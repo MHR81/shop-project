@@ -1,3 +1,4 @@
+import PageTransition from "../components/common/PageTransition";
 import Breadcrumb from "../components/common/Breadcrumb";
 import ProductDetails from "../components/ProductDetails/ProductDetails";
 import { useParams } from "react-router-dom";
@@ -21,11 +22,11 @@ export default function Product() {
     ];
 
     return (
-        <>
+        <PageTransition>
             <div className="container">
                 <Breadcrumb items={breadcrumbItems} />
             </div>
             <ProductDetails />
-        </>
+        </PageTransition>
     );
 }

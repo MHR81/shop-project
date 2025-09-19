@@ -1,3 +1,4 @@
+import PageTransition from "../components/common/PageTransition";
 import Login from '../components/Authentication/Login.jsx';
 import Breadcrumb from "../components/common/Breadcrumb.jsx";
 import { useEffect } from "react";
@@ -25,7 +26,7 @@ export default function Auth() {
     }, [navigate]);
 
     return (
-        <>
+        <PageTransition>
             <div className="container">
                 <Breadcrumb items={breadcrumbItems} />
             </div>
@@ -62,6 +63,6 @@ export default function Auth() {
                 </div>
             </div>
             {/* تست رول ها (بعدا پاک شود) */}
-        </>
+        </PageTransition>
     );
 }

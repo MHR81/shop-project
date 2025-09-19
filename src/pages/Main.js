@@ -6,15 +6,12 @@ import HomeCarousel3 from '../components/Main/HomeCarousel-3.jsx'
 export default function Main() {
     return (
         <PageTransition>
-            <div>
-                <br />
-                <HomeCard1 />
-                <br />
-                <HomeCategories2 />
-                <br />
-                <HomeCarousel3 />
-            </div>
-            <h1>34567</h1>
+            <br />
+            <HomeCard1 />
+            <br />
+            <HomeCategories2 />
+            <br />
+            <HomeCarousel3 />
         </PageTransition>
     )
 }

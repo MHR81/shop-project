@@ -1,3 +1,4 @@
+import PageTransition from "../components/common/PageTransition";
 import Breadcrumb from "../components/common/Breadcrumb";
 import Products from '../components/Products/Products.jsx'
 import Categories from '../components/Products/PCategories.jsx'
@@ -9,7 +10,7 @@ export default function ProductsPage() {
     ];
 
     return (
-        <>
+        <PageTransition>
             <div className="container">
                 <Breadcrumb items={breadcrumbItems} />
             </div>
@@ -35,6 +36,6 @@ export default function ProductsPage() {
                 </div>
             </div>
 
-        </>
+        </PageTransition>
     )
 }

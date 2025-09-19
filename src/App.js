@@ -1,40 +1,35 @@
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "bootstrap-icons/font/bootstrap-icons.css";
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { useEffect, useState } from "react";
+import { AnimatePresence } from "framer-motion";
 
+import ScrollManager from "./components/common/ScrollManager";
+import ProtectedRoute from './components/Authentication/ProtectedRoute';
 import Layout from './components/common/Layout.jsx';
+
 import Home from './pages/Main.js';
 import Auth from './pages/Auth.js';
 import Cart from './pages/Cart.js';
-import ProductsPage from './pages/Products.js';
+import Products from './pages/Products.js';
 import Product from './pages/Product.js';
 import Categories from './pages/Categories.js';
 import NotFound from './pages/NotFound.js';
 import User from './pages/User.js';
 import Admin from './pages/Admin.js';
-import ProtectedRoute from './components/Authentication/ProtectedRoute';
 
-export default function App() {
-  const [theme, setTheme] = useState(() => localStorage.getItem("theme") || "light");
-
-  useEffect(() => {
-    document.documentElement.setAttribute("data-theme", theme);
-  }, [theme]);
-
-  useEffect(() => {
-    localStorage.setItem("theme", theme);
-  }, [theme]);
+function AnimatedRoutes({ theme, setTheme }) {
+  const location = useLocation();
 
   return (
-    <BrowserRouter>
-      <Routes>
+    <AnimatePresence mode="wait">
+      <Routes location={location} key={location.pathname}>
         <Route path="/" element={<Layout theme={theme} setTheme={setTheme} />}>
           <Route index element={<Home />} />
-          <Route path="/Auth" element={<Auth />} />
+          <Route path="/auth" element={<Auth />} />
           <Route path="/cart" element={<Cart />} />
-          <Route path="/products" element={<ProductsPage />} />
+          <Route path="/products" element={<Products />} />
           <Route path="/product/:id" element={<Product />} />
           <Route path="/categories" element={<Categories />} />
           <Route path="/user" element={
@@ -50,6 +45,25 @@ export default function App() {
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>
-    </BrowserRouter>
+    </AnimatePresence>
+  );
+}
+
+export default function App() {
+  const [theme, setTheme] = useState(() => localStorage.getItem("theme") || "light");
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+  }, [theme]);
+
+  useEffect(() => {
+    localStorage.setItem("theme", theme);
+  }, [theme]);
+
+  return (
+    <Router>
+      <ScrollManager />
+      <AnimatedRoutes theme={theme} setTheme={setTheme} />
+    </Router>
   );
 }

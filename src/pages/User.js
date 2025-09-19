@@ -1,3 +1,4 @@
+import PageTransition from "../components/common/PageTransition";
 import Breadcrumb from "../components/common/Breadcrumb.jsx";
 import UserDashboard from "../components/User/UserDashboard.jsx"
 
@@ -8,7 +9,7 @@ export default function User() {
     ];
 
     return (
-        <>
+        <PageTransition>
             <div className="container">
                 <Breadcrumb items={breadcrumbItems} />
                 <h1 className="fw-bold fs-3 text">
@@ -16,8 +17,8 @@ export default function User() {
                 </h1>
             </div>
             <div className="container">
-                <UserDashboard/>
+                <UserDashboard />
             </div>
-        </>
+        </PageTransition>
     );
 }
