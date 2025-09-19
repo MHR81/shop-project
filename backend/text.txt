@@ -1,0 +1,26 @@
+shop-backend/
+│
+├─ controllers/        # منطق API ها
+│   ├─ authController.js///////////////
+│   ├─ productController.js
+│   └─ userController.js//////////////////////
+│
+├─ models/             # مدل‌های MongoDB
+│   ├─ User.js////////////////
+│   ├─ Product.js////////////////
+│   └─ Category.js/////////////////
+│
+├─ routes/             # روت‌های API
+│   ├─ authRoutes.js//////////////////
+│   ├─ productRoutes.js///////////////
+│   └─ userRoutes.js//////////////
+│
+├─ middleware/         # middleware ها
+│   ├─ authMiddleware.js////////////////////
+│   └─ errorMiddleware.js//////////////////////////
+│
+├─ utils/              # توابع کمکی (مثل JWT، hashing)
+│
+├─ .env
+├─ index.js            # فایل اصلی سرور
+└─ package.json

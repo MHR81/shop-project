@@ -1,0 +1,20 @@
+import express from "express";
+import {
+    getCategories,
+    createCategory,
+    updateCategory,
+    deleteCategory,
+} from "../controllers/categoryController.js";
+import { protect, admin } from "../middleware/authMiddleware.js"; // بعداً تعریف می‌کنیم
+
+const router = express.Router();
+
+router.route("/")
+    .get(getCategories)       // همه دسته‌ها
+    .post(protect, admin, createCategory); // اضافه کردن توسط ادمین
+
+router.route("/:id")
+    .put(protect, admin, updateCategory)  // آپدیت توسط ادمین
+    .delete(protect, admin, deleteCategory); // حذف توسط ادمین
+
+export default router;
