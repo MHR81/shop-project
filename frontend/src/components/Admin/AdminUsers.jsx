@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { createAdmin, createSupport } from "../../api/auth";
 import { getAllUsers, updateUser, deleteUser } from "../../api/users";
+import Loading from "../common/Loading";
 
 export default function AdminUsers() {
     const { user } = useAuth();
@@ -14,9 +15,11 @@ export default function AdminUsers() {
     const [users, setUsers] = useState([]);
     const [userLoading, setUserLoading] = useState(true);
     const [userMessage, setUserMessage] = useState("");
-    // حذف متغیرهای بلااستفاده
+    const [activeTab, setActiveTab] = useState("admin");
+    const [selectedUser, setSelectedUser] = useState(null);
+    const [showDetails, setShowDetails] = useState(false);
     // لیست کاربران
-    const fetchUsers = async () => {
+    const fetchUsers = useCallback(async () => {
         setUserLoading(true);
         try {
             const data = await getAllUsers(user.token);
@@ -25,7 +28,14 @@ export default function AdminUsers() {
             setUserMessage("خطا در دریافت کاربران");
         }
         setUserLoading(false);
-    };
+    }, [user.token]);
+
+    useEffect(() => { fetchUsers(); }, [fetchUsers]);
+
+    // دسته‌بندی کاربران
+    const admins = users.filter(u => u.role === "admin");
+    const supports = users.filter(u => u.role === "support");
+    const normalUsers = users.filter(u => u.role === "user");
 
     // تغییر نقش کاربر
     const handleRoleChange = async (id, role) => {
@@ -48,8 +58,15 @@ export default function AdminUsers() {
         }
     };
 
-    // بارگذاری لیست کاربران هنگام ورود
-    useState(() => { fetchUsers(); }, [user.token]);
+    // نمایش جزئیات کاربر
+    const handleShowDetails = user => {
+        setSelectedUser(user);
+        setShowDetails(true);
+    };
+    const handleCloseDetails = () => {
+        setSelectedUser(null);
+        setShowDetails(false);
+    };
 
     const handleChange = e => {
         const { name, value } = e.target;
@@ -57,7 +74,6 @@ export default function AdminUsers() {
     };
 
     const handleSubmit = async e => {
-        console.log("ارسال به createAdmin:", form);
         e.preventDefault();
         setMessage("");
         if (!form.name || !form.username || !form.email || !form.password) {
@@ -73,6 +89,7 @@ export default function AdminUsers() {
             await createAdmin(user.token, form);
             setMessage("ادمین جدید با موفقیت ساخته شد.");
             setForm({ name: "", username: "", email: "", password: "" });
+            fetchUsers();
         } catch (err) {
             setMessage("خطا در ساخت ادمین: " + (err?.response?.data?.message || "خطای سرور"));
         }
@@ -101,6 +118,7 @@ export default function AdminUsers() {
             await createSupport(user.token, supportForm);
             setSupportMessage("ساپورت جدید با موفقیت ساخته شد.");
             setSupportForm({ name: "", username: "", email: "", password: "" });
+            fetchUsers();
         } catch (err) {
             setSupportMessage("خطا در ساخت ساپورت: " + (err?.response?.data?.message || "خطای سرور"));
         }
@@ -109,7 +127,7 @@ export default function AdminUsers() {
 
     return (
         <div>
-            <h4 className="fw-bold mb-3 text-danger">Manage Users</h4>
+            <h4 className="fw-bold mb-3 text-danger">مدیریت کاربران</h4>
             <div className="mb-3">
                 <h5 className="fw-bold">ساخت ادمین جدید</h5>
                 <form onSubmit={handleSubmit} className="row g-2">
@@ -152,12 +170,25 @@ export default function AdminUsers() {
                 </form>
                 {supportMessage && <div className={`mt-3 alert ${supportMessage.includes("موفقیت") ? "alert-success" : "alert-danger"}`}>{supportMessage}</div>}
             </div>
-            <h5 className="fw-bold mt-4">لیست کاربران</h5>
-            {userLoading ? <div>در حال بارگذاری...</div> : (
+            <div className="mb-4">
+                <ul className="nav nav-tabs">
+                    <li className="nav-item">
+                        <button className={`nav-link ${activeTab === "admin" ? "active" : ""}`} onClick={() => setActiveTab("admin")}>ادمین‌ها</button>
+                    </li>
+                    <li className="nav-item">
+                        <button className={`nav-link ${activeTab === "support" ? "active" : ""}`} onClick={() => setActiveTab("support")}>ساپورت‌ها</button>
+                    </li>
+                    <li className="nav-item">
+                        <button className={`nav-link ${activeTab === "user" ? "active" : ""}`} onClick={() => setActiveTab("user")}>کاربران</button>
+                    </li>
+                </ul>
+            </div>
+            <h5 className="fw-bold mt-4">لیست {activeTab === "admin" ? "ادمین‌ها" : activeTab === "support" ? "ساپورت‌ها" : "کاربران"}</h5>
+            {userLoading ? <Loading height="100px" /> : (
                 <ul className="list-group">
-                    {users.map(u => (
+                    {(activeTab === "admin" ? admins : activeTab === "support" ? supports : normalUsers).map(u => (
                         <li key={u._id} className="list-group-item d-flex justify-content-between align-items-center">
-                            <span>{u.name} - {u.email} - نقش: <b>{u.role}</b></span>
+                            <span style={{ cursor: "pointer" }} onClick={() => handleShowDetails(u)}>{u.name} - {u.email} - نقش: <b>{u.role}</b></span>
                             <div>
                                 <select className="form-select form-select-sm d-inline-block w-auto me-2" value={u.role} onChange={e => handleRoleChange(u._id, e.target.value)}>
                                     <option value="user">یوزر</option>
@@ -171,6 +202,43 @@ export default function AdminUsers() {
                 </ul>
             )}
             {userMessage && <div className="alert alert-danger mt-2">{userMessage}</div>}
+            {/* نمایش جزئیات کاربر */}
+            {showDetails && selectedUser && (
+                <div className="modal show d-block" tabIndex="-1" style={{ background: "rgba(0,0,0,0.2)" }}>
+                    <div className="modal-dialog">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title">جزئیات کاربر</h5>
+                                <button type="button" className="btn-close" onClick={handleCloseDetails}></button>
+                            </div>
+                            <div className="modal-body">
+                                <p><b>نام:</b> {selectedUser.name}</p>
+                                <p><b>ایمیل:</b> {selectedUser.email}</p>
+                                <p><b>نام کاربری:</b> {selectedUser.username}</p>
+                                <p><b>نقش:</b> {selectedUser.role}</p>
+                                <p><b>استان:</b> {selectedUser.province || "-"}</p>
+                                <p><b>شهر:</b> {selectedUser.city || "-"}</p>
+                                <p><b>آدرس:</b> {selectedUser.address || "-"}</p>
+                                <p><b>کد پستی:</b> {selectedUser.postCode || "-"}</p>
+                                <p><b>موبایل:</b> {selectedUser.mobile || "-"}</p>
+                                {/* نمایش لاگ‌ها */}
+                                <div className="mt-3">
+                                    <h6 className="fw-bold">لاگ‌های کاربر (نمونه)</h6>
+                                    <ul className="list-group">
+                                        <li className="list-group-item">ورود به پنل: 2025-09-20 10:15</li>
+                                        <li className="list-group-item">ویرایش محصول: 2025-09-19 18:30</li>
+                                        <li className="list-group-item">حذف سفارش: 2025-09-18 14:10</li>
+                                    </ul>
+                                    <span className="text-muted">(برای لاگ واقعی باید از بک‌اند لاگ‌ها را دریافت کنید)</span>
+                                </div>
+                            </div>
+                            <div className="modal-footer">
+                                <button type="button" className="btn btn-secondary" onClick={handleCloseDetails}>بستن</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
