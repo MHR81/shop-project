@@ -62,12 +62,14 @@ export default function AdminUsers() {
     };
 
     // نمایش جزئیات کاربر
+    const { user: adminUser } = useAuth();
     const handleShowDetails = async user => {
         setSelectedUser(user);
         setShowDetails(true);
         setLogsLoading(true);
         try {
-            const logs = await getUserLogs(user.token || user.token, user._id);
+            // استفاده از توکن ادمین برای گرفتن لاگ کاربر
+            const logs = await getUserLogs(adminUser.token, user._id);
             setUserLogs(logs);
         } catch {
             setUserLogs([]);
