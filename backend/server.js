@@ -24,12 +24,14 @@ import rateLimit from "express-rate-limit";
 // ریت‌لیمیت حرفه‌ای برای کل API
 const apiLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 دقیقه
-    max: 100, // حداکثر 100 درخواست در بازه
+    max: process.env.NODE_ENV === "production" ? 100 : 10000, // در توسعه بسیار بالا
     message: { message: "تعداد درخواست شما بیش از حد مجاز است. لطفا بعدا تلاش کنید." },
     standardHeaders: true,
     legacyHeaders: false,
 });
-app.use("/api/", apiLimiter);
+if (process.env.NODE_ENV === "production") {
+    app.use("/api/", apiLimiter);
+}
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
