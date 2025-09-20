@@ -33,19 +33,17 @@ export default function Profile({ profile, setProfile, edit, setEdit }) {
 
     // بارگذاری استان‌ها (یکبار)
     useEffect(() => {
-        let mounted = true;
         setLoading(true);
         getProvinces()
             .then((res) => {
-                if (mounted) setProvinces(res || []);
+                setProvinces(res || []);
             })
             .catch((_) => {
-                if (mounted) setProvinces([]);
+                setProvinces([]);
             })
             .finally(() => {
-                if (mounted) setLoading(false);
+                setLoading(false);
             });
-        return () => (mounted = false);
     }, []);
 
     // وقتی استان تغییر کنه، شهرها رو بگیر

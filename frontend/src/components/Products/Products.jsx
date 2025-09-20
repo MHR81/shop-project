@@ -9,10 +9,19 @@ export default function Products({ filter = {} }) {
 
     useEffect(() => {
         setLoading(true);
-        getAllProducts(filter)
-            .then((data) => setProducts(data))
-            .catch((err) => console.error(err))
-            .finally(() => setLoading(false));
+        const timer = setTimeout(() => {
+            getAllProducts(filter)
+                .then((data) => {
+                    setProducts(data);
+                })
+                .catch((err) => console.error(err))
+                .finally(() => {
+                    setLoading(false);
+                });
+        }, 300);
+        return () => {
+            clearTimeout(timer);
+        };
     }, [filter]);
 
     return (

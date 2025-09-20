@@ -15,18 +15,22 @@ export default function HomeCategories2() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const fetchCategories = async () => {
-            try {
-                const data = await getCategories();
-                setCategories(data);
-            } catch (error) {
-                console.error("Error fetching categories:", error);
-            } finally {
-                setLoading(false);
-            }
+        const timer = setTimeout(() => {
+            const fetchCategories = async () => {
+                try {
+                    const data = await getCategories();
+                    setCategories(data);
+                } catch (error) {
+                    console.error("Error fetching categories:", error);
+                } finally {
+                    setLoading(false);
+                }
+            };
+            fetchCategories();
+        }, 300);
+        return () => {
+            clearTimeout(timer);
         };
-
-        fetchCategories();
     }, []);
 
     if (loading) {

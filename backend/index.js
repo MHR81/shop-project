@@ -50,7 +50,11 @@ app.use(cors({
 // rate limiter (protect brute force)
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 min
-    max: 100
+    max: 1000, // افزایش سقف درخواست برای توسعه
+    message: {
+        status: 429,
+        error: "تعداد درخواست شما بیش از حد مجاز است. لطفاً چند لحظه صبر کنید."
+    }
 });
 app.use(limiter);
 

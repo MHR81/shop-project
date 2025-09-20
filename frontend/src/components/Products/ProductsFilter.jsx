@@ -14,7 +14,12 @@ export default function ProductsFilter({ onFilter }) {
     const [inStock, setInStock] = useState(false);
 
     useEffect(() => {
-        getCategories().then(setCategories);
+        const timer = setTimeout(() => {
+            getCategories().then(setCategories);
+        }, 300);
+        return () => {
+            clearTimeout(timer);
+        };
     }, []);
 
     const handleSubmit = (e) => {

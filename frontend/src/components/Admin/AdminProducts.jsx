@@ -42,8 +42,13 @@ export default function AdminProducts() {
     }, [user.token]);
 
     useEffect(() => {
-        fetchProducts();
-        fetchCategories();
+        const timer = setTimeout(() => {
+            fetchProducts();
+            fetchCategories();
+        }, 300);
+        return () => {
+            clearTimeout(timer);
+        };
     }, [fetchProducts, fetchCategories]);
 
     // نسخه‌های تکراری حذف شد

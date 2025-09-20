@@ -10,15 +10,20 @@ export default function Category() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        getCategories()
-            .then((cats) => {
-                setCategories(cats);
-                setLoading(false);
-            })
-            .catch(() => {
-                setCategories([]);
-                setLoading(false);
-            });
+        const timer = setTimeout(() => {
+            getCategories()
+                .then((cats) => {
+                    setCategories(cats);
+                    setLoading(false);
+                })
+                .catch(() => {
+                    setCategories([]);
+                    setLoading(false);
+                });
+        }, 300);
+        return () => {
+            clearTimeout(timer);
+        };
     }, []);
 
     return (

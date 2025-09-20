@@ -24,7 +24,12 @@ export default function AdminCategories() {
     }, [user.token]);
 
     useEffect(() => {
-        fetchCategories();
+        const timer = setTimeout(() => {
+            fetchCategories();
+        }, 300);
+        return () => {
+            clearTimeout(timer);
+        };
     }, [fetchCategories]);
 
     // نسخه‌های تکراری حذف شد
