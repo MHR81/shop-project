@@ -1,3 +1,12 @@
+// بررسی نقش support برای دسترسی به روت‌های ساپورت
+export const support = (req, res, next) => {
+    if (req.user && req.user.role === "support") {
+        next();
+    } else {
+        res.status(403);
+        throw new Error("Access denied, support only");
+    }
+};
 import jwt from "jsonwebtoken";
 import asyncHandler from "express-async-handler";
 import User from "../models/User.js";

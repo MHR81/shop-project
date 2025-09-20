@@ -1,4 +1,44 @@
 /**
+ * @route POST /api/auth/create-support
+ * @desc Create new support user (admin only)
+ */
+export const createSupport = asyncHandler(async (req, res) => {
+    // Only admin can create new support
+    if (!req.user || req.user.role !== "admin") {
+        res.status(403);
+        throw new Error("Access denied, admin only");
+    }
+    const { name, username, email, password } = req.body;
+    if (!name || !username || !email || !password) {
+        res.status(400);
+        throw new Error("Please provide name, username, email and password");
+    }
+    const userExists = await User.findOne({ email });
+    if (userExists) {
+        res.status(400);
+        throw new Error("User already exists");
+    }
+    const supportUser = await User.create({
+        name,
+        username,
+        email,
+        password,
+        role: "support"
+    });
+    if (supportUser) {
+        res.status(201).json({
+            _id: supportUser._id,
+            name: supportUser.name,
+            username: supportUser.username,
+            email: supportUser.email,
+            role: supportUser.role
+        });
+    } else {
+        res.status(400);
+        throw new Error("Invalid support data");
+    }
+});
+/**
  * @route POST /api/auth/create-admin
  * @desc Create new admin user (admin only)
  */

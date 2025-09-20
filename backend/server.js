@@ -7,6 +7,7 @@ import connectDB from "./config/db.js";
 
 // Import routes
 import authRoutes from "./routes/authRoutes.js";
+import ticketRoutes from "./routes/ticketRoutes.js";
 
 dotenv.config();
 connectDB();
@@ -21,7 +22,9 @@ app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 app.use(morgan("dev"));
 
 // Routes
+
 app.use("/api/auth", authRoutes);
+app.use("/api/tickets", ticketRoutes);
 
 // Error handling middleware (after routes)
 app.use((err, req, res, next) => {

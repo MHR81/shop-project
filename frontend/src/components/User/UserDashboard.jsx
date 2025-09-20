@@ -6,6 +6,7 @@ import Profile from "./Profile";
 import CartTab from "./CartTab";
 import Orders from "./Orders";
 import ChangePassword from "./ChangePassword";
+import UserTickets from "./UserTickets";
 
 const initialProfile = {
     name: "",
@@ -69,6 +70,9 @@ export default function UserDashboard() {
                             </div>
                             <div style={{ display: activeTab === "changePassword" ? "block" : "none" }}>
                                 <ChangePassword />
+                            </div>
+                            <div style={{ display: activeTab === "tickets" ? "block" : "none" }}>
+                                <UserTickets />
                             </div>
                         </div>
                     </div>

@@ -18,6 +18,7 @@ import Categories from './pages/Categories.js';
 import NotFound from './pages/NotFound.js';
 import User from './pages/User.js';
 import Admin from './pages/Admin.js';
+import Support from './pages/Support.js';
 
 function AnimatedRoutes({ theme, setTheme }) {
   const location = useLocation();
@@ -40,6 +41,11 @@ function AnimatedRoutes({ theme, setTheme }) {
           <Route path="/admin" element={
             <ProtectedRoute allowedRoles={["admin"]}>
               <Admin />
+            </ProtectedRoute>
+          } />
+          <Route path="/support" element={
+            <ProtectedRoute allowedRoles={["support"]}>
+              <Support />
             </ProtectedRoute>
           } />
         </Route>

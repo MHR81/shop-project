@@ -42,6 +42,14 @@ export default function Sidebar({ activeTab, setActiveTab }) {
             </button>
             <button
                 className={`dashboard-sidebar list-group-item list-group-item-action${
+                    activeTab === "tickets" ? " " + activeClass : ""
+                }`}
+                onClick={() => setActiveTab("tickets")}
+            >
+                <i className="bi bi-ticket-detailed me-2"></i>Tickets
+            </button>
+            <button
+                className={`dashboard-sidebar list-group-item list-group-item-action${
                     activeTab === "changePassword" ? " " + activeClass : ""
                 }`}
                 onClick={() => setActiveTab("changePassword")}
