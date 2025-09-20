@@ -8,6 +8,7 @@ import connectDB from "./config/db.js";
 // Import routes
 import authRoutes from "./routes/authRoutes.js";
 import ticketRoutes from "./routes/ticketRoutes.js";
+import orderRoutes from "./routes/orderRoutes.js";
 
 dotenv.config();
 connectDB();
@@ -25,6 +26,7 @@ app.use(morgan("dev"));
 
 app.use("/api/auth", authRoutes);
 app.use("/api/tickets", ticketRoutes);
+app.use("/api/orders", orderRoutes);
 
 // Error handling middleware (after routes)
 app.use((err, req, res, next) => {

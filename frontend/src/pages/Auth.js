@@ -7,15 +7,7 @@ import { useNavigate } from "react-router-dom";
 // ...existing code...
 
 export default function Auth() {
-    // پاک‌سازی توکن و رول تستی هنگام ورود به صفحه Auth
-    useEffect(() => {
-        localStorage.removeItem("token");
-        localStorage.removeItem("role");
-    }, []);
-    const breadcrumbItems = [
-        { label: "Home", to: "/" },
-        { label: "Login", active: true }
-    ];
+    
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -31,9 +23,20 @@ export default function Auth() {
                 } else {
                     navigate("/user");
                 }
-            } catch {}
+            } catch { }
         }
     }, [navigate]);
+
+    // پاک‌سازی توکن و رول تستی هنگام ورود به صفحه Auth
+    useEffect(() => {
+        localStorage.removeItem("token");
+        localStorage.removeItem("role");
+    }, []);
+    const breadcrumbItems = [
+        { label: "Home", to: "/" },
+        { label: "Login", active: true }
+    ];
+
 
     return (
         <PageTransition>
