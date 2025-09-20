@@ -59,14 +59,24 @@ import Log from "../models/Log.js";
 export const deleteUser = asyncHandler(async (req, res) => {
     const user = await User.findById(req.params.id);
     if (user) {
-        await user.remove();
-        // ثبت لاگ حذف کاربر توسط ادمین
-        await Log.create({
-            user: req.user._id,
-            action: "حذف کاربر",
-            details: `کاربر با ایمیل ${user.email} و آیدی ${user._id} توسط ${req.user.email} حذف شد.`
-        });
-        res.json({ message: "کاربر حذف شد" });
+        try {
+            await user.remove();
+            // ثبت لاگ حذف کاربر توسط ادمین
+            await Log.create({
+                user: req.user._id,
+                action: "حذف کاربر",
+                details: `کاربر با ایمیل ${user.email} و آیدی ${user._id} توسط ${req.user.email} حذف شد.`
+            });
+            res.json({ message: "کاربر حذف شد" });
+        } catch (error) {
+            // ثبت لاگ خطا
+            await Log.create({
+                user: req.user._id,
+                action: "خطا در حذف کاربر",
+                details: `خطا: ${error.message} | کاربر: ${user.email} | ادمین: ${req.user.email}`
+            });
+            res.status(500).json({ message: "خطا در حذف کاربر", error: error.message });
+        }
     } else {
         res.status(404);
         throw new Error("کاربر پیدا نشد");

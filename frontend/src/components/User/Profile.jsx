@@ -73,9 +73,13 @@ export default function Profile({ profile, setProfile, edit, setEdit }) {
         setMessage("");
         if (user && user.token) {
             try {
-                await updateProfile(user.token, profile);
-                setEdit(false);
-                setMessage("پروفایل با موفقیت ذخیره شد.");
+                const result = await updateProfile(user.token, profile);
+                if (result && result._id) {
+                    setMessage("پروفایل با موفقیت ذخیره شد.");
+                    setEdit(false);
+                } else {
+                    setMessage("تغییری انجام نشد یا خطا در ذخیره.");
+                }
             } catch (err) {
                 setMessage("خطا در ذخیره پروفایل");
             }
