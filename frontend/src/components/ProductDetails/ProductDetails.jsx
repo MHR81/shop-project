@@ -53,7 +53,9 @@ export default function ProductDetails() {
                     <h2 className="fw-bold mb-3">{product.title}</h2>
                     <p className="mb-2">
                         <span className="badge bg-secondary fs-6">
-                            {product.category?.charAt(0).toUpperCase() + product.category?.slice(1)}
+                            {product.category && product.category.name
+                                ? product.category.name.charAt(0).toUpperCase() + product.category.name.slice(1)
+                                : "بدون دسته‌بندی"}
                         </span>
                     </p>
                     <p className="mb-3">{product.description}</p>

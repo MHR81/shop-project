@@ -4,7 +4,7 @@ import Category from "../models/Category.js";
 
 // گرفتن همه محصولات + فیلتر حرفه‌ای
 export const getProducts = asyncHandler(async (req, res) => {
-    const { category, minPrice, maxPrice, search } = req.query;
+    const { category, minPrice, maxPrice, search, inStock, sort } = req.query;
     const filter = {};
 
     if (category) filter.category = category;
@@ -12,8 +12,14 @@ export const getProducts = asyncHandler(async (req, res) => {
     if (minPrice) filter.price.$gte = Number(minPrice);
     if (maxPrice) filter.price.$lte = Number(maxPrice);
     if (search) filter.name = { $regex: search, $options: "i" };
+    if (inStock) filter.countInStock = { $gt: 0 };
 
-    const products = await Product.find(filter).populate("category");
+    let sortOption = {};
+    if (sort === "price-asc") sortOption.price = 1;
+    if (sort === "price-desc") sortOption.price = -1;
+    if (sort === "newest") sortOption.createdAt = -1;
+
+    const products = await Product.find(filter).populate("category").sort(sortOption);
     res.json(products);
 });
 

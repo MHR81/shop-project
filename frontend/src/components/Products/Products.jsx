@@ -3,16 +3,17 @@ import { useEffect, useState } from "react";
 import Loading from "../common/Loading.jsx";
 import { getAllProducts } from "../../api/products";
 
-export default function Products() {
+export default function Products({ filter = {} }) {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        getAllProducts()
-          .then((data) => setProducts(data))
-          .catch((err) => console.error(err))
-          .finally(() => setLoading(false));
-    }, []);
+        setLoading(true);
+        getAllProducts(filter)
+            .then((data) => setProducts(data))
+            .catch((err) => console.error(err))
+            .finally(() => setLoading(false));
+    }, [filter]);
 
     return (
         <div className="container">

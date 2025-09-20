@@ -5,6 +5,7 @@ import logo from '../../logo.png';
 import Loading from "../common/Loading";
 import { getCategories } from "../../api/categories";
 import DarkModeToggle from './DarkModeToggle';
+import NavbarSearch from "./NavbarSearch";
 
 export default function Navbar({ theme, setTheme }) {
     // Convert theme string to boolean for DarkModeToggle
@@ -16,6 +17,8 @@ export default function Navbar({ theme, setTheme }) {
     const navigate = useNavigate();
     const { user, logoutUser } = useAuth();
     const token = user?.token;
+        // نقش کاربر
+        const role = user?.role || JSON.parse(localStorage.getItem("userInfo"))?.role || "user";
 
     useEffect(() => {
         getCategories()
@@ -46,11 +49,20 @@ export default function Navbar({ theme, setTheme }) {
                     <span className="hamburger-icon"><i className="bi bi-list"></i></span>
                 </button>
 
+                {/* سرچ حرفه‌ای */}
+                <div className="d-none d-md-flex flex-grow-1 justify-content-center">
+                    <NavbarSearch theme={theme} />
+                </div>
+
                 <div className={`collapse navbar-collapse${mobileMenuOpen ? " show" : ""}`}>
                     <ul className="navbar-nav me-auto mb-2 mb-md-0 d-flex flex-column flex-md-row">
 
                         <li className="nav-item mx-2">
                             <Link className="nav-link" to="/">Home</Link>
+                        </li>
+                        {/* سرچ حرفه‌ای برای موبایل */}
+                        <li className="nav-item d-md-none w-100 my-2">
+                            <NavbarSearch theme={theme} />
                         </li>
 
                         {/* Products Dropdown */}
@@ -80,12 +92,12 @@ export default function Navbar({ theme, setTheme }) {
                                     <Loading />
                                 ) : (
                                     categories.map(cat => (
-                                        <li key={cat}>
+                                        <li key={cat._id}>
                                             <Link
                                                 className="dropdown-item"
-                                                to={`/category/${encodeURIComponent(cat)}`}
+                                                to={`/category/${encodeURIComponent(cat.name)}`}
                                             >
-                                                {cat.charAt(0).toUpperCase() + cat.slice(1)}
+                                                {cat.name.charAt(0).toUpperCase() + cat.name.slice(1)}
                                             </Link>
                                         </li>
                                     ))
@@ -110,7 +122,11 @@ export default function Navbar({ theme, setTheme }) {
                         {token && (
                             <>
                                 <li className="nav-item mx-2">
-                                    <Link className="nav-link" to="/auth" title="Dashboard">
+                                    <Link
+                                        className="nav-link"
+                                        to={role === "admin" ? "/admin" : "/user"}
+                                        title={role === "admin" ? "Admin Dashboard" : "User Profile"}
+                                    >
                                         <i className="bi bi-person-circle fs-5"></i>
                                     </Link>
                                 </li>

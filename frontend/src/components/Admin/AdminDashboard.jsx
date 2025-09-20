@@ -2,6 +2,7 @@ import { useState } from "react";
 import AdminSidebar from "./AdminSidebar";
 import AdminProfile from "./AdminProfile";
 import AdminProducts from "./AdminProducts";
+import AdminCategories from "./AdminCategories";
 import AdminOrders from "./AdminOrders";
 import AdminUsers from "./AdminUsers";
 import AdminChangePassword from "./AdminChangePassword";
@@ -21,6 +22,7 @@ export default function AdminDashboard() {
                             {activeTab === "dashboard" && <h3 className="fw-bold text-danger mb-4">Admin Dashboard</h3>}
                             {activeTab === "profile" && <AdminProfile />}
                             {activeTab === "products" && <AdminProducts />}
+                            {activeTab === "categories" && <AdminCategories />}
                             {activeTab === "orders" && <AdminOrders />}
                             {activeTab === "users" && <AdminUsers />}
                             {activeTab === "changePassword" && <AdminChangePassword />}

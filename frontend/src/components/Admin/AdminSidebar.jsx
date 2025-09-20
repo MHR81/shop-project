@@ -19,8 +19,11 @@ export default function AdminSidebar({ activeTab, setActiveTab }) {
             <button className={`dashboard-sidebar list-group-item list-group-item-action${activeTab === "profile" ? " " + activeClass : ""}`} onClick={() => setActiveTab("profile")}>
                 <i className="bi bi-person me-2"></i>Profile
             </button>
-            <button className={`dashboard-sidebar list-group-item list-group-item-action${activeTab === "products" ? " " + activeClass : ""}`} onClick={() => setActiveTab("products")}>
+            <button className={`dashboard-sidebar list-group-item list-group-item-action${activeTab === "products" ? " " + activeClass : ""}`} onClick={() => setActiveTab("products")}> 
                 <i className="bi bi-box-seam me-2"></i>Products
+            </button>
+            <button className={`dashboard-sidebar list-group-item list-group-item-action${activeTab === "categories" ? " " + activeClass : ""}`} onClick={() => setActiveTab("categories")}> 
+                <i className="bi bi-tags me-2"></i>Categories
             </button>
             <button className={`dashboard-sidebar list-group-item list-group-item-action${activeTab === "orders" ? " " + activeClass : ""}`} onClick={() => setActiveTab("orders")}>
                 <i className="bi bi-bag-check me-2"></i>Orders

@@ -1,0 +1,63 @@
+import React, { useState, useEffect } from "react";
+import { getCategories } from "../../api/categories";
+
+export default function ProductsFilter({ onFilter }) {
+    const [categories, setCategories] = useState([]);
+    const [category, setCategory] = useState("");
+    const [minPrice, setMinPrice] = useState("");
+    const [maxPrice, setMaxPrice] = useState("");
+    const [search, setSearch] = useState("");
+    const [sort, setSort] = useState("");
+    const [inStock, setInStock] = useState(false);
+
+    useEffect(() => {
+        getCategories().then(setCategories);
+    }, []);
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        onFilter({ category, minPrice, maxPrice, search, sort, inStock });
+    };
+
+    return (
+        <form className="card shadow-sm p-3 mb-4" onSubmit={handleSubmit}>
+            <div className="row g-3 align-items-center">
+                <div className="col-md-3">
+                    <label className="form-label">Category</label>
+                    <select className="form-select" value={category} onChange={e => setCategory(e.target.value)}>
+                        <option value="">All</option>
+                        {categories.map(cat => (
+                            <option key={cat._id} value={cat._id}>{cat.name}</option>
+                        ))}
+                    </select>
+                </div>
+                <div className="col-md-2">
+                    <label className="form-label">Min Price</label>
+                    <input type="number" className="form-control" value={minPrice} onChange={e => setMinPrice(e.target.value)} min="0" />
+                </div>
+                <div className="col-md-2">
+                    <label className="form-label">Max Price</label>
+                    <input type="number" className="form-control" value={maxPrice} onChange={e => setMaxPrice(e.target.value)} min="0" />
+                </div>
+                <div className="col-md-3">
+                    <label className="form-label">Search</label>
+                    <input type="text" className="form-control" value={search} onChange={e => setSearch(e.target.value)} placeholder="Product name..." />
+                </div>
+                <div className="col-md-2">
+                    <label className="form-label">Sort</label>
+                    <select className="form-select" value={sort} onChange={e => setSort(e.target.value)}>
+                        <option value="">Default</option>
+                        <option value="price-asc">Price: Low to High</option>
+                        <option value="price-desc">Price: High to Low</option>
+                        <option value="newest">Newest</option>
+                    </select>
+                </div>
+            </div>
+            <div className="form-check mt-3">
+                <input className="form-check-input" type="checkbox" checked={inStock} onChange={e => setInStock(e.target.checked)} id="inStockCheck" />
+                <label className="form-check-label" htmlFor="inStockCheck">Only show in-stock products</label>
+            </div>
+            <button type="submit" className="btn btn-danger mt-3">Apply Filter</button>
+        </form>
+    );
+}

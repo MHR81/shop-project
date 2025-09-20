@@ -28,12 +28,12 @@ export default function Category() {
                         <Loading height="300px" />
                     ) : (
                         categories.map((cat) => (
-                            <div className="p-2" key={cat}>
+                            <div className="p-2" key={cat._id}>
                                 <Link
                                     className="text-decoration-none fs-6 category-link"
-                                    to={`/categories/${encodeURIComponent(cat)}`}
+                                    to={`/categories/${encodeURIComponent(cat.name)}`}
                                 >
-                                    <i className="bi bi-chevron-right text-danger"></i> {cat.charAt(0).toUpperCase() + cat.slice(1)}
+                                    <i className="bi bi-chevron-right text-danger"></i> {cat.name.charAt(0).toUpperCase() + cat.name.slice(1)}
                                 </Link>
                             </div>
                         ))

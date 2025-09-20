@@ -37,13 +37,13 @@ export default function HomeCategories2() {
         <div className="container-fluid rounded-3 py-4">
             <div className="row g-4">
                 {categories.map(cat => (
-                    <div key={cat} className="col-6 col-md-3 d-flex justify-content-center">
+                    <div key={cat._id} className="col-6 col-md-3 d-flex justify-content-center">
                         <Link
                             className="btn btn-outline-danger fw-bold py-3 category-link-main shadow-sm text-truncate"
-                            to={`/category/${encodeURIComponent(cat)}`}
+                            to={`/category/${encodeURIComponent(cat.name)}`}
                         >
-                            <i className={`bi ${categoryIcons[cat]}`}> </i>
-                            {cat.charAt(0).toUpperCase() + cat.slice(1)}
+                            <i className={`bi ${categoryIcons[cat.name] || "bi-tag"}`}> </i>
+                            {cat.name.charAt(0).toUpperCase() + cat.name.slice(1)}
                         </Link>
                     </div>
                 ))}
