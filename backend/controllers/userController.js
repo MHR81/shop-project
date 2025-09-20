@@ -1,3 +1,52 @@
+// دریافت همه کاربران (ادمین)
+export const getUsers = asyncHandler(async (req, res) => {
+    const users = await User.find({});
+    res.json(users);
+});
+
+// دریافت کاربر با آیدی (ادمین)
+export const getUserById = asyncHandler(async (req, res) => {
+    const user = await User.findById(req.params.id);
+    if (user) res.json(user);
+    else {
+        res.status(404);
+        throw new Error("کاربر پیدا نشد");
+    }
+});
+
+// ویرایش کاربر توسط ادمین
+export const updateUser = asyncHandler(async (req, res) => {
+    const user = await User.findById(req.params.id);
+    if (user) {
+        user.name = req.body.name || user.name;
+        user.email = req.body.email || user.email;
+        user.role = req.body.role || user.role;
+        user.lastName = req.body.lastName || user.lastName;
+        user.username = req.body.username || user.username;
+        user.province = req.body.province || user.province;
+        user.city = req.body.city || user.city;
+        user.address = req.body.address || user.address;
+        user.postCode = req.body.postCode || user.postCode;
+        user.mobile = req.body.mobile || user.mobile;
+        const updatedUser = await user.save();
+        res.json(updatedUser);
+    } else {
+        res.status(404);
+        throw new Error("کاربر پیدا نشد");
+    }
+});
+
+// حذف کاربر توسط ادمین
+export const deleteUser = asyncHandler(async (req, res) => {
+    const user = await User.findById(req.params.id);
+    if (user) {
+        await user.remove();
+        res.json({ message: "کاربر حذف شد" });
+    } else {
+        res.status(404);
+        throw new Error("کاربر پیدا نشد");
+    }
+});
 import asyncHandler from "express-async-handler";
 import User from "../models/User.js";
 import generateToken from "../utils/generateToken.js";

@@ -1,25 +1,55 @@
 import { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { createAdmin, createSupport } from "../../api/auth";
+import { getAllUsers, updateUser, deleteUser } from "../../api/users";
 
 export default function AdminUsers() {
     const { user } = useAuth();
-    const [form, setForm] = useState({
-        name: "",
-        username: "",
-        email: "",
-        password: ""
-    });
-    const [supportForm, setSupportForm] = useState({
-        name: "",
-        username: "",
-        email: "",
-        password: ""
-    });
+    const [form, setForm] = useState({ name: "", username: "", email: "", password: "" });
+    const [supportForm, setSupportForm] = useState({ name: "", username: "", email: "", password: "" });
     const [supportLoading, setSupportLoading] = useState(false);
     const [supportMessage, setSupportMessage] = useState("");
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState("");
+    const [users, setUsers] = useState([]);
+    const [userLoading, setUserLoading] = useState(true);
+    const [userMessage, setUserMessage] = useState("");
+    // حذف متغیرهای بلااستفاده
+    // لیست کاربران
+    const fetchUsers = async () => {
+        setUserLoading(true);
+        try {
+            const data = await getAllUsers(user.token);
+            setUsers(data);
+        } catch {
+            setUserMessage("خطا در دریافت کاربران");
+        }
+        setUserLoading(false);
+    };
+
+    // تغییر نقش کاربر
+    const handleRoleChange = async (id, role) => {
+        try {
+            await updateUser(user.token, id, { role });
+            fetchUsers();
+        } catch {
+            setUserMessage("خطا در تغییر نقش کاربر");
+        }
+    };
+
+    // حذف کاربر
+    const handleDeleteUser = async id => {
+        if (!window.confirm("آیا مطمئن هستید؟")) return;
+        try {
+            await deleteUser(user.token, id);
+            fetchUsers();
+        } catch {
+            setUserMessage("خطا در حذف کاربر");
+        }
+    };
+
+    // بارگذاری لیست کاربران هنگام ورود
+    useState(() => { fetchUsers(); }, [user.token]);
 
     const handleChange = e => {
         const { name, value } = e.target;
@@ -122,7 +152,25 @@ export default function AdminUsers() {
                 </form>
                 {supportMessage && <div className={`mt-3 alert ${supportMessage.includes("موفقیت") ? "alert-success" : "alert-danger"}`}>{supportMessage}</div>}
             </div>
-            <div className="alert alert-danger">User management (list/search/delete/change role) will be implemented here.</div>
+            <h5 className="fw-bold mt-4">لیست کاربران</h5>
+            {userLoading ? <div>در حال بارگذاری...</div> : (
+                <ul className="list-group">
+                    {users.map(u => (
+                        <li key={u._id} className="list-group-item d-flex justify-content-between align-items-center">
+                            <span>{u.name} - {u.email} - نقش: <b>{u.role}</b></span>
+                            <div>
+                                <select className="form-select form-select-sm d-inline-block w-auto me-2" value={u.role} onChange={e => handleRoleChange(u._id, e.target.value)}>
+                                    <option value="user">یوزر</option>
+                                    <option value="admin">ادمین</option>
+                                    <option value="support">ساپورت</option>
+                                </select>
+                                <button className="btn btn-sm btn-danger" onClick={() => handleDeleteUser(u._id)}>حذف</button>
+                            </div>
+                        </li>
+                    ))}
+                </ul>
+            )}
+            {userMessage && <div className="alert alert-danger mt-2">{userMessage}</div>}
         </div>
     );
 }

@@ -12,8 +12,7 @@ export const getProductById = async (id) => {
   return res.data;
 };
 
-export const getCategories = async () => {
-  const res = await axios.get(`${API_BASE}/products`);
-  const uniqueCategories = [...new Set(res.data.map(item => item.category))];
-  return uniqueCategories;
+export const getCategories = async (token) => {
+  const res = await axios.get(`${API_BASE}/categories`, token ? { headers: { Authorization: `Bearer ${token}` } } : {});
+  return res.data;
 };
