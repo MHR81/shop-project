@@ -1,23 +1,35 @@
 import { useAuth } from "../../context/AuthContext";
 import { updateProfile } from "../../api/auth";
-const provinces = [
-    "تهران", "اصفهان", "فارس", "آذربایجان شرقی", "آذربایجان غربی", "خراسان رضوی", "گیلان", "مازندران"
-];
-
-const citiesByProvince = {
-    "تهران": ["تهران", "ری", "شمیرانات"],
-    "اصفهان": ["اصفهان", "کاشان", "خمینی‌شهر"],
-    "فارس": ["شیراز", "مرودشت", "جهرم"],
-    "آذربایجان شرقی": ["تبریز", "مراغه", "مرند"],
-    "آذربایجان غربی": ["ارومیه", "خوی", "میاندوآب"],
-    "خراسان رضوی": ["مشهد", "نیشابور", "سبزوار"],
-    "گیلان": ["رشت", "لاهیجان", "انزلی"],
-    "مازندران": ["ساری", "بابل", "آمل"],
-};
+import { getCountries, getProvinces, getCities } from "../../api/location";
+import Loading from "../common/Loading";
+import { useEffect, useState } from "react";
 
 
 export default function Profile({ profile, setProfile, edit, setEdit }) {
     const { user } = useAuth();
+    const [countries, setCountries] = useState([]);
+    const [provinces, setProvinces] = useState([]);
+    const [cities, setCities] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [message, setMessage] = useState("");
+
+    useEffect(() => {
+        setLoading(true);
+        getCountries().then(setCountries).catch(()=>{});
+        getProvinces().then(setProvinces).catch(()=>{});
+        setLoading(false);
+    }, []);
+
+    useEffect(() => {
+        if (profile.province) {
+            setLoading(true);
+            getCities(profile.province).then(setCities).catch(()=>{});
+            setLoading(false);
+        } else {
+            setCities([]);
+        }
+    }, [profile.province]);
+
     const handleChange = e => {
         const { name, value } = e.target;
         setProfile(prev => ({ ...prev, [name]: value }));
@@ -28,6 +40,13 @@ export default function Profile({ profile, setProfile, edit, setEdit }) {
             ...prev,
             province: e.target.value,
             city: ""
+        }));
+    };
+
+    const handleCountryChange = e => {
+        setProfile(prev => ({
+            ...prev,
+            country: e.target.value
         }));
     };
 
@@ -50,15 +69,18 @@ export default function Profile({ profile, setProfile, edit, setEdit }) {
 
     const handleSave = async e => {
         e.preventDefault();
+        setLoading(true);
+        setMessage("");
         if (user && user.token) {
             try {
                 await updateProfile(user.token, profile);
                 setEdit(false);
-                // TODO: نمایش پیام موفقیت یا خطا
+                setMessage("پروفایل با موفقیت ذخیره شد.");
             } catch (err) {
-                // TODO: نمایش پیام خطا
+                setMessage("خطا در ذخیره پروفایل");
             }
         }
+        setLoading(false);
     };
 
     return (
@@ -66,6 +88,8 @@ export default function Profile({ profile, setProfile, edit, setEdit }) {
             <h4 className="fw-bold mb-3">
                 <span className="fs-4">My</span> <span className="text-danger fs-3">Profile</span>
             </h4>
+            {loading && <Loading height="100px" />}
+            {message && <div className="alert alert-info mt-2">{message}</div>}
             <form onSubmit={handleSave}>
                 <div className="row">
                     <div className="col-md-6 mb-3">
@@ -110,11 +134,26 @@ export default function Profile({ profile, setProfile, edit, setEdit }) {
                         />
                     </div>
                     <div className="col-md-6 mb-3">
+                        <label className="form-label">کشور</label>
+                        <select
+                            className="form-select"
+                            name="country"
+                            value={profile.country || ""}
+                            onChange={handleCountryChange}
+                            disabled={!edit}
+                        >
+                            <option value="">انتخاب کنید</option>
+                            {countries.map(c => (
+                                <option key={c.code} value={c.name}>{c.name}</option>
+                            ))}
+                        </select>
+                    </div>
+                    <div className="col-md-6 mb-3">
                         <label className="form-label">استان</label>
                         <select
                             className="form-select"
                             name="province"
-                            value={profile.province}
+                            value={profile.province || ""}
                             onChange={handleProvinceChange}
                             disabled={!edit}
                         >
@@ -129,12 +168,12 @@ export default function Profile({ profile, setProfile, edit, setEdit }) {
                         <select
                             className="form-select"
                             name="city"
-                            value={profile.city}
+                            value={profile.city || ""}
                             onChange={handleChange}
                             disabled={!edit || !profile.province}
                         >
                             <option value="">انتخاب کنید</option>
-                            {(citiesByProvince[profile.province] || []).map(c => (
+                            {cities.map(c => (
                                 <option key={c} value={c}>{c}</option>
                             ))}
                         </select>
