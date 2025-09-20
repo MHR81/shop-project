@@ -8,6 +8,8 @@ import cors from "cors";
 import connectDB from "./config/db.js";
 
 import authRoutes from "./routes/authRoutes.js";
+import uploadRoutes from "./routes/uploadRoutes.js";
+import path from "path";
 import productRoutes from "./routes/productRoutes.js";
 import categoryRoutes from "./routes/categoryRoutes.js";
 import messageRoutes from "./routes/messageRoutes.js";
@@ -55,6 +57,7 @@ app.use(limiter);
 // routes
 
 app.use("/api/auth", authRoutes);
+app.use("/api/upload", uploadRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/tickets", ticketRoutes);
@@ -63,6 +66,9 @@ app.use("/api/location", locationRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/logs", logRoutes);
+
+// سرو کردن فایل‌های آپلود شده
+app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 
 app.use(notFound);
 app.use(errorHandler);
