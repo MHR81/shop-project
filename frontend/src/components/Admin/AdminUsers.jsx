@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { createAdmin, createSupport } from "../../api/auth";
 import { getAllUsers, updateUser, deleteUser } from "../../api/users";
+import { getUserLogs } from "../../api/logs";
 import Loading from "../common/Loading";
 
 export default function AdminUsers() {
@@ -18,6 +19,8 @@ export default function AdminUsers() {
     const [activeTab, setActiveTab] = useState("admin");
     const [selectedUser, setSelectedUser] = useState(null);
     const [showDetails, setShowDetails] = useState(false);
+    const [userLogs, setUserLogs] = useState([]);
+    const [logsLoading, setLogsLoading] = useState(false);
     // لیست کاربران
     const fetchUsers = useCallback(async () => {
         setUserLoading(true);
@@ -59,9 +62,17 @@ export default function AdminUsers() {
     };
 
     // نمایش جزئیات کاربر
-    const handleShowDetails = user => {
+    const handleShowDetails = async user => {
         setSelectedUser(user);
         setShowDetails(true);
+        setLogsLoading(true);
+        try {
+            const logs = await getUserLogs(user.token || user.token, user._id);
+            setUserLogs(logs);
+        } catch {
+            setUserLogs([]);
+        }
+        setLogsLoading(false);
     };
     const handleCloseDetails = () => {
         setSelectedUser(null);
@@ -223,13 +234,20 @@ export default function AdminUsers() {
                                 <p><b>موبایل:</b> {selectedUser.mobile || "-"}</p>
                                 {/* نمایش لاگ‌ها */}
                                 <div className="mt-3">
-                                    <h6 className="fw-bold">لاگ‌های کاربر (نمونه)</h6>
-                                    <ul className="list-group">
-                                        <li className="list-group-item">ورود به پنل: 2025-09-20 10:15</li>
-                                        <li className="list-group-item">ویرایش محصول: 2025-09-19 18:30</li>
-                                        <li className="list-group-item">حذف سفارش: 2025-09-18 14:10</li>
-                                    </ul>
-                                    <span className="text-muted">(برای لاگ واقعی باید از بک‌اند لاگ‌ها را دریافت کنید)</span>
+                                    <h6 className="fw-bold">لاگ‌های کاربر</h6>
+                                    {logsLoading ? <Loading height="40px" /> : (
+                                        <ul className="list-group">
+                                            {userLogs.length === 0 ? (
+                                                <li className="list-group-item">لاگی ثبت نشده است.</li>
+                                            ) : (
+                                                userLogs.map(log => (
+                                                    <li key={log._id} className="list-group-item">
+                                                        <b>{log.action}</b>: {log.details} <span className="text-muted">{new Date(log.createdAt).toLocaleString()}</span>
+                                                    </li>
+                                                ))
+                                            )}
+                                        </ul>
+                                    )}
                                 </div>
                             </div>
                             <div className="modal-footer">

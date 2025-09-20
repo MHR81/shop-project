@@ -22,6 +22,7 @@ export const updateUser = asyncHandler(async (req, res) => {
         if (user._id.toString() === req.user._id.toString() && req.body.role && req.body.role !== user.role) {
             return res.status(403).json({ message: "ادمین نمی‌تواند نقش خود را تغییر دهد." });
         }
+        const prevRole = user.role;
         user.name = req.body.name || user.name;
         user.email = req.body.email || user.email;
         user.role = req.body.role || user.role;
@@ -33,6 +34,18 @@ export const updateUser = asyncHandler(async (req, res) => {
         user.postCode = req.body.postCode || user.postCode;
         user.mobile = req.body.mobile || user.mobile;
         const updatedUser = await user.save();
+        // ثبت لاگ ویرایش یا تغییر نقش
+        let action = "ویرایش کاربر";
+        let details = `کاربر با ایمیل ${user.email} توسط ${req.user.email} ویرایش شد.`;
+        if (req.body.role && req.body.role !== prevRole) {
+            action = "تغییر نقش کاربر";
+            details = `نقش کاربر با ایمیل ${user.email} از ${prevRole} به ${req.body.role} توسط ${req.user.email} تغییر یافت.`;
+        }
+        await Log.create({
+            user: req.user._id,
+            action,
+            details
+        });
         res.json(updatedUser);
     } else {
         res.status(404);
@@ -41,10 +54,18 @@ export const updateUser = asyncHandler(async (req, res) => {
 });
 
 // حذف کاربر توسط ادمین
+import Log from "../models/Log.js";
+
 export const deleteUser = asyncHandler(async (req, res) => {
     const user = await User.findById(req.params.id);
     if (user) {
         await user.remove();
+        // ثبت لاگ حذف کاربر توسط ادمین
+        await Log.create({
+            user: req.user._id,
+            action: "حذف کاربر",
+            details: `کاربر با ایمیل ${user.email} و آیدی ${user._id} توسط ${req.user.email} حذف شد.`
+        });
         res.json({ message: "کاربر حذف شد" });
     } else {
         res.status(404);
