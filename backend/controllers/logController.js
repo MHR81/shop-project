@@ -1,6 +1,6 @@
-const Log = require('../models/Log');
+import Log from "../models/Log.js";
 
-exports.createLog = async (req, res) => {
+export const createLog = async (req, res) => {
   try {
     const { user, action, details } = req.body;
     const log = new Log({ user, action, details });
@@ -11,7 +11,7 @@ exports.createLog = async (req, res) => {
   }
 };
 
-exports.getLogs = async (req, res) => {
+export const getLogs = async (req, res) => {
   try {
     const query = {};
     if (req.query.user) query.user = req.query.user;
