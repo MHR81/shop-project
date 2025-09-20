@@ -1,3 +1,8 @@
+/* روشن‌تر برای ورودی سرچ در دارک مود */
+.bg-dark-2 {
+  background: #343a40 !important;
+  color: #fff !important;
+}
 @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&family=Pacifico&display=swap');
 
 html, body {
@@ -206,6 +211,12 @@ html[data-theme="dark"] .home-banner:hover{
     transform: translate(-50%, -50%);
     pointer-events: none;
     transition: transform 0.3s ease;
+}
+/* ========================= */
+/*  Search-Navbar                  */
+/* ========================= */
+.nav-search::placeholder {
+  color: var(--color-secondary)!important;
 }
 
 

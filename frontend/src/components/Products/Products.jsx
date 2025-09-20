@@ -19,16 +19,20 @@ export default function Products({ filter = {} }) {
         <div className="container">
             {loading ? (
                 <Loading height="300px" />
+            ) : products.length === 0 ? (
+                <div className="alert alert-warning text-center my-5">محصولی یافت نشد</div>
             ) : (
                 <div className="row">
                     {products.map(product => (
-                        <div key={product.id} className="col-12 col-sm-6 col-md-4 my-3">
+                        <div key={product._id} className="col-12 col-sm-6 col-md-4 my-3">
                             <ProductsCard
-                                id={product.id}
+                                id={product._id}
                                 Image={product.image}
-                                Title={product.title}
-                                Rate={product.rating?.rate}
+                                Title={product.name}
+                                Description={product.description}
                                 Price={product.price}
+                                CountInStock={product.countInStock}
+                                Category={product.category?.name}
                             />
                         </div>
                     ))}

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useTheme } from "../../context/AuthContext";
 
 export default function NavbarSearch({ theme }) {
     const [query, setQuery] = useState("");
@@ -15,17 +14,22 @@ export default function NavbarSearch({ theme }) {
     };
 
     return (
-        <form className={`navbar-search d-flex align-items-center mx-2 ${darkMode ? "search-dark" : "search-light"}`} onSubmit={handleSubmit} style={{ minWidth: 180, flex: 1 }}>
+        <form className={`navbar-search position-relative d-flex align-items-center w-50 ${darkMode ? "search-dark" : "search-light"}`} onSubmit={handleSubmit}>
             <input
                 type="text"
-                className={`form-control rounded-pill px-3 py-2 shadow-sm ${darkMode ? "bg-dark text-light border-0" : "bg-light text-dark border-0"}`}
-                placeholder="Search products..."
+                className={`form-control nav-search rounded-pill ps-4 py-2 shadow-lg ${darkMode ? "bg-dark-2 text-light border-0" : "bg-light text-dark border-0"}`}
+                placeholder="Search..."
                 value={query}
                 onChange={e => setQuery(e.target.value)}
                 style={{ fontSize: 16, transition: "all 0.2s" }}
             />
-            <button type="submit" className={`btn btn-danger rounded-circle ms-2 px-3 py-2 shadow-sm d-flex align-items-center justify-content-center`} style={{ height: 40 }}>
-                <i className="bi bi-search fs-5"></i>
+            <button
+                type="submit"
+                className="btn position-absolute end-0 top-50 translate-middle-y me-2 p-0 border-0 bg-transparent"
+                style={{ height: 32, width: 32 }}
+                tabIndex={-1}
+            >
+                <i className="bi bi-search fs-5 text-danger"></i>
             </button>
         </form>
     );

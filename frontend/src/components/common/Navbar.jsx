@@ -17,8 +17,8 @@ export default function Navbar({ theme, setTheme }) {
     const navigate = useNavigate();
     const { user, logoutUser } = useAuth();
     const token = user?.token;
-        // نقش کاربر
-        const role = user?.role || JSON.parse(localStorage.getItem("userInfo"))?.role || "user";
+    // نقش کاربر
+    const role = user?.role || JSON.parse(localStorage.getItem("userInfo"))?.role || "user";
 
     useEffect(() => {
         getCategories()
@@ -38,7 +38,7 @@ export default function Navbar({ theme, setTheme }) {
     };
 
     return (
-        <nav className="navbar navbar-expand-md rounded-bottom-3 shadow-sm">
+        <nav className="navbar navbar-expand-lg rounded-bottom-3 shadow-sm">
             <div className="container">
                 <button
                     className="py-2 navbar-toggler"
@@ -49,20 +49,12 @@ export default function Navbar({ theme, setTheme }) {
                     <span className="hamburger-icon"><i className="bi bi-list"></i></span>
                 </button>
 
-                {/* سرچ حرفه‌ای */}
-                <div className="d-none d-md-flex flex-grow-1 justify-content-center">
-                    <NavbarSearch theme={theme} />
-                </div>
 
                 <div className={`collapse navbar-collapse${mobileMenuOpen ? " show" : ""}`}>
-                    <ul className="navbar-nav me-auto mb-2 mb-md-0 d-flex flex-column flex-md-row">
+                    <ul className="navbar-nav me-auto ms-2 mb-2 mb-lg-0 d-flex flex-column flex-lg-row">
 
                         <li className="nav-item mx-2">
                             <Link className="nav-link" to="/">Home</Link>
-                        </li>
-                        {/* سرچ حرفه‌ای برای موبایل */}
-                        <li className="nav-item d-md-none w-100 my-2">
-                            <NavbarSearch theme={theme} />
                         </li>
 
                         {/* Products Dropdown */}
@@ -142,11 +134,22 @@ export default function Navbar({ theme, setTheme }) {
                         )}
 
                         {/* دکمه تغییر تم */}
-                        <li className="nav-item mx-auto d-flex align-items-center">
+                        <li className="nav-item d-none d-lg-flex mx-auto d-flex align-items-center">
                             <DarkModeToggle darkMode={darkMode} setDarkMode={dm => setTheme(dm ? "dark" : "light")} />
                         </li>
-
                     </ul>
+                    <li className="nav-item mx-auto d-lg-none d-flex align-items-center justify-content-center">
+                            <DarkModeToggle darkMode={darkMode} setDarkMode={dm => setTheme(dm ? "dark" : "light")} />
+                        </li>
+                    {/* سرچ حرفه‌ای */}
+                    <div className="me-5 d-none d-lg-flex flex-grow-1 justify-content-center">
+                        <NavbarSearch theme={theme} />
+                    </div>
+
+                    {/* سرچ حرفه‌ای برای موبایل */}
+                    <li className="d-flex align-items-center justify-content-center mt-3 nav-item d-lg-none w-100 my-2">
+                        <NavbarSearch theme={theme} />
+                    </li>
                 </div>
 
                 <Link className="navbar-brand fw-bold d-flex align-items-center" to="/">

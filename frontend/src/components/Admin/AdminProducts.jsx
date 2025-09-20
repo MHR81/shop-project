@@ -10,6 +10,7 @@ export default function AdminProducts() {
     const [products, setProducts] = useState([]);
     const [categories, setCategories] = useState([]);
     const [form, setForm] = useState({ name: "", description: "", price: "", category: "", image: "", countInStock: "" });
+    const [imageFile, setImageFile] = useState(null);
     const [editId, setEditId] = useState(null);
     const [editForm, setEditForm] = useState({ name: "", description: "", price: "", category: "", image: "", countInStock: "" });
     const [loading, setLoading] = useState(true);
@@ -47,8 +48,12 @@ export default function AdminProducts() {
     // نسخه‌های تکراری حذف شد
 
     const handleChange = e => {
-        const { name, value } = e.target;
-        setForm(prev => ({ ...prev, [name]: value }));
+        const { name, value, files } = e.target;
+        if (name === "imageFile" && files && files[0]) {
+            setImageFile(files[0]);
+        } else {
+            setForm(prev => ({ ...prev, [name]: value }));
+        }
     };
 
     const handleSubmit = async e => {
@@ -70,8 +75,18 @@ export default function AdminProducts() {
         }
         setLoading(true);
         try {
-            await axios.post(`${process.env.REACT_APP_API_URL}/products`, form, { headers: { Authorization: `Bearer ${user.token}` } });
+            let imageUrl = form.image;
+            if (imageFile) {
+                const data = new FormData();
+                data.append("image", imageFile);
+                const res = await axios.post(`${process.env.REACT_APP_API_URL}/upload`, data, {
+                    headers: { "Content-Type": "multipart/form-data" }
+                });
+                imageUrl = res.data.imageUrl;
+            }
+            await axios.post(`${process.env.REACT_APP_API_URL}/products`, { ...form, image: imageUrl }, { headers: { Authorization: `Bearer ${user.token}` } });
             setForm({ name: "", description: "", price: "", category: "", image: "", countInStock: "" });
+            setImageFile(null);
             setSuccess("محصول با موفقیت اضافه شد.");
             fetchProducts();
         } catch (err) {
@@ -153,7 +168,8 @@ export default function AdminProducts() {
                     <option value="">انتخاب دسته‌بندی</option>
                     {categories.map(cat => <option key={cat._id} value={cat._id}>{cat.name}</option>)}
                 </select>
-                <input className="form-control me-2 mb-2" name="image" value={form.image} onChange={handleChange} placeholder="آدرس تصویر" disabled={loading} />
+                <input className="form-control me-2 mb-2" name="image" value={form.image} onChange={handleChange} placeholder="آدرس تصویر (اختیاری)" disabled={loading} />
+                <input className="form-control me-2 mb-2" name="imageFile" type="file" accept="image/*" onChange={handleChange} disabled={loading} />
                 <input className="form-control me-2 mb-2" name="countInStock" value={form.countInStock} onChange={handleChange} placeholder="موجودی" type="number" disabled={loading} />
                 <button className="btn btn-success mb-2" type="submit" disabled={loading}>افزودن</button>
             </form>

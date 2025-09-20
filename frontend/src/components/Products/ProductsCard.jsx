@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-export default function ProductsCard({ id, Image, Title, Rate, Price }) {
+export default function ProductsCard({ id, Image, Title, Description, Price, CountInStock, Category }) {
     return (
         <div className="card products-card shadow-sm border-0 h-100">
             <div className="ratio ratio-4x3">
@@ -12,18 +12,18 @@ export default function ProductsCard({ id, Image, Title, Rate, Price }) {
                 />
             </div>
             <div className="card-body d-flex flex-column">
-                <h6 className="card-title text-center mb-3 text-truncate" title={Title}>{Title}</h6>
-                <div className="d-flex justify-content-between align-items-center mb-3">
-                    <span className="badge bg-warning text-dark">
-                        <i className="bi bi-star-fill me-1"></i>{Rate ?? "-"}
-                    </span>
-                    <span className="fw-bold text-success">{Price}$</span>
+                <h6 className="card-title text-center mb-2 text-truncate" title={Title}>{Title}</h6>
+                {Category && <div className="text-center text-secondary small mb-2">دسته: {Category}</div>}
+                <div className="mb-2 text-truncate text-muted" style={{ fontSize: 13 }}>{Description}</div>
+                <div className="d-flex justify-content-between align-items-center mb-2">
+                    <span className="fw-bold text-success">{Price} تومان</span>
+                    <span className={`badge ${CountInStock > 0 ? "bg-success" : "bg-danger"}`}>{CountInStock > 0 ? `موجود (${CountInStock})` : "ناموجود"}</span>
                 </div>
                 <Link
                     to={`/product/${id}`}
                     className="btn btn-outline-danger mt-auto w-100"
                 >
-                    View Product
+                    مشاهده محصول
                 </Link>
             </div>
         </div>

@@ -26,12 +26,19 @@ app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 app.use(morgan("dev"));
 
 // Routes
+import uploadRoutes from "./routes/uploadRoutes.js";
+import path from "path";
+
 app.use("/api/auth", authRoutes);
 app.use("/api/tickets", ticketRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/location", locationRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/logs", logRoutes);
+app.use("/api/upload", uploadRoutes);
+
+// سرو کردن فایل‌های آپلود شده
+app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 
 // Error handling middleware (after routes)
 app.use((err, req, res, next) => {
