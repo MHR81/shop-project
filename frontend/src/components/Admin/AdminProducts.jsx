@@ -13,6 +13,7 @@ export default function AdminProducts() {
     const [imageFile, setImageFile] = useState(null);
     const [editId, setEditId] = useState(null);
     const [editForm, setEditForm] = useState({ name: "", description: "", price: "", category: "", image: "", countInStock: "" });
+    const [editImageFile, setEditImageFile] = useState(null);
     const [loading, setLoading] = useState(true);
     const [loadingEdit, setLoadingEdit] = useState(false);
     const [loadingDelete, setLoadingDelete] = useState(false);
@@ -109,8 +110,12 @@ export default function AdminProducts() {
     };
 
     const handleEditChange = e => {
-        const { name, value } = e.target;
-        setEditForm(prev => ({ ...prev, [name]: value }));
+        const { name, value, files } = e.target;
+        if (name === "editImageFile" && files && files[0]) {
+            setEditImageFile(files[0]);
+        } else {
+            setEditForm(prev => ({ ...prev, [name]: value }));
+        }
     };
 
     const handleEditSubmit = async e => {
@@ -131,9 +136,19 @@ export default function AdminProducts() {
         }
         setLoadingEdit(true);
         try {
-            await axios.put(`${process.env.REACT_APP_API_URL}/products/${editId}`, editForm, { headers: { Authorization: `Bearer ${user.token}` } });
+            let imageUrl = editForm.image;
+            if (editImageFile) {
+                const data = new FormData();
+                data.append("image", editImageFile);
+                const res = await axios.post(`${process.env.REACT_APP_API_URL}/upload`, data, {
+                    headers: { "Content-Type": "multipart/form-data" }
+                });
+                imageUrl = res.data.imageUrl;
+            }
+            await axios.put(`${process.env.REACT_APP_API_URL}/products/${editId}`, { ...editForm, image: imageUrl }, { headers: { Authorization: `Bearer ${user.token}` } });
             setEditId(null);
             setEditForm({ name: "", description: "", price: "", category: "", image: "", countInStock: "" });
+            setEditImageFile(null);
             setSuccess("ویرایش با موفقیت انجام شد.");
             fetchProducts();
         } catch (err) {
@@ -196,6 +211,7 @@ export default function AdminProducts() {
                         {categories.map(cat => <option key={cat._id} value={cat._id}>{cat.name}</option>)}
                     </select>
                     <input className="form-control me-2 mb-2" name="image" value={editForm.image} onChange={handleEditChange} placeholder="آدرس تصویر" disabled={loadingEdit} />
+                    <input className="form-control me-2 mb-2" name="editImageFile" type="file" accept="image/*" onChange={handleEditChange} disabled={loadingEdit} />
                     <input className="form-control me-2 mb-2" name="countInStock" value={editForm.countInStock} onChange={handleEditChange} placeholder="موجودی" type="number" disabled={loadingEdit} />
                     <button className="btn btn-primary mb-2" type="submit" disabled={loadingEdit}>ثبت ویرایش</button>
                     <button className="btn btn-secondary ms-2 mb-2" type="button" onClick={() => setEditId(null)} disabled={loadingEdit}>انصراف</button>
