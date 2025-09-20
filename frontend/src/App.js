@@ -15,6 +15,7 @@ import Cart from './pages/Cart.js';
 import Products from './pages/Products.js';
 import Product from './pages/Product.js';
 import Categories from './pages/Categories.js';
+import CategoryPage from './pages/Category.js';
 import NotFound from './pages/NotFound.js';
 import User from './pages/User.js';
 import Admin from './pages/Admin.js';
@@ -32,7 +33,8 @@ function AnimatedRoutes({ theme, setTheme }) {
           <Route path="/cart" element={<Cart />} />
           <Route path="/products" element={<Products />} />
           <Route path="/product/:id" element={<Product />} />
-          <Route path="/categories" element={<Categories />} />
+    <Route path="/categories" element={<Categories />} />
+    <Route path="/category/:name" element={<CategoryPage />} />
           <Route path="/user" element={
             <ProtectedRoute allowedRoles={["user"]}>
               <User />

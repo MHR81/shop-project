@@ -40,3 +40,16 @@ export const deleteCategory = asyncHandler(async (req, res) => {
         throw new Error("Category not found");
     }
 });
+
+// گرفتن دسته‌بندی با نام و محصولات مرتبط
+import Product from "../models/Product.js";
+export const getCategoryByNameWithProducts = asyncHandler(async (req, res) => {
+    const name = decodeURIComponent(req.params.name);
+    const category = await Category.findOne({ name });
+    if (!category) {
+        res.status(404);
+        throw new Error("Category not found");
+    }
+    const products = await Product.find({ category: category._id });
+    res.json({ category, products });
+});

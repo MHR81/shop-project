@@ -4,6 +4,7 @@ import {
     createCategory,
     updateCategory,
     deleteCategory,
+    getCategoryByNameWithProducts,
 } from "../controllers/categoryController.js";
 import { protect, admin } from "../middleware/authMiddleware.js"; // بعداً تعریف می‌کنیم
 
@@ -16,5 +17,8 @@ router.route("/")
 router.route("/:id")
     .put(protect, admin, updateCategory)  // آپدیت توسط ادمین
     .delete(protect, admin, deleteCategory); // حذف توسط ادمین
+
+// گرفتن دسته‌بندی با نام و محصولات مرتبط
+router.get("/name/:name", getCategoryByNameWithProducts);
 
 export default router;
