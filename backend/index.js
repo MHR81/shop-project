@@ -1,8 +1,3 @@
-// ...existing code...
-// روت اصلی برای جلوگیری از ارور 404
-app.get('/', (req, res) => {
-    res.status(200).json({ message: 'API is running.' });
-});
 import express from "express";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
@@ -28,6 +23,11 @@ dotenv.config();
 connectDB();
 
 const app = express();
+
+// روت اصلی برای جلوگیری از ارور 404
+app.get('/', (req, res) => {
+    res.status(200).json({ message: 'API is running.' });
+});
 
 // security & logging
 app.use(helmet());
