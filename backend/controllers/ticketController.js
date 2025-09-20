@@ -48,7 +48,7 @@ export const deleteTicket = asyncHandler(async (req, res) => {
         res.status(403);
         throw new Error("دسترسی غیرمجاز");
     }
-    await ticket.deleteOne();
+    await Ticket.deleteOne({ _id: req.params.id });
     res.json({ success: true });
 });
 import asyncHandler from "express-async-handler";

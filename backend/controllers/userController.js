@@ -60,7 +60,7 @@ export const deleteUser = asyncHandler(async (req, res) => {
     const user = await User.findById(req.params.id);
     if (user) {
         try {
-            await user.remove();
+            await User.deleteOne({ _id: req.params.id });
             // ثبت لاگ حذف کاربر توسط ادمین
             await Log.create({
                 user: req.user._id,
