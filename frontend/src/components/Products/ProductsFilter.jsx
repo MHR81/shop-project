@@ -70,7 +70,6 @@ export default function ProductsFilter({ onFilter }) {
                         <input className="form-check-input" type="checkbox" checked={inStock} onChange={e => setInStock(e.target.checked)} id="inStockCheck" />
                         <label className="form-check-label" htmlFor="inStockCheck">{t("in_stock")}</label>
                     </div>
-                    <button type="submit" className="btn btn-danger mt-3">اعمال فیلتر</button>
                     <button type="submit" className="btn btn-danger mt-3">{t("show_product_filters")}</button>
                 </form>
             )}

@@ -1,10 +1,12 @@
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import PageTransition from "../components/common/PageTransition";
 import Breadcrumb from "../components/common/Breadcrumb";
 import ProductDetails from "../components/ProductDetails/ProductDetails";
-import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
 
 export default function Product() {
+    const { t } = useTranslation();
     const { id } = useParams();
     const [title, setTitle] = useState("");
 
@@ -16,9 +18,9 @@ export default function Product() {
     }, [id]);
 
     const breadcrumbItems = [
-        { label: "Home", to: "/" },
-        { label: "Products", to: "/Products" },
-        { label: title ? title : "Product", active: true }
+        { label: t("home"), to: "/" },
+        { label: t("products"), to: "/Products" },
+        { label: title ? title : t("product_not_found"), active: true }
     ];
 
     return (

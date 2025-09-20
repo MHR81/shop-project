@@ -10,6 +10,7 @@ import NavbarSearch from "./NavbarSearch";
 
 export default function Navbar({ theme, setTheme }) {
     const { i18n } = useTranslation();
+    const { t } = useTranslation();
     const [lang, setLang] = useState(i18n.language || "en");
     const handleLangChange = (lng) => {
         i18n.changeLanguage(lng);
@@ -47,21 +48,28 @@ export default function Navbar({ theme, setTheme }) {
     return (
         <nav className="navbar navbar-expand-lg rounded-bottom-3 shadow-sm">
             <div className="container">
-                <button
-                    className="py-2 navbar-toggler"
-                    type="button"
-                    aria-label="Toggle navigation"
-                    onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                >
-                    <span className="hamburger-icon"><i className="bi bi-list"></i></span>
-                </button>
-
+                <div className="d-lg-none container-fluid d-flex justify-content-between">
+                    <button
+                        className="py-2 navbar-toggler"
+                        type="button"
+                        aria-label="Toggle navigation"
+                        onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                    >
+                        <span className="hamburger-icon"><i className="bi bi-list"></i></span>
+                    </button>
+                    <div className={`justify-content-end`}>
+                        <Link className=" navbar-brand fw-bold d-flex align-items-center" to="/">
+                            <span className="navbar-logo fw-bold fs-3">Logo</span>
+                            <img src={logo} alt="Logo" className="d-none me-2 logo-img" />
+                        </Link>
+                    </div>
+                </div>
 
                 <div className={`collapse navbar-collapse${mobileMenuOpen ? " show" : ""}`}>
                     <ul className="navbar-nav me-auto ms-2 mb-2 mb-lg-0 d-flex flex-column flex-lg-row">
 
                         <li className="nav-item mx-2">
-                            <Link className="nav-link" to="/">Home</Link>
+                            <Link className="nav-link" to="/">{t("home")}</Link>
                         </li>
 
                         {/* Products Dropdown */}
@@ -78,12 +86,12 @@ export default function Navbar({ theme, setTheme }) {
                                     menu.classList.toggle("show");
                                 }}
                             >
-                                Products
+                                {t("products")}
                             </button>
                             <ul className={`categories dropdown-menu${dropdownOpen ? " show" : ""}`}>
                                 <li>
                                     <Link className="dropdown-item fw-bold" to="/Products">
-                                        All Products
+                                        {t("all-products")}
                                     </Link>
                                 </li>
                                 <li><hr className="dropdown-divider" /></li>
@@ -106,14 +114,14 @@ export default function Navbar({ theme, setTheme }) {
 
                         <li className="mx-2 nav-item">
                             <Link className="nav-link" to="/Cart">
-                                <i className="bi bi-cart"></i>Cart
+                                <i className="bi bi-cart"></i>{t("cart")}
                             </Link>
                         </li>
 
                         {!token && (
                             <li className="mx-2 nav-item">
                                 <Link className="nav-link" to="/Auth">
-                                    <i className="bi bi-person-circle fs-6"></i> Login
+                                    <i className="bi bi-person-circle fs-6"></i> {t("login")}
                                 </Link>
                             </li>
                         )}
@@ -134,7 +142,7 @@ export default function Navbar({ theme, setTheme }) {
                                         className="btn-logout text-danger fw-bold my-2"
                                         onClick={handleLogout}
                                     >
-                                        <i className="bi bi-box-arrow-right"></i> Logout
+                                        <i className="bi bi-box-arrow-right"></i> {t("logout")}
                                     </button>
                                 </li>
                             </>
@@ -145,38 +153,61 @@ export default function Navbar({ theme, setTheme }) {
                             <DarkModeToggle darkMode={darkMode} setDarkMode={dm => setTheme(dm ? "dark" : "light")} />
                         </li>
                     </ul>
-                    <li className="nav-item mx-auto d-lg-none d-flex align-items-center justify-content-center">
-                            <DarkModeToggle darkMode={darkMode} setDarkMode={dm => setTheme(dm ? "dark" : "light")} />
-                        </li>
+
+
                     {/* سرچ حرفه‌ای */}
                     <div className="me-5 d-none d-lg-flex flex-grow-1 justify-content-center">
                         <NavbarSearch theme={theme} />
-                        <div className="ms-4">
+                        <div className="ms-4 d-flex align-content-center">
                             <button
                                 className={`btn btn-sm ${lang === "en" ? "btn-outline-primary" : "btn-outline-secondary"} mx-1`}
+                                style={{ maxWidth: "30px", maxHeight: "30px" }}
                                 onClick={() => handleLangChange("en")}
                             >
                                 EN
                             </button>
                             <button
                                 className={`btn btn-sm ${lang === "fa" ? "btn-outline-primary" : "btn-outline-secondary"} mx-1`}
+                                style={{ maxWidth: "30px", maxHeight: "30px" }}
                                 onClick={() => handleLangChange("fa")}
                             >
                                 FA
                             </button>
                         </div>
                     </div>
-
                     {/* سرچ حرفه‌ای برای موبایل */}
-                    <li className="d-flex align-items-center justify-content-center mt-3 nav-item d-lg-none w-100 my-2">
+                    <div className="d-lg-none d-flex justify-content-center">
                         <NavbarSearch theme={theme} />
+                    </div>
+
+                    <li className="row d-lg-none g-3 mt-3">
+                        <div className="col d-flex justify-content-end">
+                            <button
+                                className={`btn btn-sm ${lang === "en" ? "btn-outline-primary" : "btn-outline-secondary"} mx-1`}
+                                style={{ maxWidth: "30px", maxHeight: "30px" }}
+                                onClick={() => handleLangChange("en")}
+                            >
+                                EN
+                            </button>
+                            <button
+                                className={`btn btn-sm ${lang === "fa" ? "btn-outline-primary" : "btn-outline-secondary"} mx-1`}
+                                style={{ maxWidth: "30px", maxHeight: "30px" }}
+                                onClick={() => handleLangChange("fa")}
+                            >
+                                FA
+                            </button>
+                        </div>
+                        <div className="col d-flex justify-content-start">
+                            <DarkModeToggle darkMode={darkMode} setDarkMode={dm => setTheme(dm ? "dark" : "light")} />
+                        </div>
                     </li>
+                    <Link className="d-none d-lg-block navbar-brand fw-bold d-flex align-items-center" to="/">
+                        <span className="navbar-logo fw-bold fs-3">Logo</span>
+                        <img src={logo} alt="Logo" className="d-none me-2 logo-img" />
+                    </Link>
+
                 </div>
 
-                <Link className="navbar-brand fw-bold d-flex align-items-center" to="/">
-                    <span className="navbar-logo fw-bold fs-3">Logo</span>
-                    <img src={logo} alt="Logo" className="d-none me-2 logo-img" />
-                </Link>
             </div>
         </nav>
     );
