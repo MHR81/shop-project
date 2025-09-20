@@ -9,8 +9,9 @@ export default function AdminProducts() {
     const { user } = useAuth();
     const [products, setProducts] = useState([]);
     const [categories, setCategories] = useState([]);
-    const [form, setForm] = useState({ name: "", description: "", price: "", category: "", image: "", countInStock: "" });
-    const [imageFile, setImageFile] = useState(null);
+    const [form, setForm] = useState({ name: "", description: "", price: "", category: "", countInStock: "" });
+    const [imageLinks, setImageLinks] = useState([""]);
+    const [imageFiles, setImageFiles] = useState([]);
     const [editId, setEditId] = useState(null);
     const [editForm, setEditForm] = useState({ name: "", description: "", price: "", category: "", image: "", countInStock: "" });
     const [editImageFile, setEditImageFile] = useState(null);
@@ -55,8 +56,11 @@ export default function AdminProducts() {
 
     const handleChange = e => {
         const { name, value, files } = e.target;
-        if (name === "imageFile" && files && files[0]) {
-            setImageFile(files[0]);
+        if (name === "imageFiles" && files) {
+            setImageFiles(Array.from(files));
+        } else if (name.startsWith("imageLink")) {
+            const idx = parseInt(name.replace("imageLink", ""), 10);
+            setImageLinks(links => links.map((l, i) => i === idx ? value : l));
         } else {
             setForm(prev => ({ ...prev, [name]: value }));
         }
@@ -81,18 +85,24 @@ export default function AdminProducts() {
         }
         setLoading(true);
         try {
-            let imageUrl = form.image;
-            if (imageFile) {
-                const data = new FormData();
-                data.append("image", imageFile);
-                const res = await axios.post(`${process.env.REACT_APP_API_URL}/upload`, data, {
-                    headers: { "Content-Type": "multipart/form-data" }
-                });
-                imageUrl = res.data.imageUrl;
+            let imageUrls = [];
+            // Handle uploaded images
+            if (imageFiles.length > 0) {
+                for (const file of imageFiles) {
+                    const data = new FormData();
+                    data.append("image", file);
+                    const res = await axios.post(`${process.env.REACT_APP_API_URL}/upload`, data, {
+                        headers: { "Content-Type": "multipart/form-data" }
+                    });
+                    imageUrls.push(res.data.imageUrl);
+                }
             }
-            await axios.post(`${process.env.REACT_APP_API_URL}/products`, { ...form, image: imageUrl }, { headers: { Authorization: `Bearer ${user.token}` } });
-            setForm({ name: "", description: "", price: "", category: "", image: "", countInStock: "" });
-            setImageFile(null);
+            // Handle image links (trim and filter empty)
+            imageUrls = imageUrls.concat(imageLinks.map(l => l.trim()).filter(l => l));
+            await axios.post(`${process.env.REACT_APP_API_URL}/products`, { ...form, images: imageUrls }, { headers: { Authorization: `Bearer ${user.token}` } });
+            setForm({ name: "", description: "", price: "", category: "", countInStock: "" });
+            setImageFiles([]);
+            setImageLinks([""]);
             setSuccess("محصول با موفقیت اضافه شد.");
             fetchProducts();
         } catch (err) {
@@ -189,7 +199,31 @@ export default function AdminProducts() {
                     {categories.map(cat => <option key={cat._id} value={cat._id}>{cat.name}</option>)}
                 </select>
                 <input className="form-control me-2 mb-2" name="image" value={form.image} onChange={handleChange} placeholder="آدرس تصویر (اختیاری)" disabled={loading} />
-                <input className="form-control me-2 mb-2" name="imageFile" type="file" accept="image/*" onChange={handleChange} disabled={loading} />
+                {imageLinks.map((link, idx) => (
+                    <div key={idx} className="d-flex align-items-center mb-2">
+                        <input
+                            className="form-control me-2"
+                            name={`imageLink${idx}`}
+                            value={link}
+                            onChange={handleChange}
+                            placeholder={`لینک عکس ${idx + 1}`}
+                            disabled={loading}
+                        />
+                        {idx === imageLinks.length - 1 && (
+                            <button
+                                type="button"
+                                className="btn btn-outline-success"
+                                disabled={loading || imageLinks.some(l => !l.trim())}
+                                onClick={() => {
+                                    if (imageLinks.every(l => l.trim())) {
+                                        setImageLinks([...imageLinks, ""]);
+                                    }
+                                }}
+                            >افزودن لینک جدید</button>
+                        )}
+                    </div>
+                ))}
+                <input className="form-control me-2 mb-2" name="imageFiles" type="file" accept="image/*" multiple onChange={handleChange} disabled={loading} />
                 <input className="form-control me-2 mb-2" name="countInStock" value={form.countInStock} onChange={handleChange} placeholder="موجودی" type="number" disabled={loading} />
                 <button className="btn btn-success mb-2" type="submit" disabled={loading}>افزودن</button>
             </form>

@@ -71,20 +71,22 @@ export default function CartItems() {
                             </thead>
                             <tbody>
                                 {cart.map(item => (
-                                    <tr key={item.id}>
+                                    <tr key={item.id || item._id || Math.random()}>
                                         <td className="cart-table-items"
                                             style={{ cursor: "pointer" }}
                                             onClick={() => navigate(`/product/${item.id}`)}
                                         >
-                                            <img
-                                                src={item.image}
-                                                alt={item.title}
-                                                style={{ width: "40px", height: "40px", objectFit: "contain" }}
-                                                className="me-2"
-                                            />
+                                            {item.image && item.image.trim() !== "" ? (
+                                                <img
+                                                    src={item.image}
+                                                    alt={item.title}
+                                                    style={{ width: "40px", height: "40px", objectFit: "contain" }}
+                                                    className="me-2"
+                                                />
+                                            ) : null}
                                             <span className="text-decoration-none">{item.title}</span>
                                         </td>
-                                        <td className="cart-table-items">{item.price}$</td>
+                                        <td className="cart-table-items">{item.price}</td>
                                         <td className="cart-table-items">
                                             <div className="d-flex align-items-center">
                                                 <button
@@ -99,7 +101,7 @@ export default function CartItems() {
                                                 >+</button>
                                             </div>
                                         </td>
-                                        <td className="cart-table-items">{(item.price * item.quantity).toFixed(2)}$</td>
+                                        <td className="cart-table-items">{(item.price * item.quantity)}</td>
                                         <td className="cart-table-items">
                                             <button className="btn btn-sm btn-outline-danger" onClick={() => handleRemove(item.id)}>
                                                 Remove
@@ -117,7 +119,7 @@ export default function CartItems() {
                     </div>
                     <div className="mx-2"></div>
                     <div className="fw-bold fs-5">
-                    Total Price: <span className="text-success">{totalPrice.toFixed(2)}$</span>
+                    Total Price: <span className="text-success">{totalPrice}</span>
                     </div>
                     <button
                         className="btn btn-danger px-4 py-2 fw-bold ms-auto"

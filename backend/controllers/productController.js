@@ -25,8 +25,8 @@ export const getProducts = asyncHandler(async (req, res) => {
 
 // اضافه کردن محصول جدید (ادمین)
 export const createProduct = asyncHandler(async (req, res) => {
-    const { name, description, price, category, image, countInStock } = req.body;
-    const product = new Product({ name, description, price, category, image, countInStock });
+    const { name, description, price, category, images, countInStock } = req.body;
+    const product = new Product({ name, description, price, category, images, countInStock });
     const createdProduct = await product.save();
     res.status(201).json(createdProduct);
 });
@@ -49,9 +49,15 @@ export const updateProduct = asyncHandler(async (req, res) => {
         product.description = req.body.description || product.description;
         product.price = req.body.price || product.price;
         product.category = req.body.category || product.category;
-        product.image = req.body.image || product.image;
         product.countInStock = req.body.countInStock || product.countInStock;
-
+        // Update images array if provided
+        if (Array.isArray(req.body.images)) {
+            product.images = req.body.images;
+        }
+        // For backward compatibility, update single image if provided
+        if (req.body.image) {
+            product.image = req.body.image;
+        }
         const updatedProduct = await product.save();
         res.json(updatedProduct);
     } else {

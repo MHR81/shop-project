@@ -47,7 +47,21 @@ export default function ProductDetails() {
         <div className="products-card container my-5 shadow-lg rounded">
             <div className="row align-items-center py-4">
                 <div className="col-md-5 text-center mb-4 mb-md-0">
-                    <img src={product.image} alt={product.name} className="img-fluid" style={{ maxHeight: "350px" }} />
+                    {Array.isArray(product.images) && product.images.length > 0 ? (
+                        <div className="d-flex flex-wrap justify-content-center">
+                            {product.images.map((img, idx) => (
+                                <img
+                                    key={idx}
+                                    src={img}
+                                    alt={product.name + " " + (idx + 1)}
+                                    className="img-fluid m-2"
+                                    style={{ maxHeight: "150px", maxWidth: "150px", borderRadius: "8px" }}
+                                />
+                            ))}
+                        </div>
+                    ) : (
+                        <img src={product.image} alt={product.name} className="img-fluid" style={{ maxHeight: "350px" }} />
+                    )}
                 </div>
                 <div className="col-md-7">
                     <h2 className="fw-bold mb-3">{product.name}</h2>

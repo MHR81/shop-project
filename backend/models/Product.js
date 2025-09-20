@@ -10,7 +10,7 @@ const productSchema = mongoose.Schema(
       ref: "Category",
       required: true,
     },
-    image: { type: String },
+  images: [{ type: String }],
     countInStock: { type: Number, default: 0 },
   },
   { timestamps: true }
