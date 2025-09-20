@@ -75,18 +75,18 @@ export default function SupportTicketChat({ ticketId, onBack }) {
                 <Loading height="300px" />
             ) : (
                 <div>
-                    <h5 className="fw-bold mb-2 text-warning">چت تیکت: {ticket?.subject} - کاربر: {ticket?.user?.name}</h5>
+                    <h5 className="fw-bold mb-2 ticket-chat-title-supp">چت تیکت: {ticket?.subject} - کاربر: {ticket?.user?.name}</h5>
                     {ticket?.closed && <div className="alert alert-warning">این تیکت بسته شده است.</div>}
-                    <div className="chat-box mb-3" style={{ maxHeight: 350, overflowY: "auto", background: "#f8f9fa", borderRadius: 8, padding: 12 }}>
+                    <div className="chat-box mb-3 ticket-chat-box" style={{ maxHeight: 350, overflowY: "auto", background: "#f8f9fa", borderRadius: 8, padding: 12 }}>
                         {messages.map(msg => (
-                            <div key={msg._id} className={`mb-2 p-2 rounded ${msg.sender._id === user._id ? "bg-light text-end" : "bg-white text-start"}`} style={{ position: "relative" }}>
+                            <div key={msg._id} className={`mb-2 p-2 rounded ${msg.sender._id === user._id ? "ticket-chat-user text-end" : "ticket-chat-support text-start"}`} style={{ position: "relative" }}>
                                 {msg.deleted ? <i className="text-muted">پیام حذف شده</i> : (
                                     <>
                                         <span>{msg.text}</span>
                                         {msg.edited && <span className="ms-2 badge bg-info">ویرایش شده</span>}
-                                        <div className="small text-muted">{msg.sender.name} - {new Date(msg.createdAt).toLocaleString()}</div>
+                                        <div className="mt-4 small ticket-info">{msg.sender.name} - {new Date(msg.createdAt).toLocaleString()}</div>
                                         {msg.sender._id === user._id && !msg.deleted && (
-                                            <div style={{ position: "absolute", top: 2, left: 2 }}>
+                                            <div style={{ position: "absolute", top: 10, left: 10 }}>
                                                 <button className="btn btn-sm btn-outline-info me-1" onClick={() => { setEditId(msg._id); setEditText(msg.text); }}>ادیت</button>
                                                 <button className="btn btn-sm btn-outline-danger" onClick={() => handleDelete(msg._id)}>حذف</button>
                                             </div>
@@ -105,7 +105,7 @@ export default function SupportTicketChat({ ticketId, onBack }) {
                             </form>
                         ) : (
                             <form onSubmit={handleSend} className="d-flex">
-                                <input className="form-control me-2" value={text} onChange={e => setText(e.target.value)} placeholder="پیام جدید..." />
+                                <input className="form-control me-2 ticket-new-chat" value={text} onChange={e => setText(e.target.value)} placeholder="پیام جدید..." />
                                 <button className="btn btn-primary" type="submit">ارسال</button>
                             </form>
                         )

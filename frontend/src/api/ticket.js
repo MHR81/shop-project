@@ -43,3 +43,11 @@ export const getSupportTickets = async (token) => {
     });
     return res.data;
 };
+
+// تغییر وضعیت خوانده شدن تیکت توسط ساپورت
+export const setTicketReadForSupport = async (token, id, isRead) => {
+    const res = await axios.put(`${API_URL}/tickets/${id}/read`, { isRead }, {
+        headers: { Authorization: `Bearer ${token}` }
+    });
+    return res.data;
+};

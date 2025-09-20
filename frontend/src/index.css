@@ -25,8 +25,8 @@ html, body {
   --color-info: #0dcaf0;
 
 
-  --color-bg-chat-user: #f7fafd;
-  --color-bg-chat-support: #f0f4f8;
+  --color-bg-chat-user: #f0f4f8;
+  --color-bg-chat-support: #f7fafd;
 
   --font-main: 'Vazirmatn', 'Segoe UI', 'Roboto', 'Arial', sans-serif;
   --font-logo: 'Pacifico', cursive;
@@ -470,6 +470,9 @@ input:focus, textarea:focus, select:focus {
 
 .ticket-chat-title {
   color: var(--color-primary) !important;
+}
+.ticket-chat-title-supp {
+  color: var(--color-warning) !important;
 }
 .ticket-chat-box{
   background: var(--color-bg) !important;

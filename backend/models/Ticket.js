@@ -7,6 +7,7 @@ const ticketSchema = mongoose.Schema({
     status: { type: String, enum: ["open", "answered", "closed"], default: "open" },
     support: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     closed: { type: Boolean, default: false },
+    isReadForSupport: { type: Boolean, default: false }, // خوانده نشده برای ساپورت
 }, { timestamps: true });
 
 const Ticket = mongoose.model("Ticket", ticketSchema);

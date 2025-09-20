@@ -70,6 +70,18 @@ export const createTicket = asyncHandler(async (req, res) => {
 });
 
 // دریافت همه تیکت‌ها برای ساپورت
+// تغییر وضعیت خوانده شدن تیکت توسط ساپورت
+export const setTicketReadForSupport = asyncHandler(async (req, res) => {
+    const { isRead } = req.body;
+    const ticket = await Ticket.findById(req.params.id);
+    if (!ticket) {
+        res.status(404);
+        throw new Error("تیکت پیدا نشد");
+    }
+    ticket.isReadForSupport = !!isRead;
+    await ticket.save();
+    res.json({ success: true, isReadForSupport: ticket.isReadForSupport });
+});
 export const getAllTickets = asyncHandler(async (req, res) => {
     const tickets = await Ticket.find().populate("user", "name email");
     res.json(tickets);
