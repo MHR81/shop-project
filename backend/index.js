@@ -12,6 +12,9 @@ import productRoutes from "./routes/productRoutes.js";
 import categoryRoutes from "./routes/categoryRoutes.js";
 import messageRoutes from "./routes/messageRoutes.js";
 import ticketRoutes from "./routes/ticketRoutes.js";
+import locationRoutes from "./routes/locationRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
+import orderRoutes from "./routes/orderRoutes.js";
 
 import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
 
@@ -50,7 +53,9 @@ app.use("/api/products", productRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/tickets", ticketRoutes);
 app.use("/api/messages", messageRoutes);
-app.use("/api/tickets", ticketRoutes);
+app.use("/api/location", locationRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/orders", orderRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
