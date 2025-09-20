@@ -5,8 +5,8 @@ const ticketSchema = mongoose.Schema({
     subject: { type: String, required: true },
     message: { type: String, required: true },
     status: { type: String, enum: ["open", "answered", "closed"], default: "open" },
-    answer: { type: String },
     support: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    closed: { type: Boolean, default: false },
 }, { timestamps: true });
 
 const Ticket = mongoose.model("Ticket", ticketSchema);

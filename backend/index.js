@@ -11,6 +11,8 @@ import authRoutes from "./routes/authRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
 import categoryRoutes from "./routes/categoryRoutes.js";
 import ticketRoutes from "./routes/ticketRoutes.js";
+import messageRoutes from "./routes/messageRoutes.js";
+import ticketRoutes from "./routes/ticketRoutes.js";
 
 import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
 
@@ -47,6 +49,8 @@ app.use(limiter);
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/categories", categoryRoutes);
+app.use("/api/tickets", ticketRoutes);
+app.use("/api/messages", messageRoutes);
 app.use("/api/tickets", ticketRoutes);
 
 app.use(notFound);

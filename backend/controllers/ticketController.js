@@ -1,3 +1,56 @@
+// دریافت لیست تیکت‌های یوزر
+export const getUserTickets = asyncHandler(async (req, res) => {
+    const tickets = await Ticket.find({ user: req.user._id }).sort({ createdAt: -1 });
+    res.json(tickets);
+});
+
+// دریافت لیست تیکت‌های ساپورت (همه تیکت‌ها)
+export const getSupportTickets = asyncHandler(async (req, res) => {
+    const tickets = await Ticket.find().populate("user", "name email").sort({ createdAt: -1 });
+    res.json(tickets);
+});
+
+// دریافت جزئیات یک تیکت
+export const getTicketDetails = asyncHandler(async (req, res) => {
+    const ticket = await Ticket.findById(req.params.id).populate("user support", "name email role");
+    if (!ticket) {
+        res.status(404);
+        throw new Error("تیکت پیدا نشد");
+    }
+    res.json(ticket);
+});
+
+// بستن تیکت
+export const closeTicket = asyncHandler(async (req, res) => {
+    const ticket = await Ticket.findById(req.params.id);
+    if (!ticket) {
+        res.status(404);
+        throw new Error("تیکت پیدا نشد");
+    }
+    if (String(ticket.user) !== String(req.user._id) && req.user.role !== "support") {
+        res.status(403);
+        throw new Error("دسترسی غیرمجاز");
+    }
+    ticket.closed = true;
+    ticket.status = "closed";
+    await ticket.save();
+    res.json({ success: true });
+});
+
+// حذف تیکت
+export const deleteTicket = asyncHandler(async (req, res) => {
+    const ticket = await Ticket.findById(req.params.id);
+    if (!ticket) {
+        res.status(404);
+        throw new Error("تیکت پیدا نشد");
+    }
+    if (String(ticket.user) !== String(req.user._id) && req.user.role !== "support") {
+        res.status(403);
+        throw new Error("دسترسی غیرمجاز");
+    }
+    await ticket.deleteOne();
+    res.json({ success: true });
+});
 import asyncHandler from "express-async-handler";
 import Ticket from "../models/Ticket.js";
 
