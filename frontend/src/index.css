@@ -466,6 +466,7 @@ input:focus, textarea:focus, select:focus {
 }
 .new-ticket {
   background: var(--color-bg-chat-user) !important;
+  color: var(--color-text) !important;
 }
 .new-ticket::placeholder{
   color: var(--color-text) !important;

@@ -1,13 +1,12 @@
 import { useAuth } from "../../context/AuthContext";
 import { updateProfile } from "../../api/auth";
-import { getCountries, getProvinces, getCities } from "../../api/location";
+import { getProvinces, getCitiesByProvinceName } from "../../api/location";
 import Loading from "../common/Loading";
 import { useEffect, useState } from "react";
 
 
 export default function Profile({ profile, setProfile, edit, setEdit }) {
     const { user } = useAuth();
-    const [countries, setCountries] = useState([]);
     const [provinces, setProvinces] = useState([]);
     const [cities, setCities] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -15,7 +14,6 @@ export default function Profile({ profile, setProfile, edit, setEdit }) {
 
     useEffect(() => {
         setLoading(true);
-        getCountries().then(setCountries).catch(()=>{});
         getProvinces().then(setProvinces).catch(()=>{});
         setLoading(false);
     }, []);
@@ -23,7 +21,7 @@ export default function Profile({ profile, setProfile, edit, setEdit }) {
     useEffect(() => {
         if (profile.province) {
             setLoading(true);
-            getCities(profile.province).then(setCities).catch(()=>{});
+            getCitiesByProvinceName(profile.province).then(setCities).catch(()=>{});
             setLoading(false);
         } else {
             setCities([]);
@@ -43,12 +41,7 @@ export default function Profile({ profile, setProfile, edit, setEdit }) {
         }));
     };
 
-    const handleCountryChange = e => {
-        setProfile(prev => ({
-            ...prev,
-            country: e.target.value
-        }));
-    };
+
 
     const handleSendSMS = () => {
         setProfile(prev => ({
@@ -137,21 +130,7 @@ export default function Profile({ profile, setProfile, edit, setEdit }) {
                             disabled={!edit}
                         />
                     </div>
-                    <div className="col-md-6 mb-3">
-                        <label className="form-label">کشور</label>
-                        <select
-                            className="form-select"
-                            name="country"
-                            value={profile.country || ""}
-                            onChange={handleCountryChange}
-                            disabled={!edit}
-                        >
-                            <option value="">انتخاب کنید</option>
-                            {countries.map(c => (
-                                <option key={c.code} value={c.name}>{c.name}</option>
-                            ))}
-                        </select>
-                    </div>
+
                     <div className="col-md-6 mb-3">
                         <label className="form-label">استان</label>
                         <select

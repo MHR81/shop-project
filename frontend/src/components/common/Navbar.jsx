@@ -156,7 +156,7 @@ export default function Navbar({ theme, setTheme }) {
 
 
                     {/* سرچ حرفه‌ای */}
-                    <div className="me-5 d-none d-lg-flex flex-grow-1 justify-content-center">
+                    <div className=" d-none d-lg-flex flex-grow-1 justify-content-center">
                         <NavbarSearch theme={theme} />
                         <div className="ms-4 d-flex align-content-center">
                             <button
