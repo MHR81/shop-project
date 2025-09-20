@@ -10,7 +10,6 @@ import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
 import categoryRoutes from "./routes/categoryRoutes.js";
-import ticketRoutes from "./routes/ticketRoutes.js";
 import messageRoutes from "./routes/messageRoutes.js";
 import ticketRoutes from "./routes/ticketRoutes.js";
 
