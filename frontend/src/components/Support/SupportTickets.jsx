@@ -65,7 +65,7 @@ export default function SupportTickets() {
                                             <button className="btn btn-secondary btn-sm ms-2" type="button" onClick={() => setSelectedId(null)}>انصراف</button>
                                         </form>
                                     )}
-                                    {ticket.answer && <div className="mt-2"><b>پاسخ ساپورت:</b> {ticket.answer}</div>}
+                                    {ticket.answer && <div className="mt-2 text-muted"><b>پاسخ ساپورت:</b> {ticket.answer}</div>}
                                 </li>
                             ))}
                         </ul>

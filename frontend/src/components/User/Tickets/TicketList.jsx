@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import Loading from "../../common/Loading";
 import { useAuth } from "../../../context/AuthContext";
 import { getUserTickets, deleteTicket, closeTicket } from "../../../api/ticket";
 
@@ -43,11 +44,13 @@ export default function TicketList({ onSelect }) {
 
     return (
         <div>
-            <h5 className="fw-bold mb-3 text-danger">تیکت‌های من</h5>
-            {loading ? <div>در حال بارگذاری...</div> : (
+            <h5 className="fw-bold mb-3 my-tickets-title">تیکت‌های من</h5>
+            {loading ? (
+                            <Loading height="300px" />
+                        ) : (
                 <ul className="list-group">
                     {tickets.map(ticket => (
-                        <li key={ticket._id} className="list-group-item d-flex justify-content-between align-items-center">
+                        <li key={ticket._id} className="list-group-item d-flex justify-content-between align-items-center my-tickets">
                             <span onClick={() => onSelect(ticket._id)} style={{ cursor: "pointer" }}>
                                 <b>{ticket.subject}</b> - {ticket.status === "closed" ? "(بسته شده)" : "(باز)"}
                             </span>

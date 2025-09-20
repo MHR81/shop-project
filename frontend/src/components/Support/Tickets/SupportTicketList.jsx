@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../../../context/AuthContext";
+import Loading from "../../common/Loading";
 import { getSupportTickets, deleteTicket, closeTicket } from "../../../api/ticket";
 
 export default function SupportTicketList({ onSelect }) {
@@ -44,7 +45,9 @@ export default function SupportTicketList({ onSelect }) {
     return (
         <div>
             <h5 className="fw-bold mb-3 text-warning">همه تیکت‌های کاربران</h5>
-            {loading ? <div>در حال بارگذاری...</div> : (
+            {loading ? (
+                <Loading height="300px" />
+            ) : (
                 <ul className="list-group">
                     {tickets.map(ticket => (
                         <li key={ticket._id} className="list-group-item d-flex justify-content-between align-items-center">

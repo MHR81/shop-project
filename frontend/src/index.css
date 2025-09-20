@@ -24,6 +24,10 @@ html, body {
   --color-warning: #ffc107;
   --color-info: #0dcaf0;
 
+
+  --color-bg-chat-user: #f7fafd;
+  --color-bg-chat-support: #f0f4f8;
+
   --font-main: 'Vazirmatn', 'Segoe UI', 'Roboto', 'Arial', sans-serif;
   --font-logo: 'Pacifico', cursive;
 
@@ -44,6 +48,9 @@ html[data-theme="dark"] {
   --color-primary: #ff1744;
   --color-secondary: #bdbdbd;
   --color-accent: #dc3545;
+
+  --color-bg-chat-user: #23272b;
+  --color-bg-chat-support: #2c3136;
 
   --color-nav-bg: #23272bd7;
   --color-nav-text: #fff;
@@ -439,3 +446,51 @@ input:focus, textarea:focus, select:focus {
   padding: 0.6rem 1rem;
   font-weight: 600;
 }
+
+/* ========================= */
+/* Ticket       */
+/* ========================= */
+.new-ticket-title {
+  color: var(--color-primary) !important;
+}
+.new-ticket {
+  background: var(--color-bg-chat-user) !important;
+}
+.new-ticket::placeholder{
+  color: var(--color-text) !important;
+}
+
+.my-tickets-title {
+  color: var(--color-primary) !important;
+}
+.my-tickets {
+  background: var(--color-bg) !important;
+  color: var(--color-secondary) !important;
+}
+
+.ticket-chat-title {
+  color: var(--color-primary) !important;
+}
+.ticket-chat-box{
+  background: var(--color-bg) !important;
+}
+.ticket-chat-user {
+  background: var(--color-bg-chat-user) !important;
+  color: var(--color-text) !important;
+}
+.ticket-chat-support {
+  background: var(--color-bg-chat-support) !important;
+  color: var(--color-text) !important;
+}
+.ticket-info {
+  color: var(--color-text) !important;
+}
+
+.ticket-new-chat{
+background: var(--color-bg-chat-user) !important;
+}
+.ticket-new-chat::placeholder {
+  color: var(--color-text) !important;
+}
+
+

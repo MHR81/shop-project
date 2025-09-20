@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../../../context/AuthContext";
+import Loading from "../../common/Loading";
 import { getTicketDetails } from "../../../api/ticket";
 import { getMessages, sendMessage, editMessage, deleteMessage } from "../../../api/message";
 
@@ -70,7 +71,9 @@ export default function SupportTicketChat({ ticketId, onBack }) {
     return (
         <div>
             <button className="btn btn-secondary mb-3" onClick={onBack}>بازگشت به لیست تیکت‌ها</button>
-            {loading ? <div>در حال بارگذاری...</div> : (
+            {loading ? (
+                <Loading height="300px" />
+            ) : (
                 <div>
                     <h5 className="fw-bold mb-2 text-warning">چت تیکت: {ticket?.subject} - کاربر: {ticket?.user?.name}</h5>
                     {ticket?.closed && <div className="alert alert-warning">این تیکت بسته شده است.</div>}

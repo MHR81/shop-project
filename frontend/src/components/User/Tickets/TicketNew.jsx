@@ -34,13 +34,13 @@ export default function TicketNew({ onCreated }) {
 
     return (
         <div className="mb-4">
-            <h5 className="fw-bold mb-2 text-success">ثبت تیکت جدید</h5>
+            <h5 className="fw-bold mb-2 new-ticket-title">ثبت تیکت جدید</h5>
             <form onSubmit={handleSubmit} className="row g-2">
                 <div className="col-md-6">
-                    <input className="form-control" name="subject" value={form.subject} onChange={handleChange} placeholder="موضوع" required type="text" />
+                    <input className="form-control new-ticket" name="subject" value={form.subject} onChange={handleChange} placeholder="موضوع" required type="text" />
                 </div>
                 <div className="col-md-6">
-                    <textarea className="form-control" name="message" value={form.message} onChange={handleChange} placeholder="پیام اولیه" required rows={2} />
+                    <textarea className="form-control new-ticket" name="message" value={form.message} onChange={handleChange} placeholder="پیام اولیه" required rows={2} />
                 </div>
                 <div className="col-12">
                     <button className="btn btn-success" type="submit" disabled={loading}>ثبت تیکت</button>
