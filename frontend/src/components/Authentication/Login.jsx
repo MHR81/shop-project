@@ -26,7 +26,7 @@ export default function Login() {
         try {
             const data = await loginUser(email, password);
             if (data.token) {
-                navigate(data.role === "admin" ? "/admin" : "/user");
+                navigate(data.role === "admin" ? "/admin" : data.role === "user" ? "/user" : "/support");
             } else {
                 setError("Login failed!");
             }

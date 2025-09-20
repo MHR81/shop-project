@@ -110,7 +110,7 @@ export default function Navbar({ theme, setTheme }) {
                         {token && (
                             <>
                                 <li className="nav-item mx-2">
-                                    <Link className="nav-link" to="/user" title="Dashboard">
+                                    <Link className="nav-link" to="/auth" title="Dashboard">
                                         <i className="bi bi-person-circle fs-5"></i>
                                     </Link>
                                 </li>

@@ -25,6 +25,9 @@ export default function Auth() {
                 const user = JSON.parse(userInfo);
                 if (user.role === "admin") {
                     navigate("/admin");
+                }
+                if (user.role === "support") {
+                    navigate("/support");
                 } else {
                     navigate("/user");
                 }
