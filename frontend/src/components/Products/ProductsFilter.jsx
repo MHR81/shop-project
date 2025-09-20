@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { getCategories } from "../../api/categories";
 
 export default function ProductsFilter({ onFilter }) {
+    const { t } = useTranslation();
     const [open, setOpen] = useState(false);
     const [categories, setCategories] = useState([]);
     const [category, setCategory] = useState("");
@@ -28,36 +30,36 @@ export default function ProductsFilter({ onFilter }) {
                 onClick={() => setOpen(o => !o)}
                 aria-expanded={open}
             >
-                {open ? "بستن فیلتر محصولات" : "نمایش فیلتر محصولات"}
+                {open ? t("hide_product_filters") : t("show_product_filters")}
             </button>
             {open && (
                 <form className="card shadow-sm p-3" onSubmit={handleSubmit}>
                     <div className="row g-3 align-items-center">
                         <div className="col-md-3">
-                            <label className="form-label">Category</label>
+                            <label className="form-label">{t("category")}</label>
                             <select className="form-select" value={category} onChange={e => setCategory(e.target.value)}>
-                                <option value="">All</option>
+                                <option value="">{t("all")}</option>
                                 {categories.map(cat => (
                                     <option key={cat._id} value={cat._id}>{cat.name}</option>
                                 ))}
                             </select>
                         </div>
                         <div className="col-md-2">
-                            <label className="form-label">Min Price</label>
+                            <label className="form-label">{t("min_price")}</label>
                             <input type="number" className="form-control" value={minPrice} onChange={e => setMinPrice(e.target.value)} min="0" />
                         </div>
                         <div className="col-md-2">
-                            <label className="form-label">Max Price</label>
+                            <label className="form-label">{t("max_price")}</label>
                             <input type="number" className="form-control" value={maxPrice} onChange={e => setMaxPrice(e.target.value)} min="0" />
                         </div>
                         <div className="col-md-3">
-                            <label className="form-label">Search</label>
-                            <input type="text" className="form-control" value={search} onChange={e => setSearch(e.target.value)} placeholder="Product name..." />
+                            <label className="form-label">{t("search_placeholder")}</label>
+                            <input type="text" className="form-control" value={search} onChange={e => setSearch(e.target.value)} placeholder={t("search_placeholder")} />
                         </div>
                         <div className="col-md-2">
-                            <label className="form-label">Sort</label>
+                            <label className="form-label">{t("sort")}</label>
                             <select className="form-select" value={sort} onChange={e => setSort(e.target.value)}>
-                                <option value="">Default</option>
+                                <option value="">{t("default")}</option>
                                 <option value="price-asc">Price: Low to High</option>
                                 <option value="price-desc">Price: High to Low</option>
                                 <option value="newest">Newest</option>
@@ -66,9 +68,10 @@ export default function ProductsFilter({ onFilter }) {
                     </div>
                     <div className="form-check mt-3">
                         <input className="form-check-input" type="checkbox" checked={inStock} onChange={e => setInStock(e.target.checked)} id="inStockCheck" />
-                        <label className="form-check-label" htmlFor="inStockCheck">Only show in-stock products</label>
+                        <label className="form-check-label" htmlFor="inStockCheck">{t("in_stock")}</label>
                     </div>
                     <button type="submit" className="btn btn-danger mt-3">اعمال فیلتر</button>
+                    <button type="submit" className="btn btn-danger mt-3">{t("show_product_filters")}</button>
                 </form>
             )}
         </div>

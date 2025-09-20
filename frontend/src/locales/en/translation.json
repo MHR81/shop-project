@@ -1,0 +1,19 @@
+{
+  "search_placeholder": "Search...",
+  "show_product_filters": "Show product filters",
+  "hide_product_filters": "Hide product filters",
+  "category": "Category",
+  "min_price": "Min Price",
+  "max_price": "Max Price",
+  "sort": "Sort",
+  "all": "All",
+  "default": "Default",
+  "product_not_found": "Product not found!",
+  "no_products_found": "No products found",
+  "in_stock": "In stock",
+  "out_of_stock": "Out of stock",
+  "add_to_cart": "Add to Cart",
+  "added": "Added!",
+  "view_product": "View Product",
+  "our_products": "Our Products"
+}

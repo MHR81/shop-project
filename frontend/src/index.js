@@ -1,5 +1,6 @@
 // src/index.js
 import React from "react";
+import "./i18n";
 import ReactDOM from "react-dom/client";
 import { AuthProvider } from "./context/AuthContext";
 import "./index.css";

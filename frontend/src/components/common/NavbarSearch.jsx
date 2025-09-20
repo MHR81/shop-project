@@ -1,7 +1,9 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
 export default function NavbarSearch({ theme }) {
+    const { t } = useTranslation();
     const [query, setQuery] = useState("");
     const navigate = useNavigate();
     const darkMode = theme === "dark";
@@ -18,7 +20,7 @@ export default function NavbarSearch({ theme }) {
             <input
                 type="text"
                 className={`form-control nav-search rounded-pill ps-4 py-2 shadow-lg ${darkMode ? "bg-dark-2 text-light border-0" : "bg-light text-dark border-0"}`}
-                placeholder="Search..."
+                placeholder={t("search_placeholder")}
                 value={query}
                 onChange={e => setQuery(e.target.value)}
                 style={{ fontSize: 16, transition: "all 0.2s" }}

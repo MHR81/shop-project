@@ -2,12 +2,19 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import logo from '../../logo.png';
+import { useTranslation } from "react-i18next";
 import Loading from "../common/Loading";
 import { getCategories } from "../../api/categories";
 import DarkModeToggle from './DarkModeToggle';
 import NavbarSearch from "./NavbarSearch";
 
 export default function Navbar({ theme, setTheme }) {
+    const { i18n } = useTranslation();
+    const [lang, setLang] = useState(i18n.language || "en");
+    const handleLangChange = (lng) => {
+        i18n.changeLanguage(lng);
+        setLang(lng);
+    };
     // Convert theme string to boolean for DarkModeToggle
     const darkMode = theme === "dark";
     const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -144,6 +151,20 @@ export default function Navbar({ theme, setTheme }) {
                     {/* سرچ حرفه‌ای */}
                     <div className="me-5 d-none d-lg-flex flex-grow-1 justify-content-center">
                         <NavbarSearch theme={theme} />
+                        <div className="ms-4">
+                            <button
+                                className={`btn btn-sm ${lang === "en" ? "btn-outline-primary" : "btn-outline-secondary"} mx-1`}
+                                onClick={() => handleLangChange("en")}
+                            >
+                                EN
+                            </button>
+                            <button
+                                className={`btn btn-sm ${lang === "fa" ? "btn-outline-primary" : "btn-outline-secondary"} mx-1`}
+                                onClick={() => handleLangChange("fa")}
+                            >
+                                FA
+                            </button>
+                        </div>
                     </div>
 
                     {/* سرچ حرفه‌ای برای موبایل */}

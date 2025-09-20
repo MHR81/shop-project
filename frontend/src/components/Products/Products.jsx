@@ -20,7 +20,7 @@ export default function Products({ filter = {} }) {
             {loading ? (
                 <Loading height="300px" />
             ) : products.length === 0 ? (
-                <div className="alert alert-warning text-center my-5">محصولی یافت نشد</div>
+                <div className="alert alert-warning text-center my-5">No products found</div>
             ) : (
                 <div className="row">
                     {products.map(product => (

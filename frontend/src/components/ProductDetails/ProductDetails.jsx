@@ -9,7 +9,7 @@ export default function ProductDetails() {
     const [added, setAdded] = useState(false);
 
     useEffect(() => {
-        fetch(`https://fakestoreapi.com/products/${id}`)
+        fetch(`${process.env.REACT_APP_API_URL}/products/${id}`)
             .then(res => res.json())
             .then(data => {
                 setProduct(data);
@@ -40,30 +40,30 @@ export default function ProductDetails() {
     }
 
     if (!product) {
-        return <div className="text-center text-danger my-5">محصول پیدا نشد!</div>;
+    return <div className="text-center text-danger my-5">Product not found!</div>;
     }
 
     return (
         <div className="products-card container my-5 shadow-lg rounded">
             <div className="row align-items-center py-4">
                 <div className="col-md-5 text-center mb-4 mb-md-0">
-                    <img src={product.image} alt={product.title} className="img-fluid" style={{ maxHeight: "350px" }} />
+                    <img src={product.image} alt={product.name} className="img-fluid" style={{ maxHeight: "350px" }} />
                 </div>
                 <div className="col-md-7">
-                    <h2 className="fw-bold mb-3">{product.title}</h2>
+                    <h2 className="fw-bold mb-3">{product.name}</h2>
                     <p className="mb-2">
                         <span className="badge bg-secondary fs-6">
                             {product.category && product.category.name
                                 ? product.category.name.charAt(0).toUpperCase() + product.category.name.slice(1)
-                                : "بدون دسته‌بندی"}
+                                : "No category"}
                         </span>
                     </p>
                     <p className="mb-3">{product.description}</p>
                     <div className="mb-3">
-                        <span className="badge bg-warning text-dark me-2">
-                            <i className="bi bi-star-fill"></i> {product.rating?.rate ?? "-"}
+                        <span className={`badge ${product.countInStock > 0 ? "bg-success" : "bg-danger"} me-2`}>
+                            {product.countInStock > 0 ? `In stock (${product.countInStock})` : "Out of stock"}
                         </span>
-                        <span className="fw-bold text-success fs-5">{product.price}$</span>
+                        <span className="fw-bold text-success fs-5">${product.price}</span>
                     </div>
                     <button
                         className="btn btn-danger px-4"

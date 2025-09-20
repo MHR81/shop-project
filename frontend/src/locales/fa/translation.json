@@ -1,0 +1,19 @@
+{
+  "search_placeholder": "جستجو...",
+  "show_product_filters": "نمایش فیلتر محصولات",
+  "hide_product_filters": "بستن فیلتر محصولات",
+  "category": "دسته‌بندی",
+  "min_price": "حداقل قیمت",
+  "max_price": "حداکثر قیمت",
+  "sort": "مرتب‌سازی",
+  "all": "همه",
+  "default": "پیش‌فرض",
+  "product_not_found": "محصول پیدا نشد!",
+  "no_products_found": "محصولی یافت نشد",
+  "in_stock": "موجود",
+  "out_of_stock": "ناموجود",
+  "add_to_cart": "افزودن به سبد خرید",
+  "added": "افزوده شد!",
+  "view_product": "مشاهده محصول",
+  "our_products": "محصولات ما"
+}

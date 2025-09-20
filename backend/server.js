@@ -19,6 +19,18 @@ connectDB();
 const app = express();
 
 // Middlewares
+import rateLimit from "express-rate-limit";
+
+// ریت‌لیمیت حرفه‌ای برای کل API
+const apiLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 دقیقه
+    max: 100, // حداکثر 100 درخواست در بازه
+    message: { message: "تعداد درخواست شما بیش از حد مجاز است. لطفا بعدا تلاش کنید." },
+    standardHeaders: true,
+    legacyHeaders: false,
+});
+app.use("/api/", apiLimiter);
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
