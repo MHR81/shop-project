@@ -1,3 +1,4 @@
+// ...existing code...
 // روت اصلی برای جلوگیری از ارور 404
 app.get('/', (req, res) => {
     res.status(200).json({ message: 'API is running.' });
