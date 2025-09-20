@@ -190,7 +190,7 @@ export default function Profile({ profile, setProfile, edit, setEdit }) {
                             type="email"
                             value={profile.email || ""}
                             onChange={handleChange}
-                            // disabled={!edit}
+                            disabled={true}
                             autoComplete="email"
                         />
                     </div>

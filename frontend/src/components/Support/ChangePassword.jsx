@@ -2,7 +2,7 @@ import { useState } from "react";
 import { changePassword } from "../../api/auth";
 import { useAuth } from "../../context/AuthContext";
 
-export default function AdminChangePassword() {
+export default function SupportChangePassword() {
     const [currentPassword, setCurrentPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");

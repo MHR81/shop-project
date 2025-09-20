@@ -4,6 +4,7 @@ import AuthLayout from "./AuthLayout.jsx";
 import { registerUser } from "../../api/auth";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import PasswordInput from "../common/PasswordInput.jsx";
 
 export default function Register() {
     const [showLogin, setShowLogin] = useState(false);
@@ -61,8 +62,7 @@ export default function Register() {
                 </div>
                 <div className="mb-3">
                     <label className="form-label"><i className="bi bi-lock"></i> Password</label>
-                    <input type="password" className="form-control" placeholder="Enter your password"
-                        value={password} onChange={(e) => setPassword(e.target.value)} required autoComplete="new-password" />
+                    <PasswordInput value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Enter your password" />
                 </div>
                 {error && <div className="alert alert-danger py-2">{error}</div>}
                 <button type="submit" className="btn btn-danger w-100" disabled={loading}>

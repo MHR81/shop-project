@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import Loading from "../common/Loading.jsx";
 import { useAuth } from "../../context/AuthContext";
 import AuthLayout from "./AuthLayout.jsx";
+import PasswordInput from "../common/PasswordInput.jsx";
 
 export default function Login() {
     const [showRegister, setShowRegister] = useState(false);
@@ -46,8 +47,7 @@ export default function Login() {
                 </div>
                 <div className="mb-3">
                     <label className="form-label"><i className="bi bi-lock"></i> Password</label>
-                    <input type="password" className="form-control" placeholder="Enter your password"
-                        value={password} onChange={(e) => setPassword(e.target.value)} required />
+                    <PasswordInput value={password} onChange={e => setPassword(e.target.value)} placeholder="Enter your password" />
                 </div>
                 <p className="text-start">
                     <button type="button" className="btn btn-link text-decoration-none"

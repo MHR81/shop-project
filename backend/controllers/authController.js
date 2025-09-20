@@ -1,4 +1,28 @@
 /**
+ * @route POST /api/auth/change-password
+ * @desc Change user password (protected)
+ */
+export const changePassword = asyncHandler(async (req, res) => {
+    const { currentPassword, newPassword } = req.body;
+    if (!currentPassword || !newPassword) {
+        res.status(400);
+        throw new Error("لطفاً رمز فعلی و رمز جدید را وارد کنید.");
+    }
+    const user = await User.findById(req.user._id);
+    if (!user) {
+        res.status(404);
+        throw new Error("کاربر پیدا نشد");
+    }
+    const isMatch = await user.matchPassword(currentPassword);
+    if (!isMatch) {
+        res.status(401);
+        throw new Error("رمز فعلی اشتباه است.");
+    }
+    user.password = newPassword;
+    await user.save();
+    res.json({ message: "رمز عبور با موفقیت تغییر کرد." });
+});
+/**
  * @route POST /api/auth/create-support
  * @desc Create new support user (admin only)
  */

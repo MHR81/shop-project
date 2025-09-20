@@ -1,4 +1,13 @@
 import axios from "axios";
+
+// Change Password (Admin/User)
+export const changePassword = async (token, currentPassword, newPassword) => {
+    const { data } = await axios.post(`${API_URL}/change-password`, { currentPassword, newPassword }, {
+        headers: { Authorization: `Bearer ${token}` }
+    });
+    return data;
+};
+
 // Ticket APIs
 export const createTicket = async (token, ticketData) => {
     const { data } = await axios.post(`${process.env.REACT_APP_API_URL}/tickets`, ticketData, {
