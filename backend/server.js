@@ -11,7 +11,6 @@ import ticketRoutes from "./routes/ticketRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
 import locationRoutes from "./routes/locationRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
-app.use("/api/users", userRoutes);
 
 dotenv.config();
 connectDB();
@@ -26,11 +25,11 @@ app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 app.use(morgan("dev"));
 
 // Routes
-
 app.use("/api/auth", authRoutes);
 app.use("/api/tickets", ticketRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/location", locationRoutes);
+app.use("/api/users", userRoutes);
 
 // Error handling middleware (after routes)
 app.use((err, req, res, next) => {
