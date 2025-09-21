@@ -9,14 +9,16 @@ import DarkModeToggle from './DarkModeToggle';
 import NavbarSearch from "./NavbarSearch";
 
 export default function Navbar({ theme, setTheme }) {
+    
     const { i18n } = useTranslation();
     const { t } = useTranslation();
     const [lang, setLang] = useState(i18n.language || "en");
-    const handleLangChange = (lng) => {
-        i18n.changeLanguage(lng);
-        setLang(lng);
-        localStorage.setItem('language', lng);
-    };
+    // const handleLangChange = (lng) => {
+    //     i18n.changeLanguage(lng);
+    //     setLang(lng);
+    //     localStorage.setItem('language', lng);
+    // };
+
     // Convert theme string to boolean for DarkModeToggle
     const darkMode = theme === "dark";
     const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -165,7 +167,7 @@ export default function Navbar({ theme, setTheme }) {
                     {/* سرچ حرفه‌ای */}
                     <div className=" d-none d-lg-flex flex-grow-1 justify-content-center">
                         <NavbarSearch theme={theme} />
-                        <div className="ms-4 d-flex align-content-center">
+                        {/* <div className="ms-4 d-flex align-content-center">
                             <button
                                 className={`btn btn-sm ${lang === "en" ? "btn-outline-primary" : "btn-outline-secondary"} mx-1`}
                                 style={{ maxWidth: "30px", maxHeight: "30px" }}
@@ -180,15 +182,15 @@ export default function Navbar({ theme, setTheme }) {
                             >
                                 FA
                             </button>
-                        </div>
+                        </div> */}
                     </div>
                     {/* سرچ حرفه‌ای برای موبایل */}
                     <div className="d-lg-none d-flex justify-content-center">
                         <NavbarSearch theme={theme} />
                     </div>
 
-                    <li className="row d-lg-none g-3 mt-3">
-                        <div className="col d-flex justify-content-end">
+                    <li className="row d-lg-none g-3 m-3">
+                        {/* <div className="col d-flex justify-content-end">
                             <button
                                 className={`btn btn-sm ${lang === "en" ? "btn-outline-primary" : "btn-outline-secondary"} mx-1`}
                                 style={{ maxWidth: "30px", maxHeight: "30px" }}
@@ -203,8 +205,8 @@ export default function Navbar({ theme, setTheme }) {
                             >
                                 FA
                             </button>
-                        </div>
-                        <div className="col d-flex justify-content-start">
+                        </div> */}
+                        <div className="col d-flex justify-content-center">
                             <DarkModeToggle darkMode={darkMode} setDarkMode={dm => setTheme(dm ? "dark" : "light")} />
                         </div>
                     </li>

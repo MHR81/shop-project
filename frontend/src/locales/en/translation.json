@@ -22,8 +22,9 @@
     "add_to_cart": "Add to Cart",
     "added": "Added!",
     "view_product": "View Product",
-    "our_products": "Our Products"
-    ,
+    "our_products": "Our Products",
+
+    
     "user_dashboard": "User Dashboard",
     "support_dashboard": "Support Dashboard",
     "admin_dashboard": "Admin Dashboard",

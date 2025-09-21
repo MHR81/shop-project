@@ -15,7 +15,7 @@ import Cart from './pages/Cart.js';
 import Products from './pages/Products.js';
 import Product from './pages/Product.js';
 import Categories from './pages/Categories.js';
-import CategoryPage from './pages/CategoryPage.jsx';
+import CategoryPage from './pages/CategoryPage.js';
 import NotFound from './pages/NotFound.js';
 import User from './pages/User.js';
 import Admin from './pages/Admin.js';

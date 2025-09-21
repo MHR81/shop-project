@@ -1,17 +1,14 @@
 import React from "react";
-import { useTranslation } from "react-i18next";
 import PageTransition from "../components/common/PageTransition";
 import Breadcrumb from "../components/common/Breadcrumb";
 import Products from '../components/Products/Products.jsx';
 import ProductsFilter from '../components/Products/ProductsFilter.jsx';
 
 export default function ProductsPage() {
-    const { t } = useTranslation();
     const breadcrumbItems = [
-        { label: t("home"), to: "/" },
-        { label: t("products"), active: true }
+        { label: "Home", to: "/" },
+        { label: "Products", active: true }
     ];
-
     const [filter, setFilter] = React.useState({});
     return (
         <PageTransition>
@@ -21,13 +18,12 @@ export default function ProductsPage() {
             <div className="container">
                 <div className="products-card d-flex justify-content-center rounded my-3">
                     <h3 className="my-4 fw-bold">
-                        <span className='fs-2'>{t("our_products")}</span>
+                        <span><span className='fs-2 text-danger'>Our</span> <span className="fs-1">Products</span></span>
                     </h3>
                 </div>
-                {/* فیلتر حرفه‌ای */}
                 <ProductsFilter onFilter={setFilter} />
             </div>
-                    <Products filter={filter} />
+            <Products filter={filter} />
         </PageTransition>
     );
 }
