@@ -5,7 +5,9 @@ import {
 	getAllOrders,
 	getOrderById,
 	payOrder,
-	deliverOrder
+	deliverOrder,
+	deleteAllOrders,
+	deleteOrderById
 } from "../controllers/orderController.js";
 import { protect, admin } from "../middleware/authMiddleware.js";
 
@@ -21,10 +23,10 @@ router.get("/myorders", protect, getMyOrders);
 router.get("/all", protect, admin, getAllOrders);
 
 // حذف همه سفارش‌ها (ادمین)
-router.delete("/all", protect, admin, require("../controllers/orderController.js").deleteAllOrders);
+router.delete("/all", protect, admin, deleteAllOrders);
 
 // حذف سفارش با آیدی (ادمین)
-router.delete("/:id", protect, admin, require("../controllers/orderController.js").deleteOrderById);
+router.delete("/:id", protect, admin, deleteOrderById);
 
 // دریافت سفارش با آیدی
 router.get("/:id", protect, getOrderById);
