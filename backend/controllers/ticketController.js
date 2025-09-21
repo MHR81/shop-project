@@ -55,10 +55,10 @@ export const getUserTickets = asyncHandler(async (req, res) => {
 
 // دریافت لیست تیکت‌های ساپورت (همه تیکت‌ها)
 export const getSupportTickets = asyncHandler(async (req, res) => {
-    // Only support role can access
-    if (!req.user || req.user.role !== "support") {
+    // Only support or admin role can access
+    if (!req.user || (req.user.role !== "support" && req.user.role !== "admin")) {
         res.status(403);
-        throw new Error("Access denied, support only");
+        throw new Error("Access denied, support or admin only");
     }
     const tickets = await Ticket.find().populate("user", "name email").sort({ createdAt: -1 });
     res.json(tickets);
@@ -144,10 +144,10 @@ export const setTicketReadForSupport = asyncHandler(async (req, res) => {
     res.json({ success: true, isReadForSupport: ticket.isReadForSupport });
 });
 export const getAllTickets = asyncHandler(async (req, res) => {
-    // Only support role can access
-    if (!req.user || req.user.role !== "support") {
+    // Only support or admin role can access
+    if (!req.user || (req.user.role !== "support" && req.user.role !== "admin")) {
         res.status(403);
-        throw new Error("Access denied, support only");
+        throw new Error("Access denied, support or admin only");
     }
     const tickets = await Ticket.find().populate("user", "name email");
     res.json(tickets);
