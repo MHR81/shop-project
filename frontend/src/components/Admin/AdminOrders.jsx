@@ -2,8 +2,10 @@ import { useEffect, useState, useCallback } from "react";
 import Loading from "../common/Loading";
 import { useAuth } from "../../context/AuthContext";
 import { getAllOrders, deliverOrder } from "../../api/orders";
+import { deleteAllOrders, deleteOrderById } from "../../api/orders";
 
 export default function AdminOrders() {
+    const [search, setSearch] = useState("");
     const { user } = useAuth();
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -36,15 +38,55 @@ export default function AdminOrders() {
         }
     };
 
+    const handleDeleteOrder = async id => {
+        if (!window.confirm("آیا مطمئن هستید که می‌خواهید این سفارش حذف شود؟")) return;
+        try {
+            await deleteOrderById(user.token, id);
+            setMessage("سفارش حذف شد");
+            fetchOrders();
+        } catch {
+            setMessage("خطا در حذف سفارش");
+        }
+    };
+
+    const handleDeleteAll = async () => {
+        if (!window.confirm("آیا مطمئن هستید که می‌خواهید همه سفارش‌ها حذف شوند؟")) return;
+        try {
+            await deleteAllOrders(user.token);
+            setMessage("همه سفارش‌ها حذف شدند");
+            fetchOrders();
+        } catch {
+            setMessage("خطا در حذف همه سفارش‌ها");
+        }
+    };
+
     return (
         <div>
             <h4 className="fw-bold mb-3 text-danger">مدیریت سفارشات</h4>
+            <div className="d-flex flex-wrap gap-2 mb-3">
+                <input
+                    type="text"
+                    className="form-control w-auto"
+                    placeholder="جستجو بر اساس نام کاربر یا ایمیل یا شماره سفارش..."
+                    value={search}
+                    onChange={e => setSearch(e.target.value)}
+                />
+                <button className="btn btn-danger" onClick={handleDeleteAll}>حذف همه سفارش‌ها</button>
+                <button className="btn btn-outline-secondary" onClick={() => window.print()}>پرینت لیست سفارشات</button>
+            </div>
             {loading ? <Loading height="200px" /> : (
                 orders.length === 0 ? (
                     <div className="alert alert-warning text-center">سفارشی برای نمایش وجود ندارد.</div>
                 ) : (
                     <div className="row g-4">
-                        {orders.map(order => (
+                        {orders
+                            .filter(order =>
+                                !search ||
+                                order._id.includes(search) ||
+                                (order.user?.name && order.user.name.includes(search)) ||
+                                (order.user?.email && order.user.email.includes(search))
+                            )
+                            .map(order => (
                             <div key={order._id} className="col-12 col-md-6 col-lg-4">
                                 <div className="card shadow border-0 h-100 order-card">
                                     <div className="card-header bg-gradient bg-primary text-white d-flex justify-content-between align-items-center">
@@ -87,6 +129,10 @@ export default function AdminOrders() {
                                                     </li>
                                                 ))}
                                             </ul>
+                                        </div>
+                                        <div className="d-flex gap-2 mt-2">
+                                            <button className="btn btn-sm btn-danger" onClick={() => handleDeleteOrder(order._id)}>حذف سفارش</button>
+                                            <button className="btn btn-sm btn-outline-secondary" onClick={() => navigator.clipboard.writeText(order._id)}>کپی شماره سفارش</button>
                                         </div>
                                     </div>
                                 </div>

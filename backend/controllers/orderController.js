@@ -50,6 +50,33 @@ export const getAllOrders = asyncHandler(async (req, res) => {
     res.json(orders);
 });
 
+// حذف همه سفارش‌ها (ادمین)
+export const deleteAllOrders = asyncHandler(async (req, res) => {
+    await Order.deleteMany({});
+    await Log.create({
+        user: req.user?._id,
+        action: "حذف همه سفارش‌ها",
+        details: `همه سفارش‌ها توسط ${req.user?.email || "سیستم"} حذف شدند.`
+    });
+    res.json({ message: "همه سفارش‌ها حذف شدند" });
+});
+
+// حذف سفارش با آیدی (ادمین)
+export const deleteOrderById = asyncHandler(async (req, res) => {
+    const order = await Order.findById(req.params.id);
+    if (!order) {
+        res.status(404);
+        throw new Error("سفارش پیدا نشد");
+    }
+    await order.deleteOne();
+    await Log.create({
+        user: req.user?._id,
+        action: "حذف سفارش",
+        details: `سفارش شماره ${order._id} توسط ${req.user?.email || "سیستم"} حذف شد.`
+    });
+    res.json({ message: "سفارش حذف شد" });
+});
+
 // دریافت سفارش با آیدی
 export const getOrderById = asyncHandler(async (req, res) => {
     const order = await Order.findById(req.params.id).populate("user", "name email");

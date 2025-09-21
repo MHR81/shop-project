@@ -20,6 +20,12 @@ router.get("/myorders", protect, getMyOrders);
 // دریافت همه سفارش‌ها (ادمین)
 router.get("/all", protect, admin, getAllOrders);
 
+// حذف همه سفارش‌ها (ادمین)
+router.delete("/all", protect, admin, require("../controllers/orderController.js").deleteAllOrders);
+
+// حذف سفارش با آیدی (ادمین)
+router.delete("/:id", protect, admin, require("../controllers/orderController.js").deleteOrderById);
+
 // دریافت سفارش با آیدی
 router.get("/:id", protect, getOrderById);
 
