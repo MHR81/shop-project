@@ -82,12 +82,6 @@ export default function ProductDetails() {
                             <i className="bi bi-chevron-left fs-2"></i>
                         </button>
                     )}
-                    <img
-                        src={Array.isArray(product.images) && product.images.length > 0 ? product.images[currentImg] : product.image}
-                        alt={product.name}
-                        style={{ maxHeight: "90vh", maxWidth: "90vw", borderRadius: "16px", boxShadow: "0 4px 32px rgba(0,0,0,0.3)" }}
-                        onClick={e => e.stopPropagation()}
-                    />
                     {/* Next Button */}
                     {Array.isArray(product.images) && product.images.length > 1 && (
                         <button
@@ -182,9 +176,9 @@ export default function ProductDetails() {
                         <button
                             className="btn btn-danger px-4"
                             onClick={handleAddToCart}
-                            disabled={added}
+                            disabled={added || product.countInStock === 0}
                         >
-                            {added ? "Added!" : "Add to Cart"}
+                            {product.countInStock === 0 ? "ناموجود" : added ? "Added!" : "Add to Cart"}
                         </button>
                     </div>
                 </div>

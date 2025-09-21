@@ -163,8 +163,12 @@ export default function CartItems() {
                                                 <button
                                                     className="btn btn-sm btn-outline-secondary ms-2"
                                                     onClick={() => handleQuantityChange(item.id, 1)}
+                                                    disabled={item.countInStock === 0 || item.quantity >= item.countInStock}
                                                 >+</button>
                                             </div>
+                                            {item.countInStock === 0 && (
+                                                <span className="badge bg-danger ms-2">ناموجود</span>
+                                            )}
                                         </td>
                                         <td className="cart-table-items">{(item.price * item.quantity)}</td>
                                         <td className="cart-table-items">
@@ -189,7 +193,7 @@ export default function CartItems() {
                     <button
                         className="btn btn-danger px-4 py-2 fw-bold ms-auto"
                         onClick={handleCheckout}
-                        disabled={totalItems === 0 || loading}
+                        disabled={totalItems === 0 || loading || cart.some(item => item.countInStock === 0)}
                     >
                         <i className="bi bi-credit-card-2-front me-2"></i>
                         Proceed to Checkout

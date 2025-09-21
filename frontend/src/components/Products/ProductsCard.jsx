@@ -29,6 +29,13 @@ export default function ProductsCard({ id, Image, Title, Description, Price, Cou
                 >
                     {t("view_product")}
                 </Link>
+                <button
+                    className="btn btn-danger mt-2 w-100"
+                    disabled={CountInStock === 0}
+                    style={{ opacity: CountInStock === 0 ? 0.6 : 1 }}
+                >
+                    {CountInStock === 0 ? t("out_of_stock") : t("add_to_cart")}
+                </button>
             </div>
         </div>
     );
