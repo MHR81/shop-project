@@ -16,7 +16,7 @@ export default function AdminTickets() {
         const fetchTickets = async () => {
             setLoading(true);
             try {
-                const res = await axios.get("/api/tickets", {
+                const res = await axios.get("/api/tickets/all", {
                     headers: { Authorization: `Bearer ${user.token}` }
                 });
                 setTickets(res.data);
@@ -38,7 +38,7 @@ export default function AdminTickets() {
         if (!answer.trim()) return setMessage("پاسخ را وارد کنید.");
         setAnswerLoading(true);
         try {
-            await axios.post(`/api/tickets/${activeTicket._id}/answer`, { answer }, {
+            await axios.put(`/api/tickets/${activeTicket._id}/answer`, { answer }, {
                 headers: { Authorization: `Bearer ${user.token}` }
             });
             setMessage("پاسخ با موفقیت ثبت شد.");
