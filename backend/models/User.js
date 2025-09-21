@@ -9,6 +9,7 @@ const userSchema = mongoose.Schema({
     email: { type: String, required: true, unique: true, lowercase: true },
     password: { type: String, required: true },
     role: { type: String, enum: ["user", "admin", "support"], default: "user" },
+    mainAdmin: { type: Boolean, default: false }, // ادمین اصلی
     province: { type: String },
     city: { type: String },
     address: { type: String },

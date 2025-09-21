@@ -18,6 +18,10 @@ export const getUserById = asyncHandler(async (req, res) => {
 export const updateUser = asyncHandler(async (req, res) => {
     const user = await User.findById(req.params.id);
     if (user) {
+        // جلوگیری از تغییر نقش mainAdmin توسط هر کسی
+        if (user.mainAdmin && req.body.role && req.body.role !== user.role) {
+            return res.status(403).json({ message: "نقش ادمین اصلی قابل تغییر نیست." });
+        }
         // جلوگیری از تغییر نقش ادمین توسط خودش
         if (user._id.toString() === req.user._id.toString() && req.body.role && req.body.role !== user.role) {
             return res.status(403).json({ message: "ادمین نمی‌تواند نقش خود را تغییر دهد." });
