@@ -27,6 +27,27 @@ export const updateUser = asyncHandler(async (req, res) => {
             return res.status(403).json({ message: "ادمین نمی‌تواند نقش خود را تغییر دهد." });
         }
         const prevRole = user.role;
+        // چک ایمیل تکراری (غیر از خودش)
+        if (req.body.email && req.body.email !== user.email) {
+            const emailExists = await User.findOne({ email: req.body.email });
+            if (emailExists) {
+                return res.status(400).json({ message: "ایمیل قبلاً ثبت شده است." });
+            }
+        }
+        // چک یوزرنیم تکراری (غیر از خودش)
+        if (req.body.username && req.body.username !== user.username) {
+            const usernameExists = await User.findOne({ username: req.body.username });
+            if (usernameExists) {
+                return res.status(400).json({ message: "نام کاربری قبلاً ثبت شده است." });
+            }
+        }
+        // چک موبایل تکراری (غیر از خودش)
+        if (req.body.mobile && req.body.mobile !== user.mobile) {
+            const mobileExists = await User.findOne({ mobile: req.body.mobile });
+            if (mobileExists) {
+                return res.status(400).json({ message: "شماره موبایل قبلاً ثبت شده است." });
+            }
+        }
         user.name = req.body.name || user.name;
         user.email = req.body.email || user.email;
         user.role = req.body.role || user.role;
@@ -92,16 +113,20 @@ import generateToken from "../utils/generateToken.js";
 
 // Register user
 export const registerUser = asyncHandler(async (req, res) => {
-    const { name, email, password } = req.body;
-
-    const userExists = await User.findOne({ email });
-    if (userExists) {
-        res.status(400);
-        throw new Error("User already exists");
+    const { name, email, password, username, mobile } = req.body;
+    // چک ایمیل تکراری
+    if (email && await User.findOne({ email })) {
+        return res.status(400).json({ message: "ایمیل قبلاً ثبت شده است." });
     }
-
-    const user = await User.create({ name, email, password });
-
+    // چک یوزرنیم تکراری
+    if (username && await User.findOne({ username })) {
+        return res.status(400).json({ message: "نام کاربری قبلاً ثبت شده است." });
+    }
+    // چک موبایل تکراری
+    if (mobile && await User.findOne({ mobile })) {
+        return res.status(400).json({ message: "شماره موبایل قبلاً ثبت شده است." });
+    }
+    const user = await User.create({ name, email, password, username, mobile });
     if (user) {
         res.status(201).json({
             _id: user._id,
