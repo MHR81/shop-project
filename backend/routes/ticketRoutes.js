@@ -2,7 +2,7 @@ import express from "express";
 import { protect, support } from "../middleware/authMiddleware.js";
 import { createTicket, getAllTickets, answerTicket, getUserTickets, getSupportTickets, getTicketDetails, closeTicket, deleteTicket, setTicketReadForSupport, setTicketReadForUser, clearUserTicketNotification, reopenTicketByAdmin } from "../controllers/ticketController.js";
 
-
+const router = express.Router();
 
 // تغییر وضعیت خوانده شدن تیکت توسط کاربر
 router.put("/:id/read-user", protect, setTicketReadForUser);
