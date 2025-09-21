@@ -3,18 +3,27 @@ import User from "../models/User.js";
 
 const MONGO_URI = process.env.MONGO_URI || "mongodb://localhost:27017/shop";
 
-async function setSuperAdmin() {
+
+// ایمیل‌های سوپرادمین‌ها را اینجا وارد کنید
+const superAdminEmails = [
+    "hosein81rahimi@gmail.com",
+    // هر ایمیل دیگری که خواستید اضافه کنید
+];
+
+async function setSuperAdmins() {
     await mongoose.connect(MONGO_URI);
-    const user = await User.findOne({ username: "mhr81" });
-    if (!user) {
-        console.log("کاربری با نام کاربری سوپرادمین پیدا نشد.");
+    const users = await User.find({ email: { $in: superAdminEmails } });
+    if (!users.length) {
+        console.log("هیچ کاربری با ایمیل‌های سوپرادمین پیدا نشد.");
         process.exit(1);
     }
-    user.mainAdmin = true;
-    user.role = "admin";
-    await user.save();
-    console.log("کاربر سوپرادمین اکنون ادمین اصلی است و نقش او قابل تغییر نیست.");
+    for (const user of users) {
+        user.mainAdmin = true;
+        user.role = "admin";
+        await user.save();
+        console.log(`کاربر با ایمیل ${user.email} اکنون سوپرادمین است و نقش او قابل تغییر نیست.`);
+    }
     process.exit(0);
 }
 
-setSuperAdmin();
+setSuperAdmins();
