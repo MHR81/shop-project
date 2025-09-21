@@ -46,8 +46,8 @@ export default function CartItems() {
         try {
             // دریافت اطلاعات پروفایل
             const profile = await getProfile(user.token);
-            if (!profile.address || !profile.city || !profile.province || !profile.postCode) {
-                setMessage("لطفاً ابتدا اطلاعات آدرس خود را در پروفایل تکمیل کنید.");
+            if (!profile.address || !profile.city || !profile.province || !profile.postCode || !profile.mobile || profile.mobile.trim().length < 8) {
+                setMessage("لطفاً ابتدا اطلاعات آدرس و شماره موبایل خود را در پروفایل تکمیل کنید.");
                 setLoading(false);
                 setTimeout(() => {
                     navigate("/user");

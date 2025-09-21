@@ -1,3 +1,19 @@
+import { reopenTicketByAdmin } from "../controllers/ticketController.js";
+// باز کردن دوباره تیکت بسته شده توسط ادمین
+router.put('/:id/reopen', protect, (req, res, next) => {
+	if (req.user && req.user.role === "admin") {
+		next();
+	} else {
+		res.status(403);
+		res.json({ error: "فقط ادمین می‌تواند تیکت را باز کند" });
+	}
+}, reopenTicketByAdmin);
+import { clearUserTicketNotification } from "../controllers/ticketController.js";
+// حذف نوتیفیکیشن برای کاربر وقتی تیکت خوانده شد
+router.put('/:id/clear-user-notification', protect, clearUserTicketNotification);
+import { setTicketReadForUser } from "../controllers/ticketController.js";
+// تغییر وضعیت خوانده شدن تیکت توسط کاربر
+router.put('/:id/read-user', protect, setTicketReadForUser);
 import express from "express";
 import { protect, support } from "../middleware/authMiddleware.js";
 import { createTicket, getAllTickets, answerTicket, getUserTickets, getSupportTickets, getTicketDetails, closeTicket, deleteTicket } from "../controllers/ticketController.js";

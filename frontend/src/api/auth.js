@@ -17,7 +17,7 @@ export const createTicket = async (token, ticketData) => {
 };
 
 export const getAllTickets = async (token) => {
-    const { data } = await axios.get(`${process.env.REACT_APP_API_URL}/tickets`, {
+    const { data } = await axios.get(`${process.env.REACT_APP_API_URL}/tickets/all`, {
         headers: { Authorization: `Bearer ${token}` }
     });
     return data;

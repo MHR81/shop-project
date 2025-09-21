@@ -11,9 +11,20 @@ export const sendMessage = asyncHandler(async (req, res) => {
         throw new Error("متن پیام الزامی است");
     }
     const ticket = await Ticket.findById(ticketId);
-    if (!ticket || ticket.closed) {
+    if (!ticket) {
         res.status(404);
-        throw new Error("تیکت پیدا نشد یا بسته شده است");
+        throw new Error("تیکت پیدا نشد");
+    }
+    // Prevent chat in closed tickets unless admin wants to reopen
+    if (ticket.closed) {
+        if (req.user.role === "admin" && req.body.reopen === true) {
+            ticket.closed = false;
+            ticket.status = "open";
+            await ticket.save();
+        } else {
+            res.status(403);
+            throw new Error("ارسال پیام در تیکت بسته شده مجاز نیست");
+        }
     }
     const message = await Message.create({
         ticket: ticketId,

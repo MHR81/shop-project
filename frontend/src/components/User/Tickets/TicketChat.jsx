@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Loading from "../../common/Loading";
 import { useAuth } from "../../../context/AuthContext";
 import { getTicketDetails } from "../../../api/ticket";
+import { setTicketReadForUser, clearUserTicketNotification } from "../../../api/ticket";
 import { getMessages, sendMessage, editMessage, deleteMessage } from "../../../api/message";
 import { useTranslation } from "react-i18next";
 
@@ -22,6 +23,13 @@ export default function TicketChat({ ticketId, onBack }) {
             try {
                 const ticketData = await getTicketDetails(user.token, ticketId);
                 setTicket(ticketData);
+                // Mark as read and clear notification if needed
+                if (!ticketData.isReadForUser) {
+                    await setTicketReadForUser(user.token, ticketId, true);
+                }
+                if (ticketData.notificationForUser) {
+                    await clearUserTicketNotification(user.token, ticketId);
+                }
                 const msgs = await getMessages(user.token, ticketId);
                 setMessages(msgs);
             } catch {
@@ -81,15 +89,15 @@ export default function TicketChat({ ticketId, onBack }) {
                     {ticket?.closed && <div className="alert alert-warning">{t("ticket_chat_closed")}</div>}
                     <div className="chat-box mb-3 ticket-chat-box" style={{ maxHeight: 350, overflowY: "auto", background: "#f8f9fa", borderRadius: 8, padding: 12 }}>
                         {messages.map(msg => (
-                            <div key={msg._id} className={`mb-2 p-2 rounded ${msg.sender._id === user._id ? "ticket-chat-user text-end" : "ticket-chat-support text-start"}`} style={{ position: "relative" }}>
+                            <div key={msg._id} className={`mb-2 p-2 rounded ${msg.sender && user && msg.sender._id === user._id ? "ticket-chat-user text-end" : "ticket-chat-support text-start"}`} style={{ position: "relative" }}>
                                 {msg.deleted ? (
                                     <i className="text-muted">{t("ticket_chat_deleted")}</i>
                                 ) : (
                                     <span>
                                         {msg.text}
                                         {msg.edited && <span className="ms-2 badge bg-info">{t("ticket_chat_edited")}</span>}
-                                        <div className="mt-4 small ticket-info">{msg.sender.name} - {new Date(msg.createdAt).toLocaleString()}</div>
-                                        {msg.sender._id === user._id && !msg.deleted && (
+                                        <div className="mt-4 small ticket-info">{msg.sender?.name} - {new Date(msg.createdAt).toLocaleString()}</div>
+                                        {msg.sender && user && msg.sender._id === user._id && !msg.deleted && (
                                             <div style={{ position: "absolute", top: 10, left: 10 }}>
                                                 <button className="btn btn-sm btn-outline-info me-1" onClick={() => { setEditId(msg._id); setEditText(msg.text); }}>{t("ticket_chat_edit")}</button>
                                                 <button className="btn btn-sm btn-outline-danger" onClick={() => handleDelete(msg._id)}>{t("ticket_chat_delete")}</button>

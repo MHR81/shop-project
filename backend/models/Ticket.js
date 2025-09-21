@@ -8,6 +8,8 @@ const ticketSchema = mongoose.Schema({
     support: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     closed: { type: Boolean, default: false },
     isReadForSupport: { type: Boolean, default: false }, // خوانده نشده برای ساپورت
+    isReadForUser: { type: Boolean, default: false }, // خوانده نشده برای کاربر
+    notificationForUser: { type: Boolean, default: false }, // نوتیفیکیشن برای کاربر
 }, { timestamps: true });
 
 const Ticket = mongoose.model("Ticket", ticketSchema);

@@ -52,9 +52,11 @@ export default function TicketList({ onSelect }) {
             ) : (
                 <ul className="list-group">
                     {tickets.map(ticket => (
-                        <li key={ticket._id} className="list-group-item d-flex justify-content-between align-items-center my-tickets">
-                            <span onClick={() => onSelect(ticket._id)} style={{ cursor: "pointer" }}>
+                        <li key={ticket._id} className={`list-group-item d-flex justify-content-between align-items-center my-tickets ${!ticket.isReadForUser ? "bg-light border-primary" : ""}`}>
+                            <span onClick={() => onSelect(ticket._id)} style={{ cursor: "pointer", position: "relative" }}>
                                 <b>{ticket.subject}</b> - {ticket.status === "closed" ? t("ticket_list_closed") : t("ticket_list_open")}
+                                {!ticket.isReadForUser && <span className="badge bg-primary ms-2">{t("ticket_list_unread")}</span>}
+                                {ticket.notificationForUser && <span className="badge bg-danger ms-2">{t("ticket_list_new_reply")}</span>}
                             </span>
                             <div>
                                 {!ticket.closed && <button className="btn btn-sm btn-warning me-2" onClick={() => handleClose(ticket._id)}>{t("ticket_list_close")}</button>}

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { getAllTickets, answerTicket } from "../../api/auth";
+import { setTicketReadForSupport } from "../../api/ticket";
 
 export default function SupportTickets() {
     const { user } = useAuth();
@@ -50,13 +51,22 @@ export default function SupportTickets() {
                     ) : (
                         <ul className="list-group mb-3">
                             {tickets.map(ticket => (
-                                <li key={ticket._id} className="list-group-item">
+                                <li key={ticket._id} className={`list-group-item ${!ticket.isReadForSupport ? "bg-light border-primary" : ""}`}>
                                     <div><b>موضوع:</b> {ticket.subject}</div>
                                     <div><b>پیام:</b> {ticket.message}</div>
                                     <div><b>وضعیت:</b> {ticket.status}</div>
                                     <div><b>کاربر:</b> {ticket.user?.name} ({ticket.user?.email})</div>
+                                    {!ticket.isReadForSupport && <span className="badge bg-primary ms-2">خوانده نشده</span>}
                                     {ticket.status !== "answered" && (
-                                        <button className="btn btn-sm btn-warning mt-2" onClick={() => setSelectedId(ticket._id)}>پاسخ</button>
+                                        <button className="btn btn-sm btn-warning mt-2" onClick={async () => {
+                                            setSelectedId(ticket._id);
+                                            if (!ticket.isReadForSupport) {
+                                                await setTicketReadForSupport(user.token, ticket._id, true);
+                                                // Refresh tickets to update read status
+                                                const data = await getAllTickets(user.token);
+                                                setTickets(data);
+                                            }
+                                        }}>پاسخ</button>
                                     )}
                                     {selectedId === ticket._id && (
                                         <form onSubmit={handleAnswer} className="mt-2">

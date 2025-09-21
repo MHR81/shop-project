@@ -39,6 +39,11 @@ export default function AdminOrders() {
     };
 
     const handleDeleteOrder = async id => {
+        const input = window.prompt(`برای حذف سفارش، شماره سفارش (${id}) را وارد کنید:`);
+        if (input !== id) {
+            setMessage("شماره سفارش صحیح وارد نشد. حذف انجام نشد.");
+            return;
+        }
         if (!window.confirm("آیا مطمئن هستید که می‌خواهید این سفارش حذف شود؟")) return;
         try {
             await deleteOrderById(user.token, id);
@@ -50,6 +55,11 @@ export default function AdminOrders() {
     };
 
     const handleDeleteAll = async () => {
+        const input = window.prompt("برای حذف همه سفارش‌ها، عبارت CONFIRM را وارد کنید:");
+        if (input !== "CONFIRM") {
+            setMessage("عبارت صحیح وارد نشد. حذف انجام نشد.");
+            return;
+        }
         if (!window.confirm("آیا مطمئن هستید که می‌خواهید همه سفارش‌ها حذف شوند؟")) return;
         try {
             await deleteAllOrders(user.token);

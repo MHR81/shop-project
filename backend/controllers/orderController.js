@@ -9,6 +9,12 @@ export const createOrder = asyncHandler(async (req, res) => {
         res.status(400);
         throw new Error("سفارش خالی است");
     }
+    // شماره موبایل الزامی
+    const user = req.user;
+    if (!user.mobile || user.mobile.trim().length < 8) {
+        res.status(400);
+        throw new Error("شماره موبایل برای پرداخت الزامی است");
+    }
     const order = new Order({
         user: req.user._id,
         orderItems,

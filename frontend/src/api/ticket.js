@@ -1,6 +1,14 @@
+
 import axios from "axios";
 
 const API_URL = process.env.REACT_APP_API_URL;
+
+export const setTicketReadForSupport = async (token, id, isRead) => {
+    const res = await axios.put(`${API_URL}/tickets/${id}/read`, { isRead }, {
+        headers: { Authorization: `Bearer ${token}` }
+    });
+    return res.data;
+};
 
 export const createTicket = async (token, data) => {
     const res = await axios.post(`${API_URL}/tickets`, data, {
@@ -44,10 +52,20 @@ export const getSupportTickets = async (token) => {
     return res.data;
 };
 
-// تغییر وضعیت خوانده شدن تیکت توسط ساپورت
-export const setTicketReadForSupport = async (token, id, isRead) => {
-    const res = await axios.put(`${API_URL}/tickets/${id}/read`, { isRead }, {
-        headers: { Authorization: `Bearer ${token}` }
-    });
-    return res.data;
-};
+
+
+    // تغییر وضعیت خوانده شدن تیکت توسط کاربر
+    export const setTicketReadForUser = async (token, id, isRead) => {
+        const res = await axios.put(`${API_URL}/tickets/${id}/read-user`, { isRead }, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        return res.data;
+    };
+
+    // حذف نوتیفیکیشن برای کاربر وقتی تیکت خوانده شد
+    export const clearUserTicketNotification = async (token, id) => {
+        const res = await axios.put(`${API_URL}/tickets/${id}/clear-user-notification`, {}, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        return res.data;
+    };
