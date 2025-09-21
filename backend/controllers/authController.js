@@ -2,6 +2,8 @@
  * @route POST /api/auth/change-password
  * @desc Change user password (protected)
  */
+import Log from "../models/Log.js";
+
 export const changePassword = asyncHandler(async (req, res) => {
     const { currentPassword, newPassword } = req.body;
     if (!currentPassword || !newPassword) {
@@ -20,6 +22,12 @@ export const changePassword = asyncHandler(async (req, res) => {
     }
     user.password = newPassword;
     await user.save();
+    // ثبت لاگ تغییر رمز
+    await Log.create({
+        user: req.user._id,
+        action: "تغییر رمز عبور",
+        details: `کاربر با ایمیل ${user.email} رمز عبور خود را تغییر داد.`
+    });
     res.json({ message: "رمز عبور با موفقیت تغییر کرد." });
 });
 /**
@@ -50,6 +58,12 @@ export const createSupport = asyncHandler(async (req, res) => {
         role: "support"
     });
     if (supportUser) {
+        // ثبت لاگ ساخت ساپورت
+        await Log.create({
+            user: req.user._id,
+            action: "ساخت ساپورت جدید",
+            details: `ساپورت با ایمیل ${supportUser.email} توسط ${req.user.email} ساخته شد.`
+        });
         res.status(201).json({
             _id: supportUser._id,
             name: supportUser.name,
@@ -67,7 +81,6 @@ export const createSupport = asyncHandler(async (req, res) => {
  * @desc Create new admin user (admin only)
  */
 export const createAdmin = asyncHandler(async (req, res) => {
-    console.log("دریافتی create-admin:", req.body);
     // Only admin can create new admin
     if (!req.user || req.user.role !== "admin") {
         res.status(403);
@@ -91,6 +104,12 @@ export const createAdmin = asyncHandler(async (req, res) => {
         role: "admin"
     });
     if (adminUser) {
+        // ثبت لاگ ساخت ادمین
+        await Log.create({
+            user: req.user._id,
+            action: "ساخت ادمین جدید",
+            details: `ادمین با ایمیل ${adminUser.email} توسط ${req.user.email} ساخته شد.`
+        });
         res.status(201).json({
             _id: adminUser._id,
             name: adminUser.name,
@@ -173,6 +192,12 @@ export const registerUser = asyncHandler(async (req, res) => {
             sameSite: 'strict',
             maxAge: 7 * 24 * 60 * 60 * 1000 // 7 روز
         });
+        // ثبت لاگ ثبت‌نام
+        await Log.create({
+            user: user._id,
+            action: "ثبت‌نام کاربر جدید",
+            details: `کاربر با ایمیل ${user.email} ثبت‌نام کرد.`
+        });
         res.status(201).json({
             _id: user._id,
             name: user.name,
@@ -206,6 +231,12 @@ export const loginUser = asyncHandler(async (req, res) => {
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'strict',
             maxAge: 7 * 24 * 60 * 60 * 1000 // 7 روز
+        });
+        // ثبت لاگ ورود
+        await Log.create({
+            user: user._id,
+            action: "ورود کاربر",
+            details: `کاربر با ایمیل ${user.email} وارد شد.`
         });
         res.json({
             _id: user._id,

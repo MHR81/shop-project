@@ -28,10 +28,13 @@ export default function AdminSidebar({ activeTab, setActiveTab }) {
             <button className={`dashboard-sidebar list-group-item list-group-item-action${activeTab === "orders" ? " " + activeClass : ""}`} onClick={() => setActiveTab("orders")}>
                 <i className="bi bi-bag-check me-2"></i>Orders
             </button>
-            <button className={`dashboard-sidebar list-group-item list-group-item-action${activeTab === "users" ? " " + activeClass : ""}`} onClick={() => setActiveTab("users")}>
+            <button className={`dashboard-sidebar list-group-item list-group-item-action${activeTab === "users" ? " " + activeClass : ""}`} onClick={() => setActiveTab("users")}> 
                 <i className="bi bi-people me-2"></i>Users
             </button>
-            <button className={`dashboard-sidebar list-group-item list-group-item-action${activeTab === "changePassword" ? " " + activeClass : ""}`} onClick={() => setActiveTab("changePassword")}>
+            <button className={`dashboard-sidebar list-group-item list-group-item-action${activeTab === "tickets" ? " " + activeClass : ""}`} onClick={() => setActiveTab("tickets")}> 
+                <i className="bi bi-ticket-perforated me-2"></i>Tickets
+            </button>
+            <button className={`dashboard-sidebar list-group-item list-group-item-action${activeTab === "changePassword" ? " " + activeClass : ""}`} onClick={() => setActiveTab("changePassword")}> 
                 <i className="bi bi-key me-2"></i>Change Password
             </button>
             <button className="dashboard-sidebar list-group-item list-group-item-action text-danger" onClick={handleLogout}>

@@ -18,6 +18,7 @@ import locationRoutes from "./routes/locationRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
 import logRoutes from "./routes/logRoutes.js";
+import logAdminRoutes from "./routes/logAdminRoutes.js";
 
 import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
 
@@ -70,6 +71,7 @@ app.use("/api/location", locationRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/logs", logRoutes);
+app.use("/api/logs-admin", logAdminRoutes);
 
 // سرو کردن فایل‌های آپلود شده
 app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));

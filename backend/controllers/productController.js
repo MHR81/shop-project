@@ -1,6 +1,7 @@
 import asyncHandler from "express-async-handler";
 import Product from "../models/Product.js";
 import Category from "../models/Category.js";
+import Log from "../models/Log.js";
 
 // گرفتن همه محصولات + فیلتر حرفه‌ای
 export const getProducts = asyncHandler(async (req, res) => {
@@ -28,6 +29,12 @@ export const createProduct = asyncHandler(async (req, res) => {
     const { name, description, price, category, images, countInStock } = req.body;
     const product = new Product({ name, description, price, category, images, countInStock });
     const createdProduct = await product.save();
+    // ثبت لاگ ایجاد محصول
+    await Log.create({
+        user: req.user?._id,
+        action: "ایجاد محصول",
+        details: `محصول با نام ${createdProduct.name} توسط ${req.user?.email || "سیستم"} ایجاد شد.`
+    });
     res.status(201).json(createdProduct);
 });
 
@@ -45,6 +52,7 @@ export const getProductById = asyncHandler(async (req, res) => {
 export const updateProduct = asyncHandler(async (req, res) => {
     const product = await Product.findById(req.params.id);
     if (product) {
+        const prevName = product.name;
         product.name = req.body.name || product.name;
         product.description = req.body.description || product.description;
         product.price = req.body.price || product.price;
@@ -59,6 +67,12 @@ export const updateProduct = asyncHandler(async (req, res) => {
             product.image = req.body.image;
         }
         const updatedProduct = await product.save();
+        // ثبت لاگ ویرایش محصول
+        await Log.create({
+            user: req.user?._id,
+            action: "ویرایش محصول",
+            details: `محصول با نام قبلی ${prevName} توسط ${req.user?.email || "سیستم"} ویرایش شد.`
+        });
         res.json(updatedProduct);
     } else {
         res.status(404);
@@ -71,6 +85,12 @@ export const deleteProduct = asyncHandler(async (req, res) => {
     const product = await Product.findById(req.params.id);
     if (product) {
         await Product.deleteOne({ _id: req.params.id });
+        // ثبت لاگ حذف محصول
+        await Log.create({
+            user: req.user?._id,
+            action: "حذف محصول",
+            details: `محصول با نام ${product.name} توسط ${req.user?.email || "سیستم"} حذف شد.`
+        });
         res.json({ message: "Product removed" });
     } else {
         res.status(404);

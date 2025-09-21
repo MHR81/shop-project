@@ -15,6 +15,7 @@ export default function Navbar({ theme, setTheme }) {
     const handleLangChange = (lng) => {
         i18n.changeLanguage(lng);
         setLang(lng);
+        localStorage.setItem('language', lng);
     };
     // Convert theme string to boolean for DarkModeToggle
     const darkMode = theme === "dark";
@@ -38,7 +39,13 @@ export default function Navbar({ theme, setTheme }) {
                 setCategories([]);
                 setLoading(false);
             });
-    }, []);
+        // Restore language from localStorage on mount
+        const storedLang = localStorage.getItem('language');
+        if (storedLang && storedLang !== lang) {
+            i18n.changeLanguage(storedLang);
+            setLang(storedLang);
+        }
+    }, [i18n, lang]);
 
     const handleLogout = () => {
         logoutUser();

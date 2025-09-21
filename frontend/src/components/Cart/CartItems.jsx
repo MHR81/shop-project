@@ -1,10 +1,15 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import { useAuth } from "../../context/AuthContext";
+import { getProfile } from "../../api/auth";
+import { createOrder } from "../../api/orders";
 
 export default function CartItems() {
     const [cart, setCart] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [message, setMessage] = useState("");
     const navigate = useNavigate();
+    const { user } = useAuth();
 
     useEffect(() => {
         const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -30,16 +35,65 @@ export default function CartItems() {
     const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
     const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
-    const handleCheckout = () => {
-        const token = localStorage.getItem("token");
-        if (!token) {
+    const handleCheckout = async () => {
+        setMessage("");
+        if (!user || !user.token) {
+            setMessage("ابتدا وارد حساب کاربری شوید.");
             navigate("/auth");
-        } else {
-            navigate("/user"); // یا هر صفحه‌ای که پرداخت را از آنجا انجام می‌دهی
+            return;
         }
+        setLoading(true);
+        try {
+            // دریافت اطلاعات پروفایل
+            const profile = await getProfile(user.token);
+            if (!profile.address || !profile.city || !profile.province || !profile.postCode) {
+                setMessage("لطفاً ابتدا اطلاعات آدرس خود را در پروفایل تکمیل کنید.");
+                setLoading(false);
+                setTimeout(() => {
+                    navigate("/user");
+                }, 1500);
+                return;
+            }
+            // شبیه‌سازی انتقال به درگاه پرداخت (در پروژه واقعی اینجا به درگاه منتقل می‌شوید)
+            // فرض: پرداخت موفق
+            const paymentSuccess = true; // اینجا باید با نتیجه واقعی درگاه جایگزین شود
+            if (paymentSuccess) {
+                const orderData = {
+                    orderItems: cart.map(item => ({
+                        product: item.id,
+                        name: item.name,
+                        qty: item.quantity,
+                        price: item.price,
+                        image: item.images?.[0] || item.image || ""
+                    })),
+                    shippingAddress: {
+                        address: profile.address,
+                        city: profile.city,
+                        postalCode: profile.postCode,
+                        province: profile.province
+                    },
+                    paymentMethod: "پرداخت آنلاین",
+                    itemsPrice: totalPrice,
+                    shippingPrice: 0,
+                    totalPrice: totalPrice,
+                    isPaid: true,
+                    paidAt: new Date().toISOString(),
+                    paymentResult: { status: "paid", paidAt: new Date().toISOString() }
+                };
+                await createOrder(user.token, orderData);
+                setMessage("پرداخت موفق بود و سفارش ثبت شد!");
+                localStorage.removeItem("cart");
+                setTimeout(() => {
+                    window.location.reload();
+                }, 2000);
+            } else {
+                setMessage("پرداخت ناموفق بود. لطفاً مجدداً تلاش کنید.");
+            }
+        } catch (err) {
+            setMessage("خطا در ثبت سفارش یا پرداخت! لطفاً بعداً تلاش کنید.");
+        }
+        setLoading(false);
     };
-
-    // حذف تابع افزودن به سبد خرید؛ این تابع باید در ProductDetails.jsx باشد نه اینجا
 
     if (cart.length === 0) {
         return (
@@ -135,12 +189,13 @@ export default function CartItems() {
                     <button
                         className="btn btn-danger px-4 py-2 fw-bold ms-auto"
                         onClick={handleCheckout}
-                        disabled={totalItems === 0}
+                        disabled={totalItems === 0 || loading}
                     >
                         <i className="bi bi-credit-card-2-front me-2"></i>
                         Proceed to Checkout
                     </button>
                 </div>
+                {message && <div className="alert alert-info mt-3 w-100 text-center">{message}</div>}
             </div>
         </div>
     );

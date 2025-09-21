@@ -99,5 +99,12 @@ export const answerTicket = asyncHandler(async (req, res) => {
     ticket.status = "answered";
     ticket.support = req.user._id;
     await ticket.save();
+    // ثبت لاگ پاسخ به تیکت
+    const Log = require("../models/Log.js");
+    await Log.create({
+        user: req.user._id,
+        action: "پاسخ به تیکت",
+        details: `تیکت ${ticket._id} توسط ساپورت ${req.user.email} پاسخ داده شد.`
+    });
     res.json(ticket);
 });

@@ -6,6 +6,7 @@ import AdminCategories from "./AdminCategories";
 import AdminOrders from "./AdminOrders";
 import AdminUsers from "./AdminUsers";
 import AdminChangePassword from "./AdminChangePassword";
+import AdminTickets from "./AdminTickets";
 
 export default function AdminDashboard() {
     const [activeTab, setActiveTab] = useState("dashboard");
@@ -25,6 +26,7 @@ export default function AdminDashboard() {
                             {activeTab === "categories" && <AdminCategories />}
                             {activeTab === "orders" && <AdminOrders />}
                             {activeTab === "users" && <AdminUsers />}
+                            {activeTab === "tickets" && <AdminTickets />}
                             {activeTab === "changePassword" && <AdminChangePassword />}
                         </div>
                     </div>
