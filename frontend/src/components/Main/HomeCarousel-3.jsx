@@ -51,13 +51,23 @@ export default function HomeCarousel3() {
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
+    
+
     useEffect(() => {
-        getAllProducts()
-            .then((data) => {
-                setProducts(data);
-                setLoading(false);
-            })
-            .catch(() => setLoading(false));
+        setLoading(true);
+        const timer = setTimeout(() => {
+            getAllProducts()
+                .then((data) => {
+                    setProducts(data);
+                })
+                .catch((err) => console.error(err))
+                .finally(() => {
+                    setLoading(false);
+                });
+        }, 300);
+        return () => {
+            clearTimeout(timer);
+        };
     }, []);
 
     if (loading) return <Loading />;
@@ -90,17 +100,17 @@ export default function HomeCarousel3() {
                         <div
                             className="card w-100 h-100 text-center p-3 shadow-sm product-card-hover"
                             style={{ cursor: "pointer", backgroundColor: "var(--color-bg)", borderColor: "var(--color-secondary)" }}
-                            onClick={() => navigate(`/product/${product.id}`)}
+                            onClick={() => navigate(`/product/${product._id}`)}
                         >
                             <img
-                                src={product.image}
-                                alt={product.title}
+                                src={Array.isArray(product.images) && product.images.length > 0 ? product.images[0] : product.image}
+                                alt={product.name}
                                 loading="lazy"
                                 className="img-fluid rounded-3 mb-2"
                                 style={{ maxHeight: 120, objectFit: "contain" }}
                             />
                             <h6 className="fw-bold mb-1 text-truncate" style={{ color: "var(--color-text)" }}>
-                                {product.title}
+                                {product.name}
                             </h6>
                             <p className="text-danger fw-bold mb-0">{product.price} $</p>
                         </div>

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+
 export default function CartItems() {
     const [cart, setCart] = useState([]);
     const navigate = useNavigate();
@@ -37,6 +38,8 @@ export default function CartItems() {
             navigate("/user"); // یا هر صفحه‌ای که پرداخت را از آنجا انجام می‌دهی
         }
     };
+
+    // حذف تابع افزودن به سبد خرید؛ این تابع باید در ProductDetails.jsx باشد نه اینجا
 
     if (cart.length === 0) {
         return (
@@ -76,7 +79,15 @@ export default function CartItems() {
                                             style={{ cursor: "pointer" }}
                                             onClick={() => navigate(`/product/${item.id}`)}
                                         >
-                                            {item.image && item.image.trim() !== "" ? (
+                                            {/* Show first image from images array if available, else fallback to image */}
+                                            {Array.isArray(item.images) && item.images.length > 0 ? (
+                                                <img
+                                                    src={item.images[0]}
+                                                    alt={item.title}
+                                                    style={{ width: "40px", height: "40px", objectFit: "contain" }}
+                                                    className="me-2"
+                                                />
+                                            ) : item.image && item.image.trim() !== "" ? (
                                                 <img
                                                     src={item.image}
                                                     alt={item.title}

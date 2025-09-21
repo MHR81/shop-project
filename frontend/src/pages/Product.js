@@ -11,9 +11,9 @@ export default function Product() {
     const [title, setTitle] = useState("");
 
     useEffect(() => {
-        fetch(`https://fakestoreapi.com/products/${id}`)
+        fetch(`${process.env.REACT_APP_API_URL}/products/${id}`)
             .then(res => res.json())
-            .then(data => setTitle(data.title))
+            .then(data => setTitle(data.name))
             .catch(() => setTitle(""));
     }, [id]);
 

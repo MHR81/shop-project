@@ -33,10 +33,10 @@ export default function Products({ filter = {} }) {
             ) : (
                 <div className="row">
                     {products.map(product => (
-                        <div key={product._id} className="col-12 col-sm-6 col-md-4 my-3">
+                        <div key={product._id} className="col col-sm-6 col-md-4 col-lg-3 my-3">
                             <ProductsCard
                                 id={product._id}
-                                Image={product.image}
+                                Image={Array.isArray(product.images) && product.images.length > 0 ? product.images[0] : product.image}
                                 Title={product.name}
                                 Description={product.description}
                                 Price={product.price}

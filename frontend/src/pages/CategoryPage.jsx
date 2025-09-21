@@ -31,7 +31,11 @@ export default function CategoryPage() {
                     {products.map(product => (
                         <div key={product._id} className="col-md-4 mb-3">
                             <div className="card h-100">
-                                <img src={product.image} className="card-img-top" alt={product.name} />
+                                <img
+                                    src={Array.isArray(product.images) && product.images.length > 0 ? product.images[0] : product.image}
+                                    className="card-img-top"
+                                    alt={product.name}
+                                />
                                 <div className="card-body">
                                     <h5 className="card-title">{product.name}</h5>
                                     <p className="card-text">{product.description}</p>

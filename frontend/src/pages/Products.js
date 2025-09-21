@@ -4,13 +4,12 @@ import PageTransition from "../components/common/PageTransition";
 import Breadcrumb from "../components/common/Breadcrumb";
 import Products from '../components/Products/Products.jsx';
 import ProductsFilter from '../components/Products/ProductsFilter.jsx';
-import Categories from '../components/Products/PCategories.jsx';
 
 export default function ProductsPage() {
     const { t } = useTranslation();
     const breadcrumbItems = [
         { label: t("home"), to: "/" },
-        { label: t("cart"), active: true }
+        { label: t("products"), active: true }
     ];
 
     const [filter, setFilter] = React.useState({});
@@ -28,19 +27,7 @@ export default function ProductsPage() {
                 {/* فیلتر حرفه‌ای */}
                 <ProductsFilter onFilter={setFilter} />
             </div>
-            <div className='container d-xxl-none'>
-                <Categories />
-            </div>
-            <div className='row my-4'>
-                <div className='col'>
                     <Products filter={filter} />
-                </div>
-                <div className='container d-none d-xxl-block col-3'>
-                    <div className="container my-4">
-                        <Categories />
-                    </div>
-                </div>
-            </div>
         </PageTransition>
     );
 }
