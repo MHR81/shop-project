@@ -81,7 +81,7 @@ export const closeTicket = asyncHandler(async (req, res) => {
         res.status(404);
         throw new Error("تیکت پیدا نشد");
     }
-    if (String(ticket.user) !== String(req.user._id) && req.user.role !== "support") {
+    if (String(ticket.user) !== String(req.user._id) && req.user.role !== "support" && req.user.role !== "admin") {
         res.status(403);
         throw new Error("دسترسی غیرمجاز");
     }
@@ -98,7 +98,7 @@ export const deleteTicket = asyncHandler(async (req, res) => {
         res.status(404);
         throw new Error("تیکت پیدا نشد");
     }
-    if (String(ticket.user) !== String(req.user._id) && req.user.role !== "support") {
+    if (String(ticket.user) !== String(req.user._id) && req.user.role !== "support" && req.user.role !== "admin") {
         res.status(403);
         throw new Error("دسترسی غیرمجاز");
     }

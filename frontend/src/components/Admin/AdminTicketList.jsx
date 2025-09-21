@@ -28,20 +28,16 @@ export default function AdminTicketList({ onSelect }) {
         if (!window.confirm("آیا مطمئن هستید؟")) return;
         try {
             await deleteTicket(user.token, id);
-            // Refresh tickets from server
-            const data = await getSupportTickets(user.token);
-            setTickets(data);
+            setTickets(tickets.filter(t => t._id !== id));
         } catch {
             setMessage("خطا در حذف تیکت");
         }
-    }
+    };
 
     const handleClose = async (id) => {
         try {
             await closeTicket(user.token, id);
-            // Refresh tickets from server
-            const data = await getSupportTickets(user.token);
-            setTickets(data);
+            setTickets(tickets.map(t => t._id === id ? { ...t, closed: true, status: "closed" } : t));
         } catch {
             setMessage("خطا در بستن تیکت");
         }
