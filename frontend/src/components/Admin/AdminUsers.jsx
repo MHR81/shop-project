@@ -303,11 +303,14 @@ export default function AdminUsers() {
                                 <p><b>ایمیل:</b> {selectedUser.email}</p>
                                 <p><b>نام کاربری:</b> {selectedUser.username}</p>
                                 <p><b>نقش:</b> {selectedUser.role}</p>
+                                {selectedUser.role === "admin" ?  <p><b>سوپر ادمین:</b> {selectedUser.mainAdmin ? "✅بله" : "🚫خیر"}</p> : ""}
                                 <p><b>استان:</b> {selectedUser.province || "-"}</p>
                                 <p><b>شهر:</b> {selectedUser.city || "-"}</p>
                                 <p><b>آدرس:</b> {selectedUser.address || "-"}</p>
                                 <p><b>کد پستی:</b> {selectedUser.postCode || "-"}</p>
                                 <p><b>موبایل:</b> {selectedUser.mobile || "-"}</p>
+                                <p><b>تاریخ عضویت:</b> {new Date(selectedUser.createdAt).toLocaleDateString("fa-IR")}</p>
+                                
                                 {/* نمایش لاگ‌ها */}
                                 <div className="mt-3">
                                     <h6 className="fw-bold">لاگ‌های کاربر</h6>

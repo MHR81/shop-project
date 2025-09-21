@@ -23,6 +23,7 @@ export default function ProductDetails() {
     }, [id]);
 
     const handleAddToCart = () => {
+        if (!product || product.countInStock === 0) return;
         let cart = JSON.parse(localStorage.getItem("cart")) || [];
         // Prepare product info for cart (sync with backend model)
         const productForCart = {
@@ -38,11 +39,13 @@ export default function ProductDetails() {
         };
         const existing = cart.find(item => item.id === productForCart.id);
         if (existing) {
-            cart = cart.map(item =>
-                item.id === productForCart.id
-                    ? { ...item, quantity: item.quantity + 1 }
-                    : item
-            );
+            if (existing.quantity < product.countInStock) {
+                cart = cart.map(item =>
+                    item.id === productForCart.id
+                        ? { ...item, quantity: item.quantity + 1 }
+                        : item
+                );
+            }
         } else {
             cart.push(productForCart);
         }

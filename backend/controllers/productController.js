@@ -8,7 +8,39 @@ export const getProducts = asyncHandler(async (req, res) => {
     const { category, minPrice, maxPrice, search, inStock, sort } = req.query;
     const filter = {};
 
-    if (category) filter.category = category;
+    if (category) {
+        // اگر category به صورت ObjectId ارسال شده باشد
+        if (/^[0-9a-fA-F]{24}$/.test(category)) {
+            filter.category = category;
+        } else {
+            // اگر category به صورت name ارسال شده باشد
+            // جستجوی کتگوری با regex غیر حساس به حروف و حذف فاصله و کاراکترهای خاص
+            const normalized = category.replace(/\s|\+|%27|'/g, '').toLowerCase();
+            const catDoc = await Category.findOne({
+                name: { $regex: new RegExp(normalized, 'i') }
+            });
+            // اگر پیدا نشد، یک بار با حذف فاصله و کاراکترهای خاص تست شود
+            if (!catDoc) {
+                const allCats = await Category.find({});
+                const found = allCats.find(cat =>
+                    cat.name.replace(/\s|\+|'/g, '').toLowerCase() === normalized
+                );
+                if (found) {
+                    filter.category = found._id;
+                } else {
+                    return res.json([]);
+                }
+            } else {
+                filter.category = catDoc._id;
+            }
+            if (catDoc) {
+                filter.category = catDoc._id;
+            } else {
+                // اگر کتگوری پیدا نشد، هیچ محصولی برنگردد
+                return res.json([]);
+            }
+        }
+    }
     if (minPrice || maxPrice) filter.price = {};
     if (minPrice) filter.price.$gte = Number(minPrice);
     if (maxPrice) filter.price.$lte = Number(maxPrice);

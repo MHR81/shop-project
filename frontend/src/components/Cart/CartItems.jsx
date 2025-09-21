@@ -80,7 +80,9 @@ export default function CartItems() {
                     paidAt: new Date().toISOString(),
                     paymentResult: { status: "paid", paidAt: new Date().toISOString() }
                 };
-                await createOrder(user.token, orderData);
+                const order = await createOrder(user.token, orderData);
+                // فراخوانی payOrder برای کاهش موجودی محصولات
+                await import('../../api/orders').then(api => api.payOrder(user.token, order._id, { status: "paid", paidAt: new Date().toISOString() }));
                 setMessage("پرداخت موفق بود و سفارش ثبت شد!");
                 localStorage.removeItem("cart");
                 setTimeout(() => {

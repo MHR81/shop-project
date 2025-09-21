@@ -1,8 +1,42 @@
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useState } from "react";
 
 export default function ProductsCard({ id, Image, Title, Description, Price, CountInStock, Category }) {
     const { t } = useTranslation();
+    const [added, setAdded] = useState(false);
+
+    const handleAddToCart = () => {
+        if (CountInStock === 0) return;
+        let cart = JSON.parse(localStorage.getItem("cart")) || [];
+        const productForCart = {
+            id,
+            name: Title,
+            title: Title,
+            images: [Image],
+            image: Image,
+            price: Price,
+            countInStock: CountInStock,
+            category: Category,
+            quantity: 1
+        };
+        const existing = cart.find(item => item.id === id);
+        if (existing) {
+            if (existing.quantity < CountInStock) {
+                cart = cart.map(item =>
+                    item.id === id
+                        ? { ...item, quantity: item.quantity + 1 }
+                        : item
+                );
+            }
+        } else {
+            cart.push(productForCart);
+        }
+        localStorage.setItem("cart", JSON.stringify(cart));
+        setAdded(true);
+        setTimeout(() => setAdded(false), 1200);
+    };
+
     return (
         <div className="card products-card shadow-sm border-0 h-100">
             <div className="ratio ratio-4x3">
@@ -31,10 +65,11 @@ export default function ProductsCard({ id, Image, Title, Description, Price, Cou
                 </Link>
                 <button
                     className="btn btn-danger mt-2 w-100"
-                    disabled={CountInStock === 0}
+                    disabled={CountInStock === 0 || added}
                     style={{ opacity: CountInStock === 0 ? 0.6 : 1 }}
+                    onClick={handleAddToCart}
                 >
-                    {CountInStock === 0 ? t("out_of_stock") : t("add_to_cart")}
+                    {CountInStock === 0 ? t("out_of_stock") : added ? t("added") : t("add_to_cart")}
                 </button>
             </div>
         </div>

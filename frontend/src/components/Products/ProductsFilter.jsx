@@ -38,7 +38,7 @@ export default function ProductsFilter({ onFilter }) {
                 {open ? t("hide_product_filters") : t("show_product_filters")}
             </button>
             {open && (
-                <form className="card shadow-sm p-3" onSubmit={handleSubmit}>
+                <form className="product-filter card shadow-sm p-3" onSubmit={handleSubmit}>
                     <div className="row g-3 align-items-center">
                         <div className="col-md-3">
                             <label className="form-label">{t("category")}</label>
