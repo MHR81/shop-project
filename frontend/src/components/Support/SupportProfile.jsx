@@ -72,13 +72,26 @@ export default function AdminProfile() {
         setLoading(true);
         setMessage("");
         try {
-            const [name, ...lastNameArr] = (profile.fullName || "").split(" ");
-            const lastName = lastNameArr.join(" ");
-            const payload = { ...profile, name, lastName };
+            // فقط فیلدهای مورد نیاز بک‌اند را ارسال کن
+            const payload = {
+                avatar: profile.avatar,
+                name: profile.name,
+                lastName: profile.lastName,
+                username: profile.username,
+                email: profile.email,
+                address: profile.address,
+                province: profile.province,
+                city: profile.city,
+                postCode: profile.postCode,
+                mobile: profile.mobile
+            };
             await updateProfile(user.token, payload);
+            // دریافت مجدد پروفایل از بک‌اند
+            const updated = await getProfile(user.token);
+            setProfile(updated);
             setMessage("پروفایل با موفقیت ذخیره شد.");
             setEdit(false);
-            initialProfileRef.current = JSON.parse(JSON.stringify(profile));
+            initialProfileRef.current = JSON.parse(JSON.stringify(updated));
         } catch {
             setMessage("خطا در ذخیره پروفایل.");
         } finally {
@@ -130,7 +143,7 @@ export default function AdminProfile() {
                     </h5>
                     <div className="mt-1">
                         <span className="badge bg-light text-dark border me-1"><i className="bi bi-person"></i> {profile.username}</span>
-                        <span className="badge bg-info text-dark"><i className="bi bi-envelope"></i> {profile.email}</span>
+                        <span className="badge bg-danger text-dark"><i className="bi bi-envelope"></i> {profile.email}</span>
                     </div>
                 </div>
             </div>

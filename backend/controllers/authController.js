@@ -133,16 +133,16 @@ export const updateUserProfile = asyncHandler(async (req, res) => {
         throw new Error("User not found");
     }
 
-    // Update allowed fields
-    user.name = req.body.name || user.name;
-    user.email = req.body.email || user.email;
-    user.lastName = req.body.lastName || user.lastName;
-    user.username = req.body.username || user.username;
-    user.province = req.body.province || user.province;
-    user.city = req.body.city || user.city;
-    user.address = req.body.address || user.address;
-    user.postCode = req.body.postCode || user.postCode;
-    user.mobile = req.body.mobile || user.mobile;
+    // Update allowed fields (مقدار خالی هم ذخیره شود)
+    user.name = req.body.hasOwnProperty('name') ? req.body.name : user.name;
+    user.email = req.body.hasOwnProperty('email') ? req.body.email : user.email;
+    user.lastName = req.body.hasOwnProperty('lastName') ? req.body.lastName : user.lastName;
+    user.username = req.body.hasOwnProperty('username') ? req.body.username : user.username;
+    user.province = req.body.hasOwnProperty('province') ? req.body.province : user.province;
+    user.city = req.body.hasOwnProperty('city') ? req.body.city : user.city;
+    user.address = req.body.hasOwnProperty('address') ? req.body.address : user.address;
+    user.postCode = req.body.hasOwnProperty('postCode') ? req.body.postCode : user.postCode;
+    user.mobile = req.body.hasOwnProperty('mobile') ? req.body.mobile : user.mobile;
 
     // Save updated user
     const updatedUser = await user.save();
