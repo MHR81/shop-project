@@ -388,11 +388,12 @@ html[data-theme="dark"] .loading-spinner {
 /* 🌍 Cards                   */
 /* ========================= */
 .card {
-  background: var(--color-bg-alt);
-  border-radius: var(--border-radius);
-  transition: var(--transition);
-  color: var(--color-text);
+  background: var(--color-bg-alt)!important;
+  border-radius: var(--border-radius)!important;
+  transition: var(--transition)!important;
+  color: var(--color-text)!important;
 }
+
 
 /* ========================= */
 /* 🌍 Buttons                 */

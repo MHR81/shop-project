@@ -1,11 +1,14 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { getProfile, updateProfile } from "../../api/auth";
+import { getProvinces, getCitiesByProvinceName } from "../../api/location";
 import Loading from "../common/Loading";
 
 export default function AdminProfile() {
     const { user } = useAuth();
     const [profile, setProfile] = useState(null);
+    const [provinces, setProvinces] = useState([]);
+    const [cities, setCities] = useState([]);
     const [edit, setEdit] = useState(false);
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState("");
@@ -45,12 +48,37 @@ export default function AdminProfile() {
         fetchProfile();
     }, [user?.token]);
 
+    // Load provinces
+    useEffect(() => {
+        setLoading(true);
+        getProvinces()
+            .then(res => setProvinces(res || []))
+            .catch(() => setProvinces([]))
+            .finally(() => setLoading(false));
+    }, []);
+
+    // Load cities on province change
+    useEffect(() => {
+        if (!profile?.province) {
+            setCities([]);
+            return;
+        }
+        setLoading(true);
+        getCitiesByProvinceName(profile.province)
+            .then(res => setCities(res || []))
+            .catch(() => setCities([]))
+            .finally(() => setLoading(false));
+    }, [profile?.province]);
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setProfile(prev => ({ ...prev, [name]: value }));
     };
 
-    
+    const handleProvinceChange = (e) => {
+        const value = e.target.value;
+        setProfile(prev => ({ ...prev, province: value, city: "" }));
+    };
 
     const handleAvatarChange = (e) => {
         const file = e.target.files[0];
@@ -137,6 +165,63 @@ export default function AdminProfile() {
             {message && <div className="alert alert-info py-2 small mt-2 mb-2">{message}</div>}
 
             <div className="row">
+                <div className="col-md-6 mb-2">
+                    <label className="form-label small">Type: </label>
+                    <span className="form-control-plaintext fw-bold text-warning">{profile.role}</span>
+                </div>
+                <div className="col-md-6 mb-2">
+                    <label className="form-label small">Admin Type</label>
+                    <span className="form-control-plaintext fw-bold text-warning">{profile.adminType}</span>
+                </div>
+            </div>
+            <hr style={{ color: "var(--color-text)" }}></hr>
+            <div className="row">
+                <div className="col-md-6 mb-2">
+                    <label className="form-label small">Province</label>
+                    <select
+                        className="form-select form-select-sm"
+                        name="province"
+                        value={profile.province || ""}
+                        onChange={handleProvinceChange}
+                        disabled={!edit}
+                    >
+                        <option value="">Select</option>
+                        {provinces.map(p => <option key={p.id || p.name} value={p.name}>{p.name}</option>)}
+                    </select>
+                </div>
+                <div className="col-md-6 mb-2">
+                    <label className="form-label small">City</label>
+                    <select
+                        className="form-select form-select-sm"
+                        name="city"
+                        value={profile.city || ""}
+                        onChange={handleChange}
+                        disabled={!edit || !profile.province}
+                    >
+                        <option value="">Select</option>
+                        {cities.map(c => <option key={c.id || c.name} value={c.name}>{c.name}</option>)}
+                    </select>
+                </div>
+                <div className="col-md-12 mb-2">
+                    <label className="form-label small">Address</label>
+                    <input
+                        className="form-control form-control-sm"
+                        name="address"
+                        value={profile.address || ""}
+                        onChange={handleChange}
+                        disabled={!edit}
+                    />
+                </div>
+                <div className="col-md-6 mb-2">
+                    <label className="form-label small">Post Code</label>
+                    <input
+                        className="form-control form-control-sm"
+                        name="postCode"
+                        value={profile.postCode || ""}
+                        onChange={handleChange}
+                        disabled={!edit}
+                    />
+                </div>
                 <div className="col-md-6 mb-2">
                     <label className="form-label small">Mobile</label>
                     <input

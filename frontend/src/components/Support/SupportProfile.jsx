@@ -45,12 +45,13 @@ export default function AdminProfile() {
         fetchProfile();
     }, [user?.token]);
 
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setProfile(prev => ({ ...prev, [name]: value }));
     };
 
-    
+
 
     const handleAvatarChange = (e) => {
         const file = e.target.files[0];
@@ -137,6 +138,7 @@ export default function AdminProfile() {
             {message && <div className="alert alert-info py-2 small mt-2 mb-2">{message}</div>}
 
             <div className="row">
+                
                 <div className="col-md-6 mb-2">
                     <label className="form-label small">Mobile</label>
                     <input

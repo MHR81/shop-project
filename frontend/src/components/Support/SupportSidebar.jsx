@@ -16,6 +16,9 @@ export default function SupportSidebar({ activeTab, setActiveTab }) {
             <button className={`dashboard-sidebar list-group-item list-group-item-action${activeTab === "dashboard" ? " " + activeClass : ""}`} onClick={() => setActiveTab("dashboard")}> 
                 <i className="bi bi-speedometer2 me-2"></i>Dashboard
             </button>
+            <button className={`dashboard-sidebar list-group-item list-group-item-action${activeTab === "profile" ? " " + activeClass : ""}`} onClick={() => setActiveTab("profile")}> 
+                <i className="bi bi-person-circle me-2"></i>Profile
+            </button>
             <button className={`dashboard-sidebar list-group-item list-group-item-action${activeTab === "tickets" ? " " + activeClass : ""}`} onClick={() => setActiveTab("tickets")}> 
                 <i className="bi bi-ticket-detailed me-2"></i>Tickets
             </button>
