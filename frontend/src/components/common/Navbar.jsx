@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import logo from '../../logo.png';
-import { useTranslation } from "react-i18next";
 import Loading from "../common/Loading";
 import { getCategories } from "../../api/categories";
 import DarkModeToggle from './DarkModeToggle';
@@ -10,9 +9,8 @@ import NavbarSearch from "./NavbarSearch";
 
 export default function Navbar({ theme, setTheme }) {
     
-    const { i18n } = useTranslation();
-    const { t } = useTranslation();
-    const [lang, setLang] = useState(i18n.language || "en");
+    // Removed i18n and t from useTranslation
+    // Removed unused lang and setLang
     // const handleLangChange = (lng) => {
     //     i18n.changeLanguage(lng);
     //     setLang(lng);
@@ -41,13 +39,8 @@ export default function Navbar({ theme, setTheme }) {
                 setCategories([]);
                 setLoading(false);
             });
-        // Restore language from localStorage on mount
-        const storedLang = localStorage.getItem('language');
-        if (storedLang && storedLang !== lang) {
-            i18n.changeLanguage(storedLang);
-            setLang(storedLang);
-        }
-    }, [i18n, lang]);
+        // Language logic removed
+    }, []);
 
     const handleLogout = () => {
         logoutUser();
@@ -78,7 +71,7 @@ export default function Navbar({ theme, setTheme }) {
                     <ul className="navbar-nav me-auto ms-2 mb-2 mb-lg-0 d-flex flex-column flex-lg-row">
 
                         <li className="nav-item mx-2">
-                            <Link className="nav-link" to="/">{t("home")}</Link>
+                            <Link className="nav-link" to="/">Home</Link>
                         </li>
 
                         {/* Products Dropdown */}
@@ -95,12 +88,12 @@ export default function Navbar({ theme, setTheme }) {
                                     menu.classList.toggle("show");
                                 }}
                             >
-                                {t("products")}
+                                Products
                             </button>
                             <ul className={`categories dropdown-menu${dropdownOpen ? " show" : ""}`}>
                                 <li>
                                     <Link className="dropdown-item fw-bold" to="/Products">
-                                        {t("all-products")}
+                                        All Products
                                     </Link>
                                 </li>
                                 <li><hr className="dropdown-divider" /></li>
@@ -123,14 +116,14 @@ export default function Navbar({ theme, setTheme }) {
 
                         <li className="mx-2 nav-item">
                             <Link className="nav-link" to="/Cart">
-                                <i className="bi bi-cart"></i>{t("cart")}
+                                <i className="bi bi-cart"></i>Cart
                             </Link>
                         </li>
 
                         {!token && (
                             <li className="mx-2 nav-item">
                                 <Link className="nav-link" to="/Auth">
-                                    <i className="bi bi-person-circle fs-6"></i> {t("login")}
+                                    <i className="bi bi-person-circle fs-6"></i> Login
                                 </Link>
                             </li>
                         )}
@@ -151,7 +144,7 @@ export default function Navbar({ theme, setTheme }) {
                                         className="btn-logout text-danger fw-bold my-2"
                                         onClick={handleLogout}
                                     >
-                                        <i className="bi bi-box-arrow-right"></i> {t("logout")}
+                                        <i className="bi bi-box-arrow-right"></i> Logout
                                     </button>
                                 </li>
                             </>

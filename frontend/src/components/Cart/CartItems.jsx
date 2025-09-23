@@ -38,7 +38,7 @@ export default function CartItems() {
     const handleCheckout = async () => {
         setMessage("");
         if (!user || !user.token) {
-            setMessage("ابتدا وارد حساب کاربری شوید.");
+            setMessage("Please log in first.");
             navigate("/auth");
             return;
         }
@@ -47,7 +47,7 @@ export default function CartItems() {
             // دریافت اطلاعات پروفایل
             const profile = await getProfile(user.token);
             if (!profile.address || !profile.city || !profile.province || !profile.postCode || !profile.mobile || profile.mobile.trim().length < 8) {
-                setMessage("لطفاً ابتدا اطلاعات آدرس و شماره موبایل خود را در پروفایل تکمیل کنید.");
+                setMessage("Please complete your address and mobile number in your profile first.");
                 setLoading(false);
                 setTimeout(() => {
                     navigate("/user");
@@ -56,7 +56,7 @@ export default function CartItems() {
             }
             // شبیه‌سازی انتقال به درگاه پرداخت (در پروژه واقعی اینجا به درگاه منتقل می‌شوید)
             // فرض: پرداخت موفق
-            const paymentSuccess = true; // اینجا باید با نتیجه واقعی درگاه جایگزین شود
+            const paymentSuccess = true; // Here should be replaced with real payment result
             if (paymentSuccess) {
                 const orderData = {
                     orderItems: cart.map(item => ({
@@ -83,23 +83,23 @@ export default function CartItems() {
                 const order = await createOrder(user.token, orderData);
                 // فراخوانی payOrder برای کاهش موجودی محصولات
                 await import('../../api/orders').then(api => api.payOrder(user.token, order._id, { status: "paid", paidAt: new Date().toISOString() }));
-                setMessage("پرداخت موفق بود و سفارش ثبت شد!");
+                setMessage("Payment was successful and your order has been placed!");
                 localStorage.removeItem("cart");
                 setTimeout(() => {
                     window.location.reload();
                 }, 2000);
             } else {
-                setMessage("پرداخت ناموفق بود. لطفاً مجدداً تلاش کنید.");
+                setMessage("Payment failed. Please try again.");
             }
         } catch (err) {
-            setMessage("خطا در ثبت سفارش یا پرداخت! لطفاً بعداً تلاش کنید.");
+            setMessage("Error placing order or payment! Please try again later.");
         }
         setLoading(false);
     };
 
     if (cart.length === 0) {
         return (
-            <div className="cart-table card shadow my-5">
+            <div className="cart-table card shadow my-3">
                 <div className="card-header bg-danger text-white fw-bold fs-5">
                     Shopping Cart
                 </div>
@@ -169,7 +169,7 @@ export default function CartItems() {
                                                 >+</button>
                                             </div>
                                             {item.countInStock === 0 && (
-                                                <span className="badge bg-danger ms-2">ناموجود</span>
+                                                <span className="badge bg-danger ms-2">Out of stock</span>
                                             )}
                                         </td>
                                         <td className="cart-table-items">{(item.price * item.quantity)}</td>

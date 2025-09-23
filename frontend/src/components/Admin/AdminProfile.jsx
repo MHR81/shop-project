@@ -84,7 +84,6 @@ export default function AdminProfile() {
                 postCode: profile.postCode,
                 mobile: profile.mobile
             };
-            console.log('Payload sent to backend:', payload);
             await updateProfile(user.token, payload);
             // دریافت مجدد پروفایل از بک‌اند
             const updated = await getProfile(user.token);

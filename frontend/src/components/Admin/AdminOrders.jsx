@@ -72,7 +72,7 @@ export default function AdminOrders() {
 
     return (
         <div>
-            <h4 className="fw-bold mb-3 text-danger">مدیریت سفارشات</h4>
+            <h4 className="fw-bold mb-4"><span className="fs-4">Orders</span> <span className="text-danger fs-3">Management</span></h4>
             <div className="d-flex flex-wrap gap-2 mb-3">
                 <input
                     type="text"
@@ -97,57 +97,57 @@ export default function AdminOrders() {
                                 (order.user?.email && order.user.email.includes(search))
                             )
                             .map(order => (
-                            <div key={order._id} className="col-12 col-md-6 col-lg-4">
-                                <div className="card shadow border-0 h-100 order-card">
-                                    <div className="card-header bg-gradient bg-primary text-white d-flex justify-content-between align-items-center">
-                                        <span>سفارش #{order._id}</span>
-                                        <span className="badge bg-success">پرداخت موفق</span>
-                                    </div>
-                                    <div className="card-body">
-                                        <div className="mb-2">
-                                            <strong>کاربر:</strong> <span className="badge bg-light text-dark ms-2">{order.user?.name} ({order.user?.email})</span>
+                                <div key={order._id} className="col-12 col-md-6 col-lg-4">
+                                    <div className="card shadow border-0 h-100 order-card">
+                                        <div className="card-header bg-gradient bg-primary text-white d-flex justify-content-between align-items-center">
+                                            <span>سفارش #{order._id}</span>
+                                            <span className="badge bg-success">پرداخت موفق</span>
                                         </div>
-                                        <div className="mb-2">
-                                            <strong>وضعیت ارسال:</strong>
-                                            {order.isDelivered ? <span className="badge bg-info ms-2">ارسال شده</span> : <span className="badge bg-secondary ms-2">در انتظار ارسال</span>}
-                                            {!order.isDelivered && <button className="btn btn-sm btn-primary ms-2" onClick={() => handleDeliver(order._id)}>ارسال شد</button>}
-                                        </div>
-                                        <div className="mb-2">
-                                            <strong>مبلغ کل:</strong> <span className="text-success fw-bold">{order.totalPrice} تومان</span>
-                                        </div>
-                                        <div className="mb-2">
-                                            <strong>زمان ثبت سفارش:</strong> <span className="badge bg-light text-dark ms-2">{new Date(order.createdAt).toLocaleString()}</span>
-                                        </div>
-                                        {order.paidAt && <div className="mb-2"><strong>زمان پرداخت:</strong> <span className="badge bg-success ms-2">{new Date(order.paidAt).toLocaleString()}</span></div>}
-                                        {order.isDelivered && order.deliveredAt && <div className="mb-2"><strong>زمان ارسال:</strong> <span className="badge bg-info ms-2">{new Date(order.deliveredAt).toLocaleString()}</span></div>}
-                                        <div className="mb-2">
-                                            <strong>آدرس ارسال:</strong>
-                                            <div className="small text-muted">
-                                                {order.shippingAddress?.address}, {order.shippingAddress?.city}, {order.shippingAddress?.province} - {order.shippingAddress?.postalCode}
+                                        <div className="card-body">
+                                            <div className="mb-2">
+                                                <strong>کاربر:</strong> <span className="badge bg-light text-dark ms-2">{order.user?.name} ({order.user?.email})</span>
                                             </div>
-                                        </div>
-                                        <div className="mb-2">
-                                            <strong>روش پرداخت:</strong> <span className="badge bg-light text-dark ms-2">{order.paymentMethod}</span>
-                                        </div>
-                                        <div className="mb-2">
-                                            <strong>آیتم‌ها:</strong>
-                                            <ul className="list-group list-group-flush">
-                                                {order.orderItems.map(item => (
-                                                    <li key={item.product} className="list-group-item d-flex justify-content-between align-items-center">
-                                                        <span>{item.name} <span className="badge bg-secondary ms-2">x{item.qty}</span></span>
-                                                        <span>{item.price} تومان</span>
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                        </div>
-                                        <div className="d-flex gap-2 mt-2">
-                                            <button className="btn btn-sm btn-danger" onClick={() => handleDeleteOrder(order._id)}>حذف سفارش</button>
-                                            <button className="btn btn-sm btn-outline-secondary" onClick={() => navigator.clipboard.writeText(order._id)}>کپی شماره سفارش</button>
+                                            <div className="mb-2">
+                                                <strong>وضعیت ارسال:</strong>
+                                                {order.isDelivered ? <span className="badge bg-info ms-2">ارسال شده</span> : <span className="badge bg-secondary ms-2">در انتظار ارسال</span>}
+                                                {!order.isDelivered && <button className="btn btn-sm btn-primary ms-2" onClick={() => handleDeliver(order._id)}>ارسال شد</button>}
+                                            </div>
+                                            <div className="mb-2">
+                                                <strong>مبلغ کل:</strong> <span className="text-success fw-bold">{order.totalPrice} تومان</span>
+                                            </div>
+                                            <div className="mb-2">
+                                                <strong>زمان ثبت سفارش:</strong> <span className="badge bg-light text-dark ms-2">{new Date(order.createdAt).toLocaleString()}</span>
+                                            </div>
+                                            {order.paidAt && <div className="mb-2"><strong>زمان پرداخت:</strong> <span className="badge bg-success ms-2">{new Date(order.paidAt).toLocaleString()}</span></div>}
+                                            {order.isDelivered && order.deliveredAt && <div className="mb-2"><strong>زمان ارسال:</strong> <span className="badge bg-info ms-2">{new Date(order.deliveredAt).toLocaleString()}</span></div>}
+                                            <div className="mb-2">
+                                                <strong>آدرس ارسال:</strong>
+                                                <div className="small text-muted">
+                                                    {order.shippingAddress?.address}, {order.shippingAddress?.city}, {order.shippingAddress?.province} - {order.shippingAddress?.postalCode}
+                                                </div>
+                                            </div>
+                                            <div className="mb-2">
+                                                <strong>روش پرداخت:</strong> <span className="badge bg-light text-dark ms-2">{order.paymentMethod}</span>
+                                            </div>
+                                            <div className="mb-2">
+                                                <strong>آیتم‌ها:</strong>
+                                                <ul className="list-group list-group-flush">
+                                                    {order.orderItems.map(item => (
+                                                        <li key={item.product} className="list-group-item d-flex justify-content-between align-items-center">
+                                                            <span>{item.name} <span className="badge bg-secondary ms-2">x{item.qty}</span></span>
+                                                            <span>{item.price} تومان</span>
+                                                        </li>
+                                                    ))}
+                                                </ul>
+                                            </div>
+                                            <div className="d-flex gap-2 mt-2">
+                                                <button className="btn btn-sm btn-danger" onClick={() => handleDeleteOrder(order._id)}>حذف سفارش</button>
+                                                <button className="btn btn-sm btn-outline-secondary" onClick={() => navigator.clipboard.writeText(order._id)}>کپی شماره سفارش</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        ))}
+                            ))}
                     </div>
                 )
             )}

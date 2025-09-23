@@ -567,7 +567,7 @@ select:focus {
 }
 
 .category-page-title {
-  background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-bg-alt) 100%)!important;
+  background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-bg) 100%)!important;
   color: #fff !important;
 }
 .category-page-quantity {

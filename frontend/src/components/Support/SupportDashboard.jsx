@@ -9,8 +9,9 @@ import SupportChangePassword from "./ChangePassword";
 function SupportDashboardInfo() {
     return (
         <div>
-            <h4 className="fw-bold mb-3 text-primary fs-3">Support Dashboard</h4>
+            <h4 className="fw-bold mb-3 text-warning fs-3">Support Dashboard</h4>
             <ul className="list-unstyled mb-4">
+                <li>• Complete Profile</li>
                 <li>• View and reply to user tickets</li>
                 <li>• Change password</li>
                 <li>• Logout</li>
@@ -21,7 +22,7 @@ function SupportDashboardInfo() {
 }
 
 export default function SupportDashboard() {
-    const [activeTab, setActiveTab] = useState("dashboard");
+    const [activeTab, setActiveTab] = useState("");
     const [selectedId, setSelectedId] = useState(null);
 
     return (

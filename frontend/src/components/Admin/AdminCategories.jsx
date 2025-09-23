@@ -18,7 +18,7 @@ export default function AdminCategories() {
             const data = await getCategories(user.token);
             setCategories(data);
         } catch {
-            setMessage("خطا در دریافت دسته‌بندی‌ها");
+            setMessage("Error fetching categories");
         }
         setLoading(false);
     }, [user.token]);
@@ -43,7 +43,7 @@ export default function AdminCategories() {
         e.preventDefault();
         setMessage("");
         if (!form.name) {
-            setMessage("نام دسته‌بندی الزامی است.");
+            setMessage("Category name is required.");
             return;
         }
         try {
@@ -51,7 +51,7 @@ export default function AdminCategories() {
             setForm({ name: "", description: "" });
             fetchCategories();
         } catch {
-            setMessage("خطا در افزودن دسته‌بندی");
+            setMessage("Error adding category");
         }
     };
 
@@ -69,7 +69,7 @@ export default function AdminCategories() {
     const handleEditSubmit = async e => {
         e.preventDefault();
         if (!editForm.name) {
-            setMessage("نام دسته‌بندی الزامی است.");
+            setMessage("Category name is required.");
             return;
         }
         try {
@@ -78,27 +78,27 @@ export default function AdminCategories() {
             setEditForm({ name: "", description: "" });
             fetchCategories();
         } catch {
-            setMessage("خطا در ویرایش دسته‌بندی");
+            setMessage("Error editing category");
         }
     };
 
     const handleDelete = async id => {
-        if (!window.confirm("آیا مطمئن هستید؟")) return;
+    if (!window.confirm("Are you sure?")) return;
         try {
             await deleteCategory(user.token, id);
             fetchCategories();
         } catch {
-            setMessage("خطا در حذف دسته‌بندی");
+            setMessage("Error deleting category");
         }
     };
 
     return (
         <div>
-            <h4 className="fw-bold mb-3 text-danger">مدیریت دسته‌بندی‌ها</h4>
+            <h4 className="fw-bold mb-3"><span className="fs-4">Category</span> <span className="text-danger fs-3">Management</span></h4>
             <form onSubmit={handleSubmit} className="mb-3 d-flex">
-                <input className="form-control me-2" name="name" value={form.name} onChange={handleChange} placeholder="نام دسته‌بندی" />
-                <input className="form-control me-2" name="description" value={form.description} onChange={handleChange} placeholder="توضیحات" />
-                <button className="btn btn-success" type="submit">افزودن</button>
+                <input className="form-control me-2" name="name" value={form.name} onChange={handleChange} placeholder="Category Name" />
+                <input className="form-control me-2" name="description" value={form.description} onChange={handleChange} placeholder="Description" />
+                <button className="btn btn-success" type="submit">Add</button>
             </form>
             {loading ? <Loading height="200px" /> : (
                 <ul className="list-group">
@@ -106,8 +106,8 @@ export default function AdminCategories() {
                         <li key={cat._id} className="list-group-item d-flex justify-content-between align-items-center">
                             <span>{cat.name} {cat.description && `- ${cat.description}`}</span>
                             <div>
-                                <button className="btn btn-sm btn-info me-2" onClick={() => handleEdit(cat._id)}>ویرایش</button>
-                                <button className="btn btn-sm btn-danger" onClick={() => handleDelete(cat._id)}>حذف</button>
+                                <button className="btn btn-sm btn-info me-2" onClick={() => handleEdit(cat._id)}>Edit</button>
+                                <button className="btn btn-sm btn-danger" onClick={() => handleDelete(cat._id)}>Delete</button>
                             </div>
                         </li>
                     ))}
@@ -115,10 +115,10 @@ export default function AdminCategories() {
             )}
             {editId && (
                 <form onSubmit={handleEditSubmit} className="mt-3 d-flex">
-                    <input className="form-control me-2" name="name" value={editForm.name} onChange={handleEditChange} placeholder="نام دسته‌بندی" />
-                    <input className="form-control me-2" name="description" value={editForm.description} onChange={handleEditChange} placeholder="توضیحات" />
-                    <button className="btn btn-primary" type="submit">ثبت ویرایش</button>
-                    <button className="btn btn-secondary ms-2" type="button" onClick={() => setEditId(null)}>انصراف</button>
+                    <input className="form-control me-2" name="name" value={editForm.name} onChange={handleEditChange} placeholder="Category Name" />
+                    <input className="form-control me-2" name="description" value={editForm.description} onChange={handleEditChange} placeholder="Description" />
+                    <button className="btn btn-primary" type="submit">Save Edit</button>
+                    <button className="btn btn-secondary ms-2" type="button" onClick={() => setEditId(null)}>Cancel</button>
                 </form>
             )}
             {message && <div className="alert alert-danger mt-2">{message}</div>}

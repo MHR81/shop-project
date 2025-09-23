@@ -12,7 +12,7 @@ export default function Orders() {
             setLoading(true);
             try {
                 const data = await getMyOrders(user.token);
-                // فقط سفارش‌های پرداخت‌شده را نمایش بده
+                // Only show paid orders
                 setOrders(data.filter(order => order.isPaid));
             } catch {
                 setOrders([]);
@@ -23,49 +23,49 @@ export default function Orders() {
     }, [user?.token]);
 
     return (
-        <div className="my-orders-container py-4">
-            <h2 className="fw-bold mb-4 text-center text-danger">سفارشات من</h2>
-            {loading ? <div className="alert alert-info">در حال دریافت سفارشات...</div> : (
+        <div className="my-orders-container py-2">
+            <h4 className="fw-bold mb-3"><span className="fs-4">My</span> <span className="text-danger fs-3">Orders</span></h4>
+            {loading ? <div className="alert alert-info">Loading orders...</div> : (
                 orders.length === 0 ? (
-                    <div className="alert alert-warning text-center">سفارشی ثبت نشده یا پرداخت نشده است.</div>
+                    <div className="alert alert-warning text-center">No orders have been placed or paid.</div>
                 ) : (
                     <div className="row g-4">
                         {orders.map(order => (
                             <div key={order._id} className="col-12 col-md-6 col-lg-4">
                                 <div className="card shadow border-0 h-100 order-card">
                                     <div className="card-header bg-gradient bg-danger text-white d-flex justify-content-between align-items-center">
-                                        <span>سفارش #{order._id}</span>
-                                        <span className="badge bg-success">پرداخت موفق</span>
+                                        <span>Order #{order._id}</span>
+                                        <span className="badge bg-success">Paid</span>
                                     </div>
                                     <div className="card-body">
                                         <div className="mb-2">
-                                            <strong>وضعیت ارسال:</strong>
-                                            {order.isDelivered ? <span className="badge bg-info ms-2">ارسال شده</span> : <span className="badge bg-secondary ms-2">در انتظار ارسال</span>}
+                                            <strong>Delivery Status:</strong>
+                                            {order.isDelivered ? <span className="badge bg-info ms-2">Delivered</span> : <span className="badge bg-secondary ms-2">Pending</span>}
                                         </div>
                                         <div className="mb-2">
-                                            <strong>مبلغ کل:</strong> <span className="text-success fw-bold">{order.totalPrice} تومان</span>
+                                            <strong>Total Price:</strong> <span className="text-success fw-bold">{order.totalPrice} Toman</span>
                                         </div>
                                         <div className="mb-2">
-                                            <strong>زمان ثبت سفارش:</strong> <span className="badge bg-light text-dark ms-2">{new Date(order.createdAt).toLocaleString()}</span>
+                                            <strong>Order Date:</strong> <span className="badge bg-light text-dark ms-2">{new Date(order.createdAt).toLocaleString()}</span>
                                         </div>
-                                        {order.paidAt && <div className="mb-2"><strong>زمان پرداخت:</strong> <span className="badge bg-success ms-2">{new Date(order.paidAt).toLocaleString()}</span></div>}
-                                        {order.isDelivered && order.deliveredAt && <div className="mb-2"><strong>زمان ارسال:</strong> <span className="badge bg-info ms-2">{new Date(order.deliveredAt).toLocaleString()}</span></div>}
+                                        {order.paidAt && <div className="mb-2"><strong>Payment Date:</strong> <span className="badge bg-success ms-2">{new Date(order.paidAt).toLocaleString()}</span></div>}
+                                        {order.isDelivered && order.deliveredAt && <div className="mb-2"><strong>Delivery Date:</strong> <span className="badge bg-info ms-2">{new Date(order.deliveredAt).toLocaleString()}</span></div>}
                                         <div className="mb-2">
-                                            <strong>آدرس ارسال:</strong>
+                                            <strong>Shipping Address:</strong>
                                             <div className="small text-muted">
                                                 {order.shippingAddress?.address}, {order.shippingAddress?.city}, {order.shippingAddress?.province} - {order.shippingAddress?.postalCode}
                                             </div>
                                         </div>
                                         <div className="mb-2">
-                                            <strong>روش پرداخت:</strong> <span className="badge bg-light text-dark ms-2">{order.paymentMethod}</span>
+                                            <strong>Payment Method:</strong> <span className="badge bg-light text-dark ms-2">{order.paymentMethod}</span>
                                         </div>
                                         <div className="mb-2">
-                                            <strong>آیتم‌ها:</strong>
+                                            <strong>Items:</strong>
                                             <ul className="list-group list-group-flush">
                                                 {order.orderItems.map(item => (
                                                     <li key={item.product} className="list-group-item d-flex justify-content-between align-items-center">
                                                         <span>{item.name} <span className="badge bg-secondary ms-2">x{item.qty}</span></span>
-                                                        <span>{item.price} تومان</span>
+                                                        <span>{item.price} Toman</span>
                                                     </li>
                                                 ))}
                                             </ul>

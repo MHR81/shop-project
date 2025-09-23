@@ -2,10 +2,9 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Loading from "../common/Loading";
 import { getCategories } from "../../api/categories";
-import { useTranslation } from "react-i18next";
 
 export default function Category() {
-    const { t } = useTranslation();
+    // Removed t from useTranslation
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -28,7 +27,7 @@ export default function Category() {
 
     return (
         <div className="categories container d-flex justify-content-center flex-column rounded">
-            <Link to="/categories" className="text-center text-danger fw-bold fs-4 mt-4 text-decoration-none">{t("categories")}</Link>
+            <Link to="/categories" className="text-center text-danger fw-bold fs-4 mt-4 text-decoration-none">Categories</Link>
             <hr className="w-100 mx-auto border-1 border-danger" />
             <div className="d-flex justify-content-start flex-column pb-3">
                 {loading ? (

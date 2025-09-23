@@ -7,9 +7,10 @@ import AdminOrders from "./AdminOrders";
 import AdminUsers from "./AdminUsers";
 import AdminChangePassword from "./AdminChangePassword";
 import AdminTickets from "./AdminTickets";
+import Dashboard from "./Dashboard"
 
 export default function AdminDashboard() {
-    const [activeTab, setActiveTab] = useState("dashboard");
+    const [activeTab, setActiveTab] = useState("");
 
     return (
         <div className="container my-5">
@@ -20,7 +21,7 @@ export default function AdminDashboard() {
                 <div className="col-md-9">
                     <div className="dashboard-card card shadow-sm rounded-3">
                         <div className="card-body">
-                            {activeTab === "dashboard" && <h3 className="fw-bold text-danger mb-4">Admin Dashboard</h3>}
+                            {activeTab === "dashboard" && <Dashboard />}
                             {activeTab === "profile" && <AdminProfile />}
                             {activeTab === "products" && <AdminProducts />}
                             {activeTab === "categories" && <AdminCategories />}

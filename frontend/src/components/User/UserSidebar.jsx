@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
 
-export default function Sidebar({ activeTab, setActiveTab }) {
+export default function UserSidebar({ activeTab, setActiveTab }) {
     const navigate = useNavigate();
     const { logoutUser } = useAuth();
 
@@ -11,7 +11,7 @@ export default function Sidebar({ activeTab, setActiveTab }) {
         navigate("/auth");
     };
 
-    // کلاس فعال را به قرمز تغییر می‌دهیم
+    // Change active class to red
     const activeClass = "active bg-danger text-white border-danger";
 
     return (

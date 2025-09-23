@@ -17,7 +17,7 @@ export default function AdminTicketList({ onSelect }) {
                 const data = await getSupportTickets(user.token);
                 setTickets(data);
             } catch {
-                setMessage("خطا در دریافت تیکت‌ها");
+                setMessage("Error fetching tickets");
             }
             setLoading(false);
         };
@@ -25,12 +25,12 @@ export default function AdminTicketList({ onSelect }) {
     }, [user.token]);
 
     const handleDelete = async (id) => {
-        if (!window.confirm("آیا مطمئن هستید؟")) return;
+    if (!window.confirm("Are you sure?")) return;
         try {
             await deleteTicket(user.token, id);
             setTickets(tickets.filter(t => t._id !== id));
         } catch {
-            setMessage("خطا در حذف تیکت");
+            setMessage("Error deleting ticket");
         }
     };
 
@@ -39,7 +39,7 @@ export default function AdminTicketList({ onSelect }) {
             await closeTicket(user.token, id);
             setTickets(tickets.map(t => t._id === id ? { ...t, closed: true, status: "closed" } : t));
         } catch {
-            setMessage("خطا در بستن تیکت");
+            setMessage("Error closing ticket");
         }
     };
 
@@ -49,14 +49,14 @@ export default function AdminTicketList({ onSelect }) {
             await setTicketReadForSupport(user.token, id, !isRead);
             setTickets(tickets.map(t => t._id === id ? { ...t, isReadForSupport: !isRead } : t));
         } catch {
-            setMessage("خطا در تغییر وضعیت خوانده شدن");
+            setMessage("Error changing read status");
         }
         setChangingRead("");
     };
 
     return (
         <div>
-            <h5 className="fw-bold mb-3 text-primary">همه تیکت‌های کاربران</h5>
+            <h5 className="fw-bold mb-3 text-primary">All User Tickets</h5>
             {loading ? (
                 <Loading height="300px" />
             ) : (
@@ -67,8 +67,8 @@ export default function AdminTicketList({ onSelect }) {
                             className={`my-tickets list-group-item d-flex justify-content-between align-items-center ${!ticket.isReadForSupport ? "bg-info bg-opacity-25" : ""}`}
                         >
                             <span onClick={() => onSelect(ticket._id)} style={{ cursor: "pointer" }}>
-                                <b>{ticket.subject}</b> - {ticket.status === "closed" ? "(بسته شده)" : "(باز)"} - {ticket.user?.name}
-                                {!ticket.isReadForSupport && <span className="badge bg-primary ms-2">خوانده نشده</span>}
+                                <b>{ticket.subject}</b> - {ticket.status === "closed" ? "(Closed)" : "(Open)"} - {ticket.user?.name}
+                                {!ticket.isReadForSupport && <span className="badge bg-primary ms-2">Unread</span>}
                             </span>
                             <div className="d-flex align-items-center">
                                 <button
@@ -76,10 +76,10 @@ export default function AdminTicketList({ onSelect }) {
                                     disabled={changingRead === ticket._id}
                                     onClick={() => handleToggleRead(ticket._id, ticket.isReadForSupport)}
                                 >
-                                    {ticket.isReadForSupport ? "علامت به عنوان خوانده نشده" : "علامت به عنوان خوانده شده"}
+                                    {ticket.isReadForSupport ? "Mark as Unread" : "Mark as Read"}
                                 </button>
-                                {!ticket.closed && <button className="btn btn-sm btn-warning me-2" onClick={() => handleClose(ticket._id)}>بستن</button>}
-                                <button className="btn btn-sm btn-danger" onClick={() => handleDelete(ticket._id)}>حذف</button>
+                                {!ticket.closed && <button className="btn btn-sm btn-warning me-2" onClick={() => handleClose(ticket._id)}>Close</button>}
+                                <button className="btn btn-sm btn-danger" onClick={() => handleDelete(ticket._id)}>Delete</button>
                             </div>
                         </li>
                     ))}

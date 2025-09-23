@@ -4,7 +4,7 @@ import { getProfile, updateProfile } from "../../api/auth";
 import { getProvinces, getCitiesByProvinceName } from "../../api/location";
 import Loading from "../common/Loading";
 
-export default function AdminProfile() {
+export default function UserProfile() {
     const { user } = useAuth();
     const [profile, setProfile] = useState(null);
     const [provinces, setProvinces] = useState([]);
@@ -99,13 +99,26 @@ export default function AdminProfile() {
         setLoading(true);
         setMessage("");
         try {
-            const [name, ...lastNameArr] = (profile.fullName || "").split(" ");
-            const lastName = lastNameArr.join(" ");
-            const payload = { ...profile, name, lastName };
+            // فقط فیلدهای مورد نیاز بک‌اند را ارسال کن
+            const payload = {
+                avatar: profile.avatar,
+                name: profile.name,
+                lastName: profile.lastName,
+                username: profile.username,
+                email: profile.email,
+                address: profile.address,
+                province: profile.province,
+                city: profile.city,
+                postCode: profile.postCode,
+                mobile: profile.mobile
+            };
             await updateProfile(user.token, payload);
+            // دریافت مجدد پروفایل از بک‌اند
+            const updated = await getProfile(user.token);
+            setProfile(updated);
             setMessage("پروفایل با موفقیت ذخیره شد.");
             setEdit(false);
-            initialProfileRef.current = JSON.parse(JSON.stringify(profile));
+            initialProfileRef.current = JSON.parse(JSON.stringify(updated));
         } catch {
             setMessage("خطا در ذخیره پروفایل.");
         } finally {
@@ -122,7 +135,7 @@ export default function AdminProfile() {
                     <img
                         src={profile.avatar}
                         alt={profile.fullName}
-                        className="rounded-circle border border-2 border-primary"
+                        className="rounded-circle border border-2 border-info"
                         style={{ width: 64, height: 64, objectFit: "cover" }}
                     />
                     {edit && (
@@ -164,16 +177,7 @@ export default function AdminProfile() {
 
             {message && <div className="alert alert-info py-2 small mt-2 mb-2">{message}</div>}
 
-            <div className="row">
-                <div className="col-md-6 mb-2">
-                    <label className="form-label small">Type: </label>
-                    <span className="form-control-plaintext fw-bold text-warning">{profile.role}</span>
-                </div>
-                <div className="col-md-6 mb-2">
-                    <label className="form-label small">Admin Type</label>
-                    <span className="form-control-plaintext fw-bold text-warning">{profile.adminType}</span>
-                </div>
-            </div>
+            
             <hr style={{ color: "var(--color-text)" }}></hr>
             <div className="row">
                 <div className="col-md-6 mb-2">

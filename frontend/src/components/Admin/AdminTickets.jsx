@@ -6,7 +6,7 @@ export default function AdminTickets() {
     const [activeTicketId, setActiveTicketId] = useState(null);
     return (
         <div>
-            <h4 className="fw-bold mb-3 text-primary">مدیریت تیکت‌ها</h4>
+            <h4 className="fw-bold mb-3 text-primary">Ticket Management</h4>
             {!activeTicketId ? (
                 <AdminTicketList onSelect={setActiveTicketId} />
             ) : (

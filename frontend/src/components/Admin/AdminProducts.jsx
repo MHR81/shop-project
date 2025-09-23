@@ -230,7 +230,7 @@ export default function AdminProducts() {
 
     return (
         <div>
-            <h4 className="fw-bold mb-3 text-danger">مدیریت محصولات</h4>
+            <h4 className="fw-bold mb-4"><span className="fs-4">Products</span> <span className="text-danger fs-3">Management</span></h4>
             <form onSubmit={handleSubmit} className="mb-3 d-flex flex-wrap">
                 <input className="form-control me-2 mb-2" name="name" value={form.name} onChange={handleChange} placeholder="نام محصول" disabled={loading} />
                 <input className="form-control me-2 mb-2" name="description" value={form.description} onChange={handleChange} placeholder="توضیحات" disabled={loading} />

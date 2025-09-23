@@ -1,11 +1,10 @@
 import { useState } from "react";
 import { useAuth } from "../../../context/AuthContext";
 import { createTicket } from "../../../api/ticket";
-import { useTranslation } from "react-i18next";
 
 const TicketNew = ({ onCreated }) => {
     const { user } = useAuth();
-    const { t } = useTranslation();
+    // Removed unused t from useTranslation
     const [form, setForm] = useState({ subject: "", message: "" });
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState("");
@@ -19,38 +18,38 @@ const TicketNew = ({ onCreated }) => {
         e.preventDefault();
         setMessage("");
         if (!form.subject || !form.message) {
-            setMessage(t("ticket_required"));
+            setMessage("Please enter subject and message.");
             return;
         }
         setLoading(true);
         try {
             await createTicket(user.token, form);
-            setMessage(t("ticket_success"));
+            setMessage("Ticket submitted successfully.");
             setForm({ subject: "", message: "" });
             if (onCreated) onCreated();
         } catch (err) {
-            setMessage(t("ticket_error"));
+            setMessage("Error submitting ticket");
         }
         setLoading(false);
     };
 
     return (
         <div className="mb-4">
-            <h5 className="fw-bold mb-2 new-ticket-title">{t("ticket_new_title")}</h5>
+            <h4 className="fw-bold mb-3"><span className="fs-4">New</span> <span className="text-danger fs-3">Ticket</span></h4>
             <form onSubmit={handleSubmit} className="row g-2">
                 <div className="col-md-6">
-                    <input className="form-control new-ticket" name="subject" value={form.subject} onChange={handleChange} placeholder={t("ticket_subject")}
+                    <input className="form-control new-ticket" name="subject" value={form.subject} onChange={handleChange} placeholder="Subject"
                         required type="text" />
                 </div>
                 <div className="col-md-6">
-                    <textarea className="form-control new-ticket" name="message" value={form.message} onChange={handleChange} placeholder={t("ticket_message")}
+                    <textarea className="form-control new-ticket" name="message" value={form.message} onChange={handleChange} placeholder="Initial Message"
                         required rows={2} />
                 </div>
                 <div className="col-12">
-                    <button className="btn btn-success" type="submit" disabled={loading}>{t("ticket_submit")}</button>
+                    <button className="btn btn-success" type="submit" disabled={loading}>Submit Ticket</button>
                 </div>
             </form>
-            {message && <div className={`mt-2 alert ${message.includes(t("ticket_success")) ? "alert-success" : "alert-danger"}`}>{message}</div>}
+            {message && <div className={`mt-2 alert ${message.includes("Ticket submitted successfully.") ? "alert-success" : "alert-danger"}`}>{message}</div>}
         </div>
     );
 };

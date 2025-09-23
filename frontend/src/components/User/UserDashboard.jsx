@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { getProfile } from "../../api/auth";
-import Sidebar from "./Sidebar";
+import Sidebar from "./UserSidebar";
 import Profile from "./UserProfile";
 import CartTab from "./CartTab";
 import Orders from "./Orders";

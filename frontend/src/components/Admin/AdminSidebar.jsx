@@ -1,7 +1,18 @@
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
 export default function AdminSidebar({ activeTab, setActiveTab }) {
+    React.useEffect(() => {
+        const savedTab = localStorage.getItem("adminSidebarActiveTab");
+        if (savedTab && setActiveTab) setActiveTab(savedTab);
+    }, [setActiveTab]);
+
+    React.useEffect(() => {
+        if (activeTab) localStorage.setItem("adminSidebarActiveTab", activeTab);
+    }, [activeTab]);
+
+    // هنگام خروج مقدار را حذف کن
     const navigate = useNavigate();
     const { logoutUser } = useAuth();
     const activeClass = "active bg-danger text-white border-danger";
@@ -9,6 +20,7 @@ export default function AdminSidebar({ activeTab, setActiveTab }) {
     const handleLogout = () => {
         logoutUser();
         navigate("/auth");
+        localStorage.removeItem("adminSidebarActiveTab");
     };
 
     return (

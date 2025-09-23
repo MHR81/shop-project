@@ -37,7 +37,7 @@ export default function AdminProfile() {
                 setProfile(profileData);
                 initialProfileRef.current = JSON.parse(JSON.stringify(profileData));
             } catch {
-                setMessage("خطا در دریافت پروفایل.");
+                setMessage("Error fetching profile.");
             } finally {
                 setLoading(false);
             }
@@ -66,13 +66,13 @@ export default function AdminProfile() {
 
     const handleSave = async () => {
         if (!isDirty()) {
-            setMessage("هیچ تغییری برای ذخیره وجود ندارد.");
+            setMessage("No changes to save.");
             return;
         }
         setLoading(true);
         setMessage("");
         try {
-            // فقط فیلدهای مورد نیاز بک‌اند را ارسال کن
+            // Only send required fields to backend
             const payload = {
                 avatar: profile.avatar,
                 name: profile.name,
@@ -86,14 +86,14 @@ export default function AdminProfile() {
                 mobile: profile.mobile
             };
             await updateProfile(user.token, payload);
-            // دریافت مجدد پروفایل از بک‌اند
+            // Fetch updated profile from backend
             const updated = await getProfile(user.token);
             setProfile(updated);
-            setMessage("پروفایل با موفقیت ذخیره شد.");
+            setMessage("Profile saved successfully.");
             setEdit(false);
             initialProfileRef.current = JSON.parse(JSON.stringify(updated));
         } catch {
-            setMessage("خطا در ذخیره پروفایل.");
+            setMessage("Error saving profile.");
         } finally {
             setLoading(false);
         }
@@ -102,86 +102,89 @@ export default function AdminProfile() {
     if (!profile) return <Loading height="100px" />;
 
     return (
-        <div className="card shadow-sm border-0 p-3 rounded-3">
-            <div className="d-flex align-items-center mb-3">
-                <div className="position-relative me-3">
-                    <img
-                        src={profile.avatar}
-                        alt={profile.fullName}
-                        className="rounded-circle border border-2 border-primary"
-                        style={{ width: 64, height: 64, objectFit: "cover" }}
-                    />
-                    {edit && (
-                        <label className="position-absolute bottom-0 end-0 bg-primary text-white rounded-circle p-1" style={{ cursor: "pointer" }}>
-                            <i className="bi bi-pencil"></i>
-                            <input type="file" accept="image/*" style={{ display: "none" }} onChange={handleAvatarChange} />
-                        </label>
-                    )}
-                </div>
-                <div>
-                    <h5 className="fw-semibold mb-1">
-                        {edit ? (
-                            <>
-                                <input
-                                    className="form-control form-control-sm mb-1"
-                                    name="name"
-                                    value={profile.name || ""}
-                                    onChange={handleChange}
-                                    placeholder="Name"
-                                />
-                                <input
-                                    className="form-control form-control-sm"
-                                    name="lastName"
-                                    value={profile.lastName || ""}
-                                    onChange={handleChange}
-                                    placeholder="Last Name"
-                                />
-                            </>
-                        ) : (
-                            <span>{profile.name} {profile.lastName}</span>
+        <div>
+            <h4 className="fw-bold mb-3 text-warning fs-3">Support Profile</h4>
+            <div className="card shadow-sm border-0 p-3 rounded-3">
+                <div className="d-flex align-items-center mb-3">
+                    <div className="position-relative me-3">
+                        <img
+                            src={profile.avatar}
+                            alt={profile.fullName}
+                            className="rounded-circle border border-2 border-primary"
+                            style={{ width: 64, height: 64, objectFit: "cover" }}
+                        />
+                        {edit && (
+                            <label className="position-absolute bottom-0 end-0 bg-primary text-white rounded-circle p-1" style={{ cursor: "pointer" }}>
+                                <i className="bi bi-pencil"></i>
+                                <input type="file" accept="image/*" style={{ display: "none" }} onChange={handleAvatarChange} />
+                            </label>
                         )}
-                    </h5>
-                    <div className="mt-1">
-                        <span className="badge bg-light text-dark border me-1"><i className="bi bi-person"></i> {profile.username}</span>
-                        <span className="badge bg-danger text-dark"><i className="bi bi-envelope"></i> {profile.email}</span>
+                    </div>
+                    <div>
+                        <h5 className="fw-semibold mb-1">
+                            {edit ? (
+                                <>
+                                    <input
+                                        className="form-control form-control-sm mb-1"
+                                        name="name"
+                                        value={profile.name || ""}
+                                        onChange={handleChange}
+                                        placeholder="Name"
+                                    />
+                                    <input
+                                        className="form-control form-control-sm"
+                                        name="lastName"
+                                        value={profile.lastName || ""}
+                                        onChange={handleChange}
+                                        placeholder="Last Name"
+                                    />
+                                </>
+                            ) : (
+                                <span>{profile.name} {profile.lastName}</span>
+                            )}
+                        </h5>
+                        <div className="mt-1">
+                            <span className="badge bg-light text-dark border me-1"><i className="bi bi-person"></i> {profile.username}</span>
+                            <span className="badge bg-warning text-dark"><i className="bi bi-envelope"></i> {profile.email}</span>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            {message && <div className="alert alert-info py-2 small mt-2 mb-2">{message}</div>}
+                {message && <div className="alert alert-info py-2 small mt-2 mb-2">{message}</div>}
 
-            <div className="row">
-                
-                <div className="col-md-6 mb-2">
-                    <label className="form-label small">Mobile</label>
-                    <input
-                        className="form-control form-control-sm"
-                        name="mobile"
-                        value={profile.mobile || ""}
-                        onChange={handleChange}
-                        disabled={!edit}
-                    />
+                <div className="row">
+
+                    <div className="col-md-6 mb-2">
+                        <label className="form-label small">Mobile</label>
+                        <input
+                            className="form-control form-control-sm"
+                            name="mobile"
+                            value={profile.mobile || ""}
+                            onChange={handleChange}
+                            disabled={!edit}
+                        />
+                    </div>
                 </div>
-            </div>
 
-            <div className="mt-2">
-                {!edit ? (
-                    <button className="btn btn-outline-primary btn-sm" onClick={() => setEdit(true)}>Edit Profile</button>
-                ) : (
-                    <>
-                        <button className="btn btn-success btn-sm me-2" onClick={handleSave} disabled={loading}>Save</button>
-                        <button
-                            className="btn btn-outline-secondary btn-sm"
-                            onClick={() => {
-                                setProfile(JSON.parse(JSON.stringify(initialProfileRef.current)));
-                                setEdit(false);
-                                setMessage("");
-                            }}
-                        >
-                            Cancel
-                        </button>
-                    </>
-                )}
+                <div className="mt-2">
+                    {!edit ? (
+                        <button className="btn btn-outline-primary btn-sm" onClick={() => setEdit(true)}>Edit Profile</button>
+                    ) : (
+                        <>
+                            <button className="btn btn-success btn-sm me-2" onClick={handleSave} disabled={loading}>Save</button>
+                            <button
+                                className="btn btn-outline-secondary btn-sm"
+                                onClick={() => {
+                                    setProfile(JSON.parse(JSON.stringify(initialProfileRef.current)));
+                                    setEdit(false);
+                                    setMessage("");
+                                }}
+                            >
+                                Cancel
+                            </button>
+                        </>
+                    )}
+                </div>
             </div>
         </div>
     );

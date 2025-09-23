@@ -1,3 +1,4 @@
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
@@ -6,9 +7,21 @@ export default function SupportSidebar({ activeTab, setActiveTab }) {
     const { logoutUser } = useAuth();
     const activeClass = "active bg-warning text-dark border-warning";
 
+    // مقدار تب فعال را از localStorage بخوان و هنگام mount ست کن
+    React.useEffect(() => {
+        const savedTab = localStorage.getItem("supportSidebarActiveTab");
+        if (savedTab && setActiveTab) setActiveTab(savedTab);
+    }, [setActiveTab]);
+
+    // هر بار که تب تغییر کرد، مقدار جدید را ذخیره کن
+    React.useEffect(() => {
+        if (activeTab) localStorage.setItem("supportSidebarActiveTab", activeTab);
+    }, [activeTab]);
+
     const handleLogout = () => {
         logoutUser();
         navigate("/auth");
+        localStorage.removeItem("supportSidebarActiveTab");
     };
 
     return (

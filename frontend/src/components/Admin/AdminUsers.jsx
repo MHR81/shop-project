@@ -206,12 +206,8 @@ export default function AdminUsers() {
     };
     return (
         <div>
-            <div className="mb-3">
-                <button className="btn btn-outline-danger" onClick={handleDeleteAllLogs}>
-                    <i className="bi bi-trash me-1"></i> حذف همه لاگ‌ها
-                </button>
-            </div>
-            <h4 className="fw-bold mb-3 text-danger">مدیریت کاربران</h4>
+
+            <h4 className="fw-bold mb-4"><span className="fs-4">Users</span> <span className="text-danger fs-3">Management</span></h4>
             <div className="mb-3">
                 <h5 className="fw-bold">ساخت ادمین جدید</h5>
                 <form onSubmit={handleSubmit} className="row g-2">
@@ -267,7 +263,14 @@ export default function AdminUsers() {
                     </li>
                 </ul>
             </div>
-            <h5 className="fw-bold mt-4">لیست {activeTab === "admin" ? "ادمین‌ها" : activeTab === "support" ? "ساپورت‌ها" : "کاربران"}</h5>
+            <div className="d-flex gap-3 mb-3">
+                <h5 className="fw-bold fs-4"><span className="">{activeTab === "admin" ? "Admins" : activeTab === "support" ? "Supports" : "Users"}</span><span className="text-danger"> List</span></h5>
+                <div>
+                    <button className="btn btn-outline-danger" onClick={handleDeleteAllLogs}>
+                        <i className="bi bi-trash me-1"></i> حذف همه لاگ‌ها
+                    </button>
+                </div>
+            </div>
             {userLoading ? <Loading height="100px" /> : (
                 <ul className="list-group">
                     {(activeTab === "admin" ? admins : activeTab === "support" ? supports : normalUsers).map(u => (
@@ -303,14 +306,14 @@ export default function AdminUsers() {
                                 <p><b>ایمیل:</b> {selectedUser.email}</p>
                                 <p><b>نام کاربری:</b> {selectedUser.username}</p>
                                 <p><b>نقش:</b> {selectedUser.role}</p>
-                                {selectedUser.role === "admin" ?  <p><b>سوپر ادمین:</b> {selectedUser.mainAdmin ? "✅بله" : "🚫خیر"}</p> : ""}
+                                {selectedUser.role === "admin" ? <p><b>سوپر ادمین:</b> {selectedUser.mainAdmin ? "✅بله" : "🚫خیر"}</p> : ""}
                                 <p><b>استان:</b> {selectedUser.province || "-"}</p>
                                 <p><b>شهر:</b> {selectedUser.city || "-"}</p>
                                 <p><b>آدرس:</b> {selectedUser.address || "-"}</p>
                                 <p><b>کد پستی:</b> {selectedUser.postCode || "-"}</p>
                                 <p><b>موبایل:</b> {selectedUser.mobile || "-"}</p>
                                 <p><b>تاریخ عضویت:</b> {new Date(selectedUser.createdAt).toLocaleDateString("fa-IR")}</p>
-                                
+
                                 {/* نمایش لاگ‌ها */}
                                 <div className="mt-3">
                                     <h6 className="fw-bold">لاگ‌های کاربر</h6>

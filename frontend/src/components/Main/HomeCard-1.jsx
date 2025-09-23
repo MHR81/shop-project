@@ -1,10 +1,9 @@
 import { useNavigate } from "react-router-dom";
 import banner from "../../Images/Home1.png";
-import { useTranslation } from "react-i18next";
 
 export default function HomeCard1() {
     const navigate = useNavigate();
-    const { t } = useTranslation();
+    // Removed t from useTranslation
 
     const handleShopNow = () => {
         navigate("/Products");
@@ -23,7 +22,7 @@ export default function HomeCard1() {
                     <p className="fs-5 mb-4 w-50 text-truncate">
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit
                     </p>
-                    <button onClick={handleShopNow} className="btn btn-outline-danger px-4 py-2 fw-bold shadow-sm">{t("buy-now")}</button>
+                    <button onClick={handleShopNow} className="btn btn-outline-danger px-4 py-2 fw-bold shadow-sm">Buy Now</button>
                 </div>
             </div>
             {/* Mobile: Simple content */}
@@ -35,7 +34,7 @@ export default function HomeCard1() {
                 <p className="fs-5 mb-4">
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
                 </p>
-                <button onClick={handleShopNow} className="btn btn-outline-danger px-4 py-2 fw-bold shadow-sm">{t("buy-now")}</button>
+                <button onClick={handleShopNow} className="btn btn-outline-danger px-4 py-2 fw-bold shadow-sm">Buy Now</button>
             </div>
         </div>
     );

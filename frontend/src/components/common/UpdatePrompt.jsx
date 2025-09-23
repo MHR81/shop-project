@@ -59,13 +59,13 @@ export default function UpdatePrompt() {
             <div className="toast show align-items-center" role="alert" aria-live="assertive" aria-atomic="true">
                 <div className="d-flex">
                     <div className="toast-body">
-                        نسخهٔ جدید برنامه آماده است.
+                        A new version of the app is available.
                     </div>
                     <button onClick={doUpdate} className="btn btn-outline-danger btn-sm me-2">
-                        بروزرسانی
+                        Update
                     </button>
                     <button onClick={() => setVisible(false)} className="btn btn-link btn-sm me-2">
-                        بستن
+                        Close
                     </button>
                 </div>
             </div>

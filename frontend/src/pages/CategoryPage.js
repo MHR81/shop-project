@@ -49,7 +49,7 @@ export default function CategoryPage() {
 
     return (
         <div className="container py-4">
-            <div className="category-page-title category-header shadow-lg rounded-4 p-4 mb-4 d-flex flex-column flex-md-row align-items-center justify-content-between">
+            <div className="category-page-title category-header rounded-4 p-4 mb-4 d-flex flex-column flex-md-row align-items-center justify-content-between">
                 <div className="d-flex align-items-center mb-3 mb-md-0">
                     <FaLayerGroup size={40} className="me-3" />
                     <div>
@@ -57,9 +57,12 @@ export default function CategoryPage() {
                         {categoryDesc && <div className="text-light small mt-1">{categoryDesc}</div>}
                     </div>
                 </div>
-                <div className="d-flex flex-column align-items-end">
+                <div className="d-flex flex-column align-items-end d-none d-md-block">
                     <span className="badge category-page-quantity fs-6 px-3 py-2 shadow-sm">Products: {products.length}</span>
                 </div>
+            </div>
+            <div className="align-items-end d-md-none mb-3">
+                <span className="badge category-page-quantity fs-6 px-3 py-2 shadow-sm">Products: {products.length}</span>
             </div>
 
             {products.length === 0 ? (

@@ -8,7 +8,7 @@ export default function CartTab() {
 
     return (
         <div>
-            <h4 className="fw-bold mb-3"><span className="fs-4">My</span> <span className="text-danger fs-3">Cart</span></h4>
+            <h4 className="fw-bold"><span className="fs-4">My</span> <span className="text-danger fs-3">Cart</span></h4>
             <CartItems />
             <div className="d-flex gap-2 mt-3">
                 <Link to="/products">
